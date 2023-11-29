@@ -273,7 +273,6 @@ namespace Hourglass.Parsing
                     catch
                     {
                         // Try the next pattern
-                        continue;
                     }
                 }
 

@@ -56,12 +56,12 @@
                     <Separator Height="10" Background="Transparent"/>
                     <TextBlock>
                         <Run Text="{x:Static properties:Resources.AboutDialogMoreInformation}"/><LineBreak/>
-                        <Hyperlink NavigateUri="https://chris.dziemborowicz.com/apps/hourglass" RequestNavigate="HyperlinkRequestNavigate">https://chris.dziemborowicz.com/apps/hourglass</Hyperlink>
+                        <Hyperlink NavigateUri="https://github.com/i2van/hourglass#readme" RequestNavigate="HyperlinkRequestNavigate">https://github.com/i2van/hourglass#readme</Hyperlink>
                     </TextBlock>
                     <Separator Height="10" Background="Transparent"/>
                     <TextBlock>
                         <Run Text="{x:Static properties:Resources.AboutDialogContributeOnGitHub}"/><LineBreak/>
-                        <Hyperlink NavigateUri="https://github.com/dziemborowicz/hourglass" RequestNavigate="HyperlinkRequestNavigate">https://github.com/dziemborowicz/hourglass</Hyperlink>
+                        <Hyperlink NavigateUri="https://github.com/i2van/hourglass" RequestNavigate="HyperlinkRequestNavigate">https://github.com/i2van/hourglass</Hyperlink>
                     </TextBlock>
                 </StackPanel>
             </ScrollViewer>

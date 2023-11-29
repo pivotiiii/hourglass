@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if PORTABLE
+
 namespace Hourglass.Properties
 {
     using System;
@@ -63,7 +65,7 @@ namespace Hourglass.Properties
         public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection collection)
         {
             SettingsPropertyValueCollection settingsPropertyValueCollection = GetSettingsPropertyValueCollection(collection);
-            
+
             XmlDocument document = TryLoadSettingsDocument();
             foreach (SettingsPropertyValue value in settingsPropertyValueCollection)
             {
@@ -105,7 +107,7 @@ namespace Hourglass.Properties
                     writer.WriteStartElement("setting");
                     writer.WriteAttributeString("name", value.Name);
                     writer.WriteAttributeString("serializeAs", value.Property.SerializeAs.ToString());
-                    
+
                     // <value>
                     writer.WriteStartElement("value");
                     if (value.Property.SerializeAs == SettingsSerializeAs.String)
@@ -241,3 +243,5 @@ namespace Hourglass.Properties
         }
     }
 }
+
+#endif

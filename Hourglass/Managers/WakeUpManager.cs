@@ -96,10 +96,11 @@ namespace Hourglass.Managers
         /// </returns>
         private DateTime? GetNextTimerExpiry()
         {
-            IOrderedEnumerable<DateTime> expiryTimes = TimerManager.Instance.RunningTimers
+            var expiryTimes = TimerManager.Instance.RunningTimers
                 .Where(t => t.EndTime.HasValue)
                 .Select(t => t.EndTime.Value)
-                .OrderBy(t => t);
+                .OrderBy(t => t)
+                .ToList();
 
             return expiryTimes.Any() ? expiryTimes.First() : (DateTime?)null;
         }

@@ -5,7 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hourglass.Windows"
         mc:Ignorable="d"
-        Title="Manage Themes" Width="525" ResizeMode="NoResize" SizeToContent="Height" Closing="WindowClosing">
+        Title="Manage Themes"
+        Width="525"
+        ResizeMode="NoResize"
+        SizeToContent="Height"
+        Closing="WindowClosing"
+        WindowStartupLocation="CenterScreen">
     <StackPanel>
         <Border Background="#F9F9F9" BorderBrush="#DDDDDD" BorderThickness="0 0 0 1" Padding="8">
             <Grid>

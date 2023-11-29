@@ -128,7 +128,7 @@ namespace Hourglass
         EsAwaymodeRequired = 0x00000040,
 
         /// <summary>
-        /// Informs the system that the state being set should remain in effect until the next call that uses 
+        /// Informs the system that the state being set should remain in effect until the next call that uses
         /// <see cref="EsContinuous"/> and one of the other state flags is cleared.
         /// </summary>
         EsContinuous = 0x80000000,
@@ -227,7 +227,7 @@ namespace Hourglass
         /// Otherwise, the timer is a synchronization timer.</param>
         /// <param name="lpTimerName">The name of the timer object.</param>
         /// <returns>A handle to the timer object if the call succeeds, or <see cref="IntPtr.Zero"/> otherwise.</returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr CreateWaitableTimer(IntPtr lpTimerAttributes, bool bManualReset, string lpTimerName);
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace Hourglass
         /// <param name="esFlags">The thread's execution requirements.</param>
         /// <returns>If the function succeeds, the return value is the previous thread execution state. If the function
         /// fails, the return value is <see cref="ExecutionState.EsNull"/>.</returns>
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true)]
         public static extern ExecutionState SetThreadExecutionState(ExecutionState esFlags);
 
         /// <summary>

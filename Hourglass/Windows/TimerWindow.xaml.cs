@@ -264,7 +264,7 @@ namespace Hourglass.Windows
                 }
 
                 this.mode = value;
-                this.OnPropertyChanged("mode");
+                this.OnPropertyChanged(nameof(this.Mode));
             }
         }
 
@@ -304,7 +304,9 @@ namespace Hourglass.Windows
                 this.UnbindTimer();
                 this.timer = value;
                 this.BindTimer();
-                this.OnPropertyChanged("Timer", "Options");
+                this.OnPropertyChanged(
+                    nameof(this.Timer),
+                    nameof(this.Options));
             }
         }
 
@@ -334,7 +336,7 @@ namespace Hourglass.Windows
                 }
 
                 this.lastTimerStart = value;
-                this.OnPropertyChanged("TimerStart");
+                this.OnPropertyChanged(nameof(this.LastTimerStart));
             }
         }
 
@@ -379,7 +381,7 @@ namespace Hourglass.Windows
                     this.ResizeMode = ResizeMode.CanResize;
                 }
 
-                this.OnPropertyChanged("IsFullScreen");
+                this.OnPropertyChanged(nameof(this.IsFullScreen));
             }
         }
 
@@ -401,9 +403,13 @@ namespace Hourglass.Windows
                 }
 
                 this.restoreWindowState = value;
-                this.OnPropertyChanged("RestoreWindowState");
+                this.OnPropertyChanged(nameof(this.RestoreWindowState));
             }
         }
+
+        public bool DoNotPromptOnExit { get; set; }
+
+        public bool DoNotActivateNextWindow { get; set; }
 
         #endregion
 
@@ -491,26 +497,7 @@ namespace Hourglass.Windows
         /// brought to the foreground for any reason.</returns>
         public bool BringToFront()
         {
-            try
-            {
-                this.Show();
-
-                if (this.WindowState == WindowState.Minimized)
-                {
-                    this.WindowState = this.RestoreWindowState;
-                }
-
-                this.Topmost = false;
-                this.Topmost = true;
-                this.Topmost = this.Options.AlwaysOnTop;
-
-                return true;
-            }
-            catch (InvalidOperationException)
-            {
-                // This happens if the window is closing (waiting for the user to confirm) when this method is called
-                return false;
-            }
+            return this.BringToFront(RestoreWindowState, Options.AlwaysOnTop);
         }
 
         /// <summary>
@@ -1702,13 +1689,20 @@ namespace Hourglass.Windows
         /// <param name="e">The event data.</param>
         private void EscapeCommandExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            // Cancel or reset
-            bool canceledOrReset = this.CancelOrReset();
+            if (this.CancelOrReset())
+            {
+                return;
+            }
 
-            // If nothing changed, exit full-screen mode
-            if (!canceledOrReset && this.IsFullScreen)
+            if (this.IsFullScreen)
             {
                 this.IsFullScreen = false;
+                return;
+            }
+
+            if (Equals(FocusManager.GetFocusedElement(this), this))
+            {
+                this.WindowState = WindowState.Minimized;
             }
         }
 
@@ -1952,12 +1946,19 @@ namespace Hourglass.Windows
                 this.RestoreWindowState = this.WindowState;
             }
 
-            if (this.WindowState == WindowState.Minimized && Settings.Default.ShowInNotificationArea)
+            var isMinimized = this.WindowState == WindowState.Minimized;
+
+            if (isMinimized && Settings.Default.ShowInNotificationArea)
             {
                 this.MinimizeToNotificationArea();
             }
 
             this.UpdateBoundControls();
+
+            if (isMinimized)
+            {
+                this.BringNextToFrontAndActivate();
+            }
         }
 
         /// <summary>
@@ -1975,13 +1976,13 @@ namespace Hourglass.Windows
             }
 
             // Prompt for confirmation if required
-            if (this.Options.PromptOnExit && this.Timer.State != TimerState.Stopped && this.Timer.State != TimerState.Expired)
+            if (!this.DoNotPromptOnExit && this.Options.PromptOnExit && this.Timer.State != TimerState.Stopped && this.Timer.State != TimerState.Expired)
             {
                 MessageBoxResult result = MessageBox.Show(
                     Properties.Resources.TimerWindowCloseMessageBoxText,
                     Properties.Resources.MessageBoxTitle,
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
+                    MessageBoxButton.YesNoCancel,
+                    MessageBoxImage.Exclamation);
 
                 if (result != MessageBoxResult.Yes)
                 {
@@ -2000,6 +2001,9 @@ namespace Hourglass.Windows
             KeepAwakeManager.Instance.StopKeepAwakeFor(this);
             AppManager.Instance.Persist();
         }
+
+        private void WindowClosed(object sender, EventArgs e) =>
+            this.BringNextToFrontAndActivate();
 
         #endregion
     }

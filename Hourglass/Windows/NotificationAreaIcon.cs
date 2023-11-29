@@ -16,6 +16,7 @@ namespace Hourglass.Windows
     using System.Windows.Threading;
 
     using Hourglass.Extensions;
+    using Hourglass.Managers;
     using Hourglass.Properties;
     using Hourglass.Timing;
 
@@ -46,6 +47,12 @@ namespace Hourglass.Windows
         /// </summary>
         private bool disposed;
 
+        private UsageDialog usageDialog;
+
+        private bool exiting;
+
+        private DateTime lastClickTime;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NotificationAreaIcon"/> class.
         /// </summary>
@@ -53,7 +60,7 @@ namespace Hourglass.Windows
         {
             this.notifyIcon = new NotifyIcon();
             this.notifyIcon.Icon = new Icon(Resources.TrayIcon, SystemInformation.SmallIconSize);
-            this.notifyIcon.MouseDown += this.NotifyIconMouseDown;
+            this.notifyIcon.MouseUp += this.NotifyIconMouseUp;
             this.notifyIcon.MouseMove += this.NotifyIconMouseMove;
 
             this.notifyIcon.BalloonTipClicked += this.BalloonTipClicked;
@@ -124,24 +131,13 @@ namespace Hourglass.Windows
         }
 
         /// <summary>
-        /// Throws a <see cref="ObjectDisposedException"/> if the object has been disposed.
-        /// </summary>
-        protected void ThrowIfDisposed()
-        {
-            if (this.disposed)
-            {
-                throw new ObjectDisposedException(this.GetType().FullName);
-            }
-        }
-
-        /// <summary>
         /// Restores all <see cref="TimerWindow"/>s.
         /// </summary>
         private void RestoreAllTimerWindows()
         {
             if (Application.Current != null)
             {
-                foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>())
+                foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().ArrangeDescending())
                 {
                     window.BringToFrontAndActivate();
                 }
@@ -183,18 +179,58 @@ namespace Hourglass.Windows
             }
         }
 
-        /// <summary>
-        /// Invoked when the user presses the mouse button while the pointer is over the icon in the notification area
-        /// of the taskbar.
-        /// </summary>
-        /// <param name="sender">The <see cref="NotifyIcon"/>.</param>
-        /// <param name="e">The event data.</param>
-        private void NotifyIconMouseDown(object sender, MouseEventArgs e)
+        private bool IsDoubleClick(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button != MouseButtons.Left)
             {
-                this.RestoreAllTimerWindows();
+                return false;
             }
+
+            var clickTime = DateTime.UtcNow;
+            if (this.lastClickTime == DateTime.MinValue)
+            {
+                this.lastClickTime = clickTime;
+                return false;
+            }
+
+            if ((clickTime - this.lastClickTime).Duration() > TimeSpan.FromMilliseconds(SystemInformation.DoubleClickTime))
+            {
+                this.lastClickTime = clickTime;
+                return false;
+            }
+
+            this.lastClickTime = DateTime.MinValue;
+            return true;
+        }
+
+        private void NotifyIconMouseUp(object sender, MouseEventArgs e)
+        {
+            if (Application.Current is null)
+            {
+                return;
+            }
+
+            if (!this.IsDoubleClick(e))
+            {
+                return;
+            }
+
+            var windows = Application.Current.Windows.OfType<TimerWindow>()
+                .Where(window => window.WindowState != WindowState.Minimized)
+                .ToArray();
+
+            if (windows.Any())
+            {
+                foreach (var window in windows)
+                {
+                    window.DoNotActivateNextWindow = true;
+                    window.WindowState = WindowState.Minimized;
+                }
+
+                return;
+            }
+
+            this.RestoreAllTimerWindows();
         }
 
         /// <summary>
@@ -205,24 +241,57 @@ namespace Hourglass.Windows
         /// <param name="e">The event data.</param>
         private void NotifyIconMouseMove(object sender, MouseEventArgs e)
         {
-            if (Application.Current != null)
+            if (Application.Current is null)
             {
-                StringBuilder builder = new StringBuilder();
+                return;
+            }
 
-                foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().Where(window => window.Timer.State != TimerState.Stopped))
+            var windows = Application.Current.Windows.OfType<TimerWindow>()
+                .Where(window => window.Timer.State == TimerState.Running)
+                .OrderBy(window => window.Timer.TimeLeft ?? TimeSpan.MaxValue)
+                .ToArray();
+
+            if (!windows.Any())
+            {
+                this.notifyIcon.Text = Resources.NoTimersAreCurrentlyRunningNotificationAreText;
+                return;
+            }
+
+            const int maxSize = 63;
+
+            StringBuilder builder = new StringBuilder(maxSize);
+
+            foreach (var windowString in Application.Current.Windows.OfType<TimerWindow>().Where(window => window.Timer.State == TimerState.Running)
+                         .OrderBy(window => window.Timer.TimeLeft ?? TimeSpan.MaxValue)
+                         .Select(window => window.ToString())
+                         .Where(windowString => !string.IsNullOrWhiteSpace(windowString)))
+            {
+                if (builder.Length == 0)
                 {
-                    string windowString = builder.Length == 0
-                        ? window.ToString()
-                        : Environment.NewLine + window.ToString();
-
-                    if (builder.Length + windowString.Length < 64)
-                    {
-                        builder.Append(windowString);
-                    }
+                    builder.Append(windowString);
+                    continue;
                 }
 
-                this.notifyIcon.Text = builder.ToString();
+                builder.AppendLine();
+                builder.Append(windowString);
+
+                if (builder.Length > maxSize)
+                {
+                    break;
+                }
             }
+
+            if (builder.Length > maxSize)
+            {
+                const string dots = "...";
+
+                var maxTextSize = maxSize - dots.Length;
+
+                builder.Remove(maxTextSize, builder.Length - maxTextSize);
+                builder.Append(dots);
+            }
+
+            this.notifyIcon.Text = builder.ToString();
         }
 
         /// <summary>
@@ -244,27 +313,53 @@ namespace Hourglass.Windows
         {
             this.notifyIcon.ContextMenu.MenuItems.Clear();
 
-            MenuItem newTimerMenuItem = new MenuItem(Resources.NotificationAreaIconNewTimerMenuItem);
-            newTimerMenuItem.Click += this.NewTimerMenuItemClick;
-            this.notifyIcon.ContextMenu.MenuItems.Add(newTimerMenuItem);
+            var hasApplication = Application.Current != null;
 
-            this.notifyIcon.ContextMenu.MenuItems.Add("-" /* separator */);
-
-            foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>())
+            if (hasApplication)
             {
-                MenuItem windowMenuItem = new MenuItem(window.ToString());
-                windowMenuItem.Tag = window;
-                windowMenuItem.Click += this.WindowMenuItemClick;
-                this.notifyIcon.ContextMenu.MenuItems.Add(windowMenuItem);
-            }
+                MenuItem newTimerMenuItem = new MenuItem(Resources.NotificationAreaIconNewTimerMenuItem);
+                newTimerMenuItem.Click += this.NewTimerMenuItemClick;
+                this.notifyIcon.ContextMenu.MenuItems.Add(newTimerMenuItem);
 
-            this.notifyIcon.ContextMenu.MenuItems.Add("-" /* separator */);
+                this.notifyIcon.ContextMenu.MenuItems.Add("-" /* separator */);
+
+                foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().Arrange())
+                {
+                    MenuItem windowMenuItem = new MenuItem(window.ToString());
+                    windowMenuItem.Tag = window;
+                    windowMenuItem.Click += this.WindowMenuItemClick;
+                    this.notifyIcon.ContextMenu.MenuItems.Add(windowMenuItem);
+                }
+
+                this.notifyIcon.ContextMenu.MenuItems.Add("-" /* separator */);
+
+                var commandLineMenuItem = new MenuItem(Resources.NotificationAreaIconCommandLineMenuItem);
+                commandLineMenuItem.Click += this.CommandLineMenuItemClick;
+                this.notifyIcon.ContextMenu.MenuItems.Add(commandLineMenuItem);
+
+                this.notifyIcon.ContextMenu.MenuItems.Add("-" /* separator */);
+            }
 
             MenuItem exitMenuItem = new MenuItem(Resources.NotificationAreaIconExitMenuItem);
             exitMenuItem.Click += this.ExitMenuItemClick;
             this.notifyIcon.ContextMenu.MenuItems.Add(exitMenuItem);
 
-            this.dispatcherTimer.Start();
+            if (hasApplication)
+            {
+                this.dispatcherTimer.Start();
+            }
+        }
+
+        private void CommandLineMenuItemClick(object sender, EventArgs e)
+        {
+            if (this.usageDialog == null || PresentationSource.FromVisual(this.usageDialog) == null)
+            {
+                this.usageDialog = CommandLineArguments.ShowUsage();
+            }
+            else
+            {
+                this.usageDialog.BringToFront();
+            }
         }
 
         /// <summary>
@@ -333,8 +428,47 @@ namespace Hourglass.Windows
         /// <param name="e">The event data.</param>
         private void ExitMenuItemClick(object sender, EventArgs e)
         {
+            if (this.exiting)
+            {
+                return;
+            }
+
+            if (Application.Current is null)
+            {
+                this.usageDialog?.Close();
+                AppManager.Instance.Dispose();
+                Environment.Exit(0);
+                return;
+            }
+
+            this.exiting = true;
+
+            if (Application.Current.Windows.OfType<TimerWindow>()
+                    .Any(window => window.Options.PromptOnExit &&
+                                   window.Timer.State != TimerState.Stopped &&
+                                   window.Timer.State != TimerState.Expired))
+            {
+                var result = System.Windows.MessageBox.Show(
+                    Resources.ExitMenuMessageBoxText,
+                    Resources.MessageBoxTitle,
+                    MessageBoxButton.YesNoCancel,
+                    MessageBoxImage.Exclamation);
+
+                if (result != MessageBoxResult.Yes)
+                {
+                    this.exiting = false;
+                    return;
+                }
+            }
+
             foreach (Window window in Application.Current.Windows)
             {
+                if (window is TimerWindow timerWindow)
+                {
+                    timerWindow.DoNotActivateNextWindow = true;
+                    timerWindow.DoNotPromptOnExit = true;
+                }
+
                 window.Close();
             }
         }

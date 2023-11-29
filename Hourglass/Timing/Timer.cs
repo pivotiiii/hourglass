@@ -258,7 +258,7 @@ namespace Hourglass.Timing
             if (newTimerStart != null && newTimerStart.TryGetEndTime(start, out end))
             {
                 this.timerStart = newTimerStart;
-                this.OnPropertyChanged("TimerStart");
+                this.OnPropertyChanged(nameof(this.TimerStart));
 
                 this.Start(start, end);
                 return true;
@@ -276,11 +276,11 @@ namespace Hourglass.Timing
         {
             this.ThrowIfDisposed();
 
-            TimerStart timerStart = this.timerStart;
-            if (timerStart != null && timerStart.Type == TimerStartType.TimeSpan)
+            TimerStart actualTimerStart = this.timerStart;
+            if (actualTimerStart != null && actualTimerStart.Type == TimerStartType.TimeSpan)
             {
                 this.Stop();
-                return this.Start(timerStart);
+                return this.Start(actualTimerStart);
             }
 
             return false;
@@ -427,7 +427,13 @@ namespace Hourglass.Timing
             this.timeElapsedAsString = this.GetTimeElapsedAsString();
             this.timeExpiredAsString = this.GetTimeExpiredAsString();
 
-            this.OnPropertyChanged("TimerStart", "TimeLeftAsPercentage", "TimeElapsedAsPercentage", "TimeLeftAsString", "TimeElapsedAsString", "TimeExpiredAsString");
+            this.OnPropertyChanged(
+                nameof(this.TimerStart),
+                nameof(this.TimeLeftAsPercentage),
+                nameof(this.TimeElapsedAsPercentage),
+                nameof(this.TimeLeftAsString),
+                nameof(this.TimeElapsedAsString),
+                nameof(this.TimeExpiredAsString));
         }
 
         /// <summary>
@@ -480,7 +486,7 @@ namespace Hourglass.Timing
             {
                 return 100.0;
             }
-            
+
             return 100.0 * timeLeft / totalTime;
         }
 
