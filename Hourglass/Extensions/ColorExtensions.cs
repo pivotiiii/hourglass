@@ -35,7 +35,7 @@ namespace Hourglass.Extensions
 
             if (color == null)
             {
-                throw new ArgumentException("colorString");
+                throw new ArgumentNullException(nameof(colorString));
             }
 
             return (Color)color;

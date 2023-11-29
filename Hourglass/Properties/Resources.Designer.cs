@@ -1011,13 +1011,22 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to stop all the running timers and exit?.
+        /// </summary>
+        public static string ExitMenuMessageBoxText {
+            get {
+                return ResourceManager.GetString("ExitMenuMessageBoxText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MIT License
         ///
-        ///Copyright © 2021 Chris Dziemborowicz
+        ///Copyright © 2021 Chris Dziemborowicz, 2023 Ivan Ivon
         ///
         ///Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
         ///
-        ///The above copyright n [rest of string was truncated]&quot;;.
+        ///The a [rest of string was truncated]&quot;;.
         /// </summary>
         public static string License {
             get {
@@ -1346,6 +1355,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;Command-line usage.
+        /// </summary>
+        public static string NotificationAreaIconCommandLineMenuItem {
+            get {
+                return ResourceManager.GetString("NotificationAreaIconCommandLineMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to E&amp;xit.
         /// </summary>
         public static string NotificationAreaIconExitMenuItem {
@@ -1378,6 +1396,15 @@ namespace Hourglass.Properties {
         public static string NotificationAreaIconYourTimerHasExpired {
             get {
                 return ResourceManager.GetString("NotificationAreaIconYourTimerHasExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No timers are currently running.
+        /// </summary>
+        public static string NoTimersAreCurrentlyRunningNotificationAreText {
+            get {
+                return ResourceManager.GetString("NoTimersAreCurrentlyRunningNotificationAreText", resourceCulture);
             }
         }
         
@@ -1967,7 +1994,9 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to close this timer window?.
+        ///   Looks up a localized string similar to Are you sure you want to stop and remove the timer and close this timer window?
+        ///
+        ///If you want to keep timer running consider minimizing timer window instead of closing it..
         /// </summary>
         public static string TimerWindowCloseMessageBoxText {
             get {

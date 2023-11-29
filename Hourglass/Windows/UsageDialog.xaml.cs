@@ -8,7 +8,6 @@ namespace Hourglass.Windows
 {
     using System.Windows;
     using System.Windows.Media;
-    using System.Windows.Navigation;
 
     /// <summary>
     /// A window that displays command-line usage.

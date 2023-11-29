@@ -195,24 +195,12 @@ namespace Hourglass.Windows
         /// <summary>
         /// Removes focus from all controls.
         /// </summary>
-        /// <returns>A value indicating whether the focus was removed from any element.</returns>
-        private bool UnfocusAll()
+        private void UnfocusAll()
         {
-            bool unfocused = this.ThemesComboBox.Unfocus()
-                || this.NewButton.Unfocus()
-                || this.NameTextBox.Unfocus()
-                || this.DeleteButton.Unfocus()
-                || this.ColorsGrid.Unfocus()
-                || this.SaveButton.Unfocus()
-                || this.CancelButton.Unfocus()
-                || this.CloseButton.Unfocus();
-
             foreach (ColorControl control in this.ColorsGrid.GetAllVisualChildren().OfType<ColorControl>())
             {
-                unfocused |= control.Unfocus();
+                control.Unfocus();
             }
-
-            return unfocused;
         }
 
         /// <summary>
@@ -375,7 +363,7 @@ namespace Hourglass.Windows
                     Properties.Resources.ThemeManagerWindowSavePrompt,
                     Properties.Resources.MessageBoxTitle,
                     MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Question);
+                    MessageBoxImage.Exclamation);
 
                 switch (result)
                 {
@@ -503,8 +491,8 @@ namespace Hourglass.Windows
                     this /* owner */,
                     Properties.Resources.ThemeManagerWindowDeletePrompt,
                     Properties.Resources.MessageBoxTitle,
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
+                    MessageBoxButton.YesNoCancel,
+                    MessageBoxImage.Exclamation);
 
                 if (result == MessageBoxResult.Yes)
                 {

@@ -166,7 +166,7 @@ Options:
         24-hour time rather than the closest 12-hour time to the current time.
 
         For example, if the current time is 3:00 pm (15:00) and the input is
-        "until 05:00" the timer will --
+        "until 05:00" the timer will
         - if this setting is on, count down until 5:00 am (05:00); or
         - if this setting is off, count down until 5:00 pm (17:00).
 
@@ -187,11 +187,11 @@ Options:
             elapsed         Time elapsed
             title           Timer title
 
-            left+title      Time remaining � Timer title
-            elapsed+title   Time elapsed � Timer title
+            left+title      Time remaining · Timer title
+            elapsed+title   Time elapsed · Timer title
 
-            title+left      Timer title � Time remaining
-            title+elapsed   Timer title � Time elapsed
+            title+left      Timer title · Time remaining
+            title+elapsed   Timer title · Time elapsed
 
         Required        no
         Default value   last
@@ -242,28 +242,28 @@ Options:
         used setting.
 
         The factory default settings are:
-            --title                         (none)
-            --always-on-top                 off
-            --full-screen                   off
-            --prompt-on-exit                on
-            --show-progress-in-taskbar      on
-            --do-not-keep-awake             off
-            --show-in-notification-area     off
-            --reverse-progress-bar          off
-            --show-time-elapsed             off
-            --loop-timer                    off
-            --pop-up-when-expired           on
-            --close-when-expired            off
-            --shut-down-when-expired        off
-            --theme                         blue
-            --sound                         normal beep
-            --loop-sound                    off
-            --open-saved-timers             off
-            --prefer-24h-time               off
-            --window-title                  app
-            --window-state                  normal
-            --window-bounds                 auto,auto,350,150
-            --lock-interface                off
+            --title                       -t (none)
+            --always-on-top               -a off
+            --full-screen                 -f off
+            --prompt-on-exit              -o on
+            --show-progress-in-taskbar    -y on
+            --do-not-keep-awake           -k off
+            --show-in-notification-area   -n off
+            --reverse-progress-bar        -g off
+            --show-time-elapsed           -u off
+            --loop-timer                  -l off
+            --pop-up-when-expired         -p on
+            --close-when-expired          -e off
+            --shut-down-when-expired      -x off
+            --theme                       -m blue
+            --sound                       -s normal beep
+            --loop-sound                  -r off
+            --open-saved-timers           -v off
+            --prefer-24h-time             -j off
+            --window-title                -i app
+            --window-state                -w normal
+            --window-bounds               -b auto,auto,350,150
+            --lock-interface              -z off
 
         Required        no
         Alias           -d

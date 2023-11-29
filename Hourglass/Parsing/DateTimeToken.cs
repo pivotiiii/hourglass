@@ -184,7 +184,6 @@ namespace Hourglass.Parsing
                     catch
                     {
                         // Try the next pattern set
-                        continue;
                     }
                 }
 
@@ -311,7 +310,7 @@ namespace Hourglass.Parsing
             {
                 if (string.IsNullOrWhiteSpace(datePartPattern) && string.IsNullOrWhiteSpace(timePartPattern))
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentException(nameof(datePartPattern));
                 }
 
                 // Date pattern only
@@ -353,7 +352,7 @@ namespace Hourglass.Parsing
             {
                 if (string.IsNullOrWhiteSpace(timePartPattern) && string.IsNullOrWhiteSpace(datePartPattern))
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentException(nameof(timePartPattern));
                 }
 
                 // Time pattern only

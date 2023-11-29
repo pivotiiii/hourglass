@@ -580,5 +580,34 @@ namespace Hourglass.Extensions
         }
 
         #endregion
+
+        /// <summary>
+        /// Brings the window to the front.
+        /// </summary>
+        /// <returns><c>true</c> if the window is brought to the foreground, or <c>false</c> if the window cannot be
+        /// brought to the foreground for any reason.</returns>
+        public static bool BringToFront(this Window window, WindowState restoreWindowState = WindowState.Normal, bool alwaysOnTop = false)
+        {
+            try
+            {
+                window.Show();
+
+                if (window.WindowState == WindowState.Minimized)
+                {
+                    window.WindowState = restoreWindowState;
+                }
+
+                window.Topmost = false;
+                window.Topmost = true;
+                window.Topmost = alwaysOnTop;
+
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                // This happens if the window is closing (waiting for the user to confirm) when this method is called
+                return false;
+            }
+        }
     }
 }

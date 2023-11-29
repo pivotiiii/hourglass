@@ -128,7 +128,7 @@ namespace Hourglass.Windows
         {
             if (e.Uri.Scheme != "https")
             {
-                throw new ArgumentException();
+                throw new ArgumentException(nameof(e));
             }
 
             Process.Start(e.Uri.ToString());

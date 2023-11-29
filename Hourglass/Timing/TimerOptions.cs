@@ -241,7 +241,7 @@ namespace Hourglass.Timing
                 }
 
                 this.title = value;
-                this.OnPropertyChanged("Title");
+                this.OnPropertyChanged(nameof(this.Title));
             }
         }
 
@@ -263,7 +263,7 @@ namespace Hourglass.Timing
                 }
 
                 this.alwaysOnTop = value;
-                this.OnPropertyChanged("AlwaysOnTop");
+                this.OnPropertyChanged(nameof(this.AlwaysOnTop));
             }
         }
 
@@ -286,7 +286,7 @@ namespace Hourglass.Timing
                 }
 
                 this.promptOnExit = value;
-                this.OnPropertyChanged("PromptOnExit");
+                this.OnPropertyChanged(nameof(this.PromptOnExit));
             }
         }
 
@@ -308,7 +308,7 @@ namespace Hourglass.Timing
                 }
 
                 this.showProgressInTaskbar = value;
-                this.OnPropertyChanged("ShowProgressInTaskbar");
+                this.OnPropertyChanged(nameof(this.ShowProgressInTaskbar));
             }
         }
 
@@ -330,7 +330,7 @@ namespace Hourglass.Timing
                 }
 
                 this.doNotKeepComputerAwake = value;
-                this.OnPropertyChanged("DoNotKeepComputerAwake");
+                this.OnPropertyChanged(nameof(this.DoNotKeepComputerAwake));
             }
         }
 
@@ -352,7 +352,7 @@ namespace Hourglass.Timing
                 }
 
                 this.reverseProgressBar = value;
-                this.OnPropertyChanged("ReverseProgressBar");
+                this.OnPropertyChanged(nameof(this.ReverseProgressBar));
             }
         }
 
@@ -374,7 +374,7 @@ namespace Hourglass.Timing
                 }
 
                 this.showTimeElapsed = value;
-                this.OnPropertyChanged("ShowTimeElapsed");
+                this.OnPropertyChanged(nameof(this.ShowTimeElapsed));
             }
         }
 
@@ -396,7 +396,7 @@ namespace Hourglass.Timing
                 }
 
                 this.loopTimer = value;
-                this.OnPropertyChanged("LoopTimer");
+                this.OnPropertyChanged(nameof(this.LoopTimer));
             }
         }
 
@@ -419,7 +419,7 @@ namespace Hourglass.Timing
                 }
 
                 this.popUpWhenExpired = value;
-                this.OnPropertyChanged("PopUpWhenExpired");
+                this.OnPropertyChanged(nameof(this.PopUpWhenExpired));
             }
         }
 
@@ -441,7 +441,7 @@ namespace Hourglass.Timing
                 }
 
                 this.closeWhenExpired = value;
-                this.OnPropertyChanged("CloseWhenExpired");
+                this.OnPropertyChanged(nameof(this.CloseWhenExpired));
             }
         }
 
@@ -463,7 +463,7 @@ namespace Hourglass.Timing
                 }
 
                 this.shutDownWhenExpired = value;
-                this.OnPropertyChanged("ShutDownWhenExpired");
+                this.OnPropertyChanged(nameof(this.ShutDownWhenExpired));
             }
         }
 
@@ -485,7 +485,7 @@ namespace Hourglass.Timing
                 }
 
                 this.theme = value;
-                this.OnPropertyChanged("Theme");
+                this.OnPropertyChanged(nameof(this.Theme));
             }
         }
 
@@ -507,7 +507,7 @@ namespace Hourglass.Timing
                 }
 
                 this.sound = value;
-                this.OnPropertyChanged("Sound");
+                this.OnPropertyChanged(nameof(this.Sound));
             }
         }
 
@@ -530,7 +530,7 @@ namespace Hourglass.Timing
                 }
 
                 this.loopSound = value;
-                this.OnPropertyChanged("LoopSound");
+                this.OnPropertyChanged(nameof(this.LoopSound));
             }
         }
 
@@ -552,7 +552,7 @@ namespace Hourglass.Timing
                 }
 
                 this.windowTitleMode = value;
-                this.OnPropertyChanged("WindowTitleMode");
+                this.OnPropertyChanged(nameof(this.WindowTitleMode));
             }
         }
 
@@ -574,7 +574,7 @@ namespace Hourglass.Timing
                 }
 
                 this.windowSize = value;
-                this.OnPropertyChanged("WindowSize");
+                this.OnPropertyChanged(nameof(this.WindowSize));
             }
         }
 
@@ -597,7 +597,7 @@ namespace Hourglass.Timing
                 }
 
                 this.lockInterface = value;
-                this.OnPropertyChanged("LockInterface");
+                this.OnPropertyChanged(nameof(this.LockInterface));
             }
         }
 
@@ -659,23 +659,23 @@ namespace Hourglass.Timing
             this.lockInterface = options.lockInterface;
 
             this.OnPropertyChanged(
-                "Title",
-                "AlwaysOnTop",
-                "PromptOnExit",
-                "ShowProgressInTaskbar",
-                "DoNotKeepComputerAwake",
-                "ReverseProgressBar",
-                "ShowTimeElapsed",
-                "LoopTimer",
-                "PopUpWhenExpired",
-                "CloseWhenExpired",
-                "ShutDownWhenExpired",
-                "Theme",
-                "Sound",
-                "LoopSound",
-                "WindowTitleMode",
-                "WindowSize",
-                "LockInterface");
+                nameof(this.Title),
+                nameof(this.AlwaysOnTop),
+                nameof(this.PromptOnExit),
+                nameof(this.ShowProgressInTaskbar),
+                nameof(this.DoNotKeepComputerAwake),
+                nameof(this.ReverseProgressBar),
+                nameof(this.ShowTimeElapsed),
+                nameof(this.LoopTimer),
+                nameof(this.PopUpWhenExpired),
+                nameof(this.CloseWhenExpired),
+                nameof(this.ShutDownWhenExpired),
+                nameof(this.Theme),
+                nameof(this.Sound),
+                nameof(this.LoopSound),
+                nameof(this.WindowTitleMode),
+                nameof(this.WindowSize),
+                nameof(this.LockInterface));
         }
 
         /// <summary>
@@ -708,23 +708,23 @@ namespace Hourglass.Timing
             this.lockInterface = info.LockInterface;
 
             this.OnPropertyChanged(
-                "Title",
-                "AlwaysOnTop",
-                "PromptOnExit",
-                "ShowProgressInTaskbar",
-                "DoNotKeepComputerAwake",
-                "ReverseProgressBar",
-                "ShowTimeElapsed",
-                "LoopTimer",
-                "PopUpWhenExpired",
-                "CloseWhenExpired",
-                "ShutDownWhenExpired",
-                "Theme",
-                "Sound",
-                "LoopSound",
-                "WindowTitleMode",
-                "WindowSize",
-                "LockInterface");
+                nameof(this.Title),
+                nameof(this.AlwaysOnTop),
+                nameof(this.PromptOnExit),
+                nameof(this.ShowProgressInTaskbar),
+                nameof(this.DoNotKeepComputerAwake),
+                nameof(this.ReverseProgressBar),
+                nameof(this.ShowTimeElapsed),
+                nameof(this.LoopTimer),
+                nameof(this.PopUpWhenExpired),
+                nameof(this.CloseWhenExpired),
+                nameof(this.ShutDownWhenExpired),
+                nameof(this.Theme),
+                nameof(this.Sound),
+                nameof(this.LoopSound),
+                nameof(this.WindowTitleMode),
+                nameof(this.WindowSize),
+                nameof(this.LockInterface));
         }
 
         /// <summary>

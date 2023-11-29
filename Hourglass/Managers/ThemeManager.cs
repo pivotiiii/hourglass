@@ -222,7 +222,7 @@ namespace Hourglass.Managers
                     return this.DefaultTheme;
 
                 default:
-                    throw new ArgumentException();
+                    throw new ArgumentException(nameof(theme));
             }
         }
 
@@ -245,7 +245,7 @@ namespace Hourglass.Managers
                     return this.DefaultDarkTheme;
 
                 default:
-                    throw new ArgumentException();
+                    throw new ArgumentException(nameof(theme));
             }
         }
 

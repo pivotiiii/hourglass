@@ -1,0 +1,60 @@
+﻿name: build
+
+on: [push, pull_request]
+
+env:
+  PROJECT: Hourglass
+  PROJECT_CONFIG: Release
+  PROJECT_CONFIG_PORTABLE: Release Portable
+  RETENTION_DAYS: 30
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+
+    # Setup
+
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v1.3.1
+
+    - name: Setup VSTest
+      uses: darenm/Setup-VSTest@v1.2
+
+    # Checkout
+
+    - name: Checkout
+      uses: actions/checkout@v4.1.1
+
+    # Build
+
+    - name: ${{env.PROJECT}} ${{env.PROJECT_CONFIG_PORTABLE}} build
+      run: msbuild /p:Configuration="${{env.PROJECT_CONFIG_PORTABLE}}" ${{env.PROJECT}}.sln
+
+    - name: ${{env.PROJECT}} ${{env.PROJECT_CONFIG}} build
+      run: msbuild /p:Configuration="${{env.PROJECT_CONFIG}}" ${{env.PROJECT}}.sln
+
+    # Test
+
+    - name: ${{env.PROJECT}} ${{env.PROJECT_CONFIG}} tests
+      run: vstest.console.exe ${{env.PROJECT}}.Test\bin\${{env.PROJECT_CONFIG}}\${{env.PROJECT}}.Test.dll
+
+    # Upload artifacts
+
+    - name: Publish ${{env.PROJECT_CONFIG}} Installer
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        name: ${{env.PROJECT}}Installer
+        path: |
+          ${{env.PROJECT}}.Bundle/bin/${{env.PROJECT_CONFIG}}/${{env.PROJECT}}Installer.exe
+        retention-days: ${{env.RETENTION_DAYS}}
+
+    - name: Publish ${{env.PROJECT_CONFIG_PORTABLE}}
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        name: ${{env.PROJECT}}Portable
+        path: |
+          ${{env.PROJECT}}/bin/${{env.PROJECT_CONFIG_PORTABLE}}/${{env.PROJECT}}.exe
+          ${{env.PROJECT}}/bin/${{env.PROJECT_CONFIG_PORTABLE}}/${{env.PROJECT}}.exe.config
+        retention-days: ${{env.RETENTION_DAYS}}

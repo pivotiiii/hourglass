@@ -30,7 +30,7 @@ namespace Hourglass.Managers
         /// <summary>
         /// The URL for the XML file containing information about the latest version of the app.
         /// </summary>
-        private const string UpdateCheckUrl = "https://updates.dziemborowicz.com/hourglass";
+        private const string UpdateCheckUrl = "https://raw.githubusercontent.com/i2van/hourglass/develop/latest.xml";
 
         /// <summary>
         /// The latest version of the app.
@@ -48,7 +48,7 @@ namespace Hourglass.Managers
         private UpdateManager()
         {
         }
-        
+
         /// <summary>
         /// Raised when a property value changes.
         /// </summary>
@@ -119,7 +119,7 @@ namespace Hourglass.Managers
             try
             {
                 // Try to use TLS 1.3 if it's supported.
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | /* Tls13 */ (SecurityProtocolType)12288;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
             }
             catch (NotSupportedException)
             {
@@ -166,15 +166,13 @@ namespace Hourglass.Managers
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
                     Stream responseStream = response.GetResponseStream();
-                    if (responseStream != null)
-                    {
-                        XmlSerializer serializer = new XmlSerializer(typeof(UpdateInfo));
-                        return (UpdateInfo)serializer.Deserialize(responseStream);
-                    }
-                    else
+                    if (responseStream is null)
                     {
                         return null;
                     }
+
+                    XmlSerializer serializer = new XmlSerializer(typeof(UpdateInfo));
+                    return (UpdateInfo)serializer.Deserialize(responseStream);
                 }
             }
             catch
@@ -200,7 +198,10 @@ namespace Hourglass.Managers
                 return false;
             }
 
-            this.OnPropertyChanged("HasUpdates", "LatestVersion", "UpdateUri");
+            this.OnPropertyChanged(
+                nameof(this.HasUpdates),
+                nameof(this.LatestVersion),
+                nameof(this.UpdateUri));
             return true;
         }
     }
