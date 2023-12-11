@@ -52,9 +52,9 @@ public static class TimerWindowExtensions
 
     private static int CompareTime(TimerWindow x, TimerWindow y)
     {
-        return IsNotRunning(x.Timer.TimeLeft, y.Timer.TimeLeft)
+        return IsNotRunning(  x.Timer.TimeLeft,  y.Timer.TimeLeft)
             ? CompareTimeSpan(x.Timer.TotalTime, y.Timer.TotalTime)
-            : CompareTimeSpan(x.Timer.TimeLeft, y.Timer.TimeLeft);
+            : CompareTimeSpan(x.Timer.TimeLeft,  y.Timer.TimeLeft);
 
         static int CompareTimeSpan(TimeSpan? x, TimeSpan? y) =>
             x == y ? 0 : x > y ? 1 : -1;

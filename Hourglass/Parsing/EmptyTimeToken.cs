@@ -78,7 +78,7 @@ namespace Hourglass.Parsing
             /// cref="DateToken.Parser"/>.</returns>
             public override bool IsCompatibleWith(DateToken.Parser dateTokenParser)
             {
-                return !(dateTokenParser is EmptyDateToken.Parser);
+                return dateTokenParser is not EmptyDateToken.Parser;
             }
 
             /// <summary>

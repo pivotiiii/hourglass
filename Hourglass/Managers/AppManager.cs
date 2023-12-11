@@ -21,8 +21,9 @@ namespace Hourglass.Managers
         /// <summary>
         /// The manager class singleton instances.
         /// </summary>
-        private static readonly Manager[] Managers = 
+        private static readonly Manager[] Managers =
         {
+            TaskDialogManager.Instance,
             ErrorManager.Instance,
             SettingsManager.Instance,
             UpdateManager.Instance,

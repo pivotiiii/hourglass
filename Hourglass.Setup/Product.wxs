@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
-    <Product Id="*" Name="Hourglass" Language="1033" Version="1.15.1.0" Manufacturer="Chris Dziemborowicz, Ivan Ivon" UpgradeCode="172d3713-8820-4374-8195-3e2374e7724f">
+    <Product Id="*" Name="Hourglass" Language="1033" Version="1.15.2.0" Manufacturer="Chris Dziemborowicz, Ivan Ivon" UpgradeCode="172d3713-8820-4374-8195-3e2374e7724f">
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"/>
 
         <Icon Id="AppIcon.exe" SourceFile="$(var.Hourglass.ProjectDir)Resources\AppIcon.ico"/>
@@ -9,6 +9,7 @@
         <MediaTemplate EmbedCab="yes"/>
         <Property Id="ARPPRODUCTICON" Value="AppIcon.exe"/>
         <Property Id="ApplicationFolderName" Value="Hourglass"/>
+        <Property Id="ApplicationExe" Value="Hourglass.exe"/>
         <Property Id="WixAppFolder" Value="WixPerMachineFolder"/>
 
         <Directory Id="TARGETDIR" Name="SourceDir">
@@ -19,6 +20,10 @@
                             <netfx:NativeImage Id="ApplicationExecutableNativeImage" Platform="all" Priority="0" AppBaseDirectory="APPLICATIONFOLDER"/>
                             <Shortcut Id="ApplicationShortcut" Directory="ApplicationShortcutFolder" Name="Hourglass" Description="A simple countdown timer" Advertise="yes" Icon="AppIcon.exe" WorkingDirectory="APPLICATIONFOLDER"/>
                         </File>
+                        <RegistryKey Root="HKMU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\[ApplicationExe]">
+                            <RegistryValue Type="string" Value="[APPLICATIONFOLDER][ApplicationExe]"/>
+                            <RegistryValue Type="string" Name="Path" Value="[APPLICATIONFOLDER]"/>
+                        </RegistryKey>
                     </Component>
                 </Directory>
             </Directory>

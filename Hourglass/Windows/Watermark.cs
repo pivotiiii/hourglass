@@ -90,7 +90,7 @@ namespace Hourglass.Windows
         /// property.</param>
         private static void DependencyPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (!(sender is TextBox) && !(sender is ComboBox))
+            if (sender is not TextBox && sender is not ComboBox)
             {
                 return;
             }

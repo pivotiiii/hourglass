@@ -236,6 +236,10 @@ namespace Hourglass.Windows
         /// </summary>
         private IList<MenuItem> selectableWindowTitleMenuItems;
 
+        private MenuItem faqMenuItem;
+
+        private MenuItem usageMenuItem;
+
         /// <summary>
         /// The "About" <see cref="MenuItem"/>.
         /// </summary>
@@ -832,6 +836,20 @@ namespace Hourglass.Windows
             this.timerTitlePlusTimeElapsedWindowTitleMenuItem.Click += this.CheckableMenuItemClick;
             this.windowTitleMenuItem.Items.Add(this.timerTitlePlusTimeElapsedWindowTitleMenuItem);
             this.selectableWindowTitleMenuItems.Add(this.timerTitlePlusTimeElapsedWindowTitleMenuItem);
+
+            this.Items.Add(new Separator());
+
+            // FAQ
+            this.faqMenuItem = new MenuItem();
+            this.faqMenuItem.Header = Properties.Resources.ContextMenuFAQMenuItem;
+            this.faqMenuItem.Click += this.FAQMenuItemClick;
+            this.Items.Add(this.faqMenuItem);
+
+            // Usage
+            this.usageMenuItem = new MenuItem();
+            this.usageMenuItem.Header = Properties.Resources.ContextMenuUsageMenuItem;
+            this.usageMenuItem.Click += this.UsageMenuItemClick;
+            this.Items.Add(this.usageMenuItem);
 
             this.Items.Add(new Separator());
 
@@ -1476,6 +1494,16 @@ namespace Hourglass.Windows
                 this.maximizeMenuItem.Visibility = Visibility.Collapsed;
                 this.windowStateItemsSeparator.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void FAQMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            Consts.FAQUri.Navigate();
+        }
+
+        private void UsageMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            CommandLineArguments.ShowUsage();
         }
 
         /// <summary>

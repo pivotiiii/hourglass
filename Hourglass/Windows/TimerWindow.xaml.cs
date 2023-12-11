@@ -8,7 +8,6 @@ namespace Hourglass.Windows
 {
     using System;
     using System.ComponentModel;
-    using System.Diagnostics;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -501,7 +500,7 @@ namespace Hourglass.Windows
         }
 
         /// <summary>
-        /// Brings the window to the front, activates it, and focusses it.
+        /// Brings the window to the front, activates it, and focuses it.
         /// </summary>
         public void BringToFrontAndActivate()
         {
@@ -1665,7 +1664,7 @@ namespace Hourglass.Windows
             {
                 try
                 {
-                    Process.Start(updateUri.ToString());
+                    updateUri.Navigate();
                 }
                 catch (Exception ex)
                 {
@@ -1978,14 +1977,17 @@ namespace Hourglass.Windows
             // Prompt for confirmation if required
             if (!this.DoNotPromptOnExit && this.Options.PromptOnExit && this.Timer.State != TimerState.Stopped && this.Timer.State != TimerState.Expired)
             {
-                MessageBoxResult result = MessageBox.Show(
-                    Properties.Resources.TimerWindowCloseMessageBoxText,
-                    Properties.Resources.MessageBoxTitle,
-                    MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Exclamation);
+                var result = this.ShowTaskDialog(
+                    Properties.Resources.TimerWindowCloseTaskDialogInstruction,
+                    Properties.Resources.StopAndCloseWindowCloseTaskDialogCommand,
+                    Properties.Resources.MinimizeWindowCloseTaskDialogCommand);
 
                 if (result != MessageBoxResult.Yes)
                 {
+                    if (result == MessageBoxResult.No)
+                    {
+                        WindowState = WindowState.Minimized;
+                    }
                     e.Cancel = true;
                     return;
                 }

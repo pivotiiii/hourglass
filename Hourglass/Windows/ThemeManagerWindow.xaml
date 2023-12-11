@@ -54,8 +54,8 @@
         <Border Background="#F9F9F9" BorderBrush="#DDDDDD" BorderThickness="0 1 0 0" Padding="8">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="SaveButton" Content="_Save" IsDefault="True" Margin="4" MinWidth="75" Click="SaveButtonClick"/>
-                <Button x:Name="CancelButton" Content="_Cancel" IsCancel="True" Margin="4" MinWidth="75" Click="CancelButtonClick"/>
-                <Button x:Name="CloseButton" Content="C_lose" IsDefault="True" Margin="4" MinWidth="75" Click="CloseButtonClick"/>
+                <Button x:Name="CancelButton" Content="Cancel" IsCancel="True" Margin="4" MinWidth="75" Click="CancelButtonClick"/>
+                <Button x:Name="CloseButton" Content="_Close" IsDefault="True" IsCancel="True" Margin="4" MinWidth="75" Click="CloseButtonClick"/>
             </StackPanel>
         </Border>
     </StackPanel>

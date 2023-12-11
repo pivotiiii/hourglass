@@ -7,8 +7,11 @@
 namespace Hourglass.Extensions
 {
     using System;
+    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Interop;
+
+    using KPreisser.UI;
 
     using Hourglass.Windows;
 
@@ -601,6 +604,8 @@ namespace Hourglass.Extensions
                 window.Topmost = true;
                 window.Topmost = alwaysOnTop;
 
+                window.Activate();
+
                 return true;
             }
             catch (InvalidOperationException)
@@ -608,6 +613,69 @@ namespace Hourglass.Extensions
                 // This happens if the window is closing (waiting for the user to confirm) when this method is called
                 return false;
             }
+        }
+
+        private static TaskDialog taskDialog;
+
+        public static MessageBoxResult ShowTaskDialog(this Window window, string instruction, string yesText, string noText = null)
+        {
+            if (taskDialog is not null)
+            {
+                SetForegroundWindow(taskDialog.Handle);
+                return MessageBoxResult.Cancel;
+            }
+
+            var dialogPage = new TaskDialogPage
+            {
+                Title = Properties.Resources.MessageBoxTitle,
+                Text = Properties.Resources.WhatWouldYouDoTaskDialogText,
+                Instruction = instruction,
+                Icon = TaskDialogStandardIcon.Warning,
+                CustomButtonStyle = TaskDialogCustomButtonStyle.CommandLinks,
+                AllowCancel = true
+            };
+
+            var yesButton = dialogPage.CustomButtons.Add(yesText);
+            var noButton = string.IsNullOrWhiteSpace(noText) ? null : dialogPage.CustomButtons.Add(noText);
+            dialogPage.CustomButtons.Add(Properties.Resources.BackTaskDialogCommand);
+
+            var hasOwner = window is not null;
+
+            var dialog = new TaskDialog(dialogPage)
+            {
+                StartupLocation = hasOwner ? TaskDialogStartupLocation.CenterParent : TaskDialogStartupLocation.CenterScreen
+            };
+
+            dialog.Shown += OnShown;
+
+            var handle = hasOwner ? new WindowInteropHelper(window).Handle : IntPtr.Zero;
+            var result = dialog.Show(handle);
+
+            var messageBoxResult = ReferenceEquals(result, yesButton)
+                ? MessageBoxResult.Yes
+                : ReferenceEquals(result, noButton)
+                    ? MessageBoxResult.No
+                    : MessageBoxResult.Cancel;
+
+            taskDialog = null;
+
+            return messageBoxResult;
+
+            void OnShown(object sender, EventArgs e)
+            {
+                dialog.Shown -= OnShown;
+                taskDialog = dialog;
+            }
+
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            static extern bool SetForegroundWindow(IntPtr hWnd);
+        }
+
+        public static void Clean()
+        {
+            taskDialog?.Close();
+            taskDialog = null;
         }
     }
 }

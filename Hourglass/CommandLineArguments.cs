@@ -209,21 +209,9 @@ namespace Hourglass
         /// Shows the command-line usage of this application in a window.
         /// </summary>
         /// <param name="errorMessage">An error message to display. (Optional.)</param>
-        public static UsageDialog ShowUsage(string errorMessage = null)
+        public static void ShowUsage(string errorMessage = null)
         {
-            UsageDialog usageDialog = new UsageDialog();
-            usageDialog.ErrorMessage = errorMessage;
-
-            if (Application.Current != null && Application.Current.Dispatcher != null)
-            {
-                usageDialog.Show();
-            }
-            else
-            {
-                usageDialog.ShowDialog();
-            }
-
-            return usageDialog;
+            UsageDialog.ShowOrActivate(errorMessage);
         }
 
         /// <summary>

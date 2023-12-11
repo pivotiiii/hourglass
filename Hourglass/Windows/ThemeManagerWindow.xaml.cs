@@ -358,12 +358,10 @@ namespace Hourglass.Windows
         {
             if (this.State == ThemeManagerWindowState.UserThemeEdited)
             {
-                MessageBoxResult result = MessageBox.Show(
-                    this /* owner */,
-                    Properties.Resources.ThemeManagerWindowSavePrompt,
-                    Properties.Resources.MessageBoxTitle,
-                    MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Exclamation);
+                MessageBoxResult result = this.ShowTaskDialog(
+                    Properties.Resources.ThemeManagerWindowSaveTaskDialogInstruction,
+                    Properties.Resources.ThemeManagerWindowSaveTaskDialogCommand,
+                    Properties.Resources.ThemeManagerWindowDontSaveTaskDialogCommand);
 
                 switch (result)
                 {
@@ -487,12 +485,9 @@ namespace Hourglass.Windows
         {
             if (this.SelectedTheme.Type == ThemeType.UserProvided)
             {
-                MessageBoxResult result = MessageBox.Show(
-                    this /* owner */,
-                    Properties.Resources.ThemeManagerWindowDeletePrompt,
-                    Properties.Resources.MessageBoxTitle,
-                    MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Exclamation);
+                MessageBoxResult result = this.ShowTaskDialog(
+                    Properties.Resources.ThemeManagerWindowDeleteTaskDialogInstruction,
+                    Properties.Resources.ThemeManagerWindowDeleteTaskDialogCommand);
 
                 if (result == MessageBoxResult.Yes)
                 {

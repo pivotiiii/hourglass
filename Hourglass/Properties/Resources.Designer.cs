@@ -125,6 +125,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;Back.
+        /// </summary>
+        public static string BackTaskDialogCommand {
+            get {
+                return ResourceManager.GetString("BackTaskDialogCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
         public static System.IO.UnmanagedMemoryStream BeepLoud {
@@ -283,6 +292,15 @@ namespace Hourglass.Properties {
         public static string ContextMenuDoNotKeepComputerAwakeMenuItem {
             get {
                 return ResourceManager.GetString("ContextMenuDoNotKeepComputerAwakeMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FA_Q.
+        /// </summary>
+        public static string ContextMenuFAQMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuFAQMenuItem", resourceCulture);
             }
         }
         
@@ -598,6 +616,15 @@ namespace Hourglass.Properties {
         public static string ContextMenuUnnamedTheme {
             get {
                 return ResourceManager.GetString("ContextMenuUnnamedTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command-line _usage.
+        /// </summary>
+        public static string ContextMenuUsageMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuUsageMenuItem", resourceCulture);
             }
         }
         
@@ -1011,11 +1038,20 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to stop all the running timers and exit?.
+        ///   Looks up a localized string similar to You are about to stop all the running timers and exit.
         /// </summary>
-        public static string ExitMenuMessageBoxText {
+        public static string ExitMenuTaskDialogInstruction {
             get {
-                return ResourceManager.GetString("ExitMenuMessageBoxText", resourceCulture);
+                return ResourceManager.GetString("ExitMenuTaskDialogInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://chris.dziemborowicz.com/apps/hourglass/#downloads.
+        /// </summary>
+        public static string FAQUrl {
+            get {
+                return ResourceManager.GetString("FAQUrl", resourceCulture);
             }
         }
         
@@ -1040,6 +1076,15 @@ namespace Hourglass.Properties {
         public static string MessageBoxTitle {
             get {
                 return ResourceManager.GetString("MessageBoxTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mi&amp;nimize.
+        /// </summary>
+        public static string MinimizeWindowCloseTaskDialogCommand {
+            get {
+                return ResourceManager.GetString("MinimizeWindowCloseTaskDialogCommand", resourceCulture);
             }
         }
         
@@ -1355,7 +1400,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Command-line usage.
+        ///   Looks up a localized string similar to Command-line &amp;usage.
         /// </summary>
         public static string NotificationAreaIconCommandLineMenuItem {
             get {
@@ -1562,6 +1607,24 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;Stop and close.
+        /// </summary>
+        public static string StopAndCloseWindowCloseTaskDialogCommand {
+            get {
+                return ResourceManager.GetString("StopAndCloseWindowCloseTaskDialogCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop and e&amp;xit.
+        /// </summary>
+        public static string StopAndExitMenuTaskDialogCommand {
+            get {
+                return ResourceManager.GetString("StopAndExitMenuTaskDialogCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Black.
         /// </summary>
         public static string ThemeManagerBlackDarkTheme {
@@ -1706,11 +1769,29 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete the selected theme?.
+        ///   Looks up a localized string similar to &amp;Delete.
         /// </summary>
-        public static string ThemeManagerWindowDeletePrompt {
+        public static string ThemeManagerWindowDeleteTaskDialogCommand {
             get {
-                return ResourceManager.GetString("ThemeManagerWindowDeletePrompt", resourceCulture);
+                return ResourceManager.GetString("ThemeManagerWindowDeleteTaskDialogCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are about to delete the selected theme.
+        /// </summary>
+        public static string ThemeManagerWindowDeleteTaskDialogInstruction {
+            get {
+                return ResourceManager.GetString("ThemeManagerWindowDeleteTaskDialogInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not save and &amp;close.
+        /// </summary>
+        public static string ThemeManagerWindowDontSaveTaskDialogCommand {
+            get {
+                return ResourceManager.GetString("ThemeManagerWindowDontSaveTaskDialogCommand", resourceCulture);
             }
         }
         
@@ -1724,11 +1805,20 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to save the changes to the current theme?.
+        ///   Looks up a localized string similar to &amp;Save and close.
         /// </summary>
-        public static string ThemeManagerWindowSavePrompt {
+        public static string ThemeManagerWindowSaveTaskDialogCommand {
             get {
-                return ResourceManager.GetString("ThemeManagerWindowSavePrompt", resourceCulture);
+                return ResourceManager.GetString("ThemeManagerWindowSaveTaskDialogCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are about to save the modified theme.
+        /// </summary>
+        public static string ThemeManagerWindowSaveTaskDialogInstruction {
+            get {
+                return ResourceManager.GetString("ThemeManagerWindowSaveTaskDialogInstruction", resourceCulture);
             }
         }
         
@@ -1994,13 +2084,11 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to stop and remove the timer and close this timer window?
-        ///
-        ///If you want to keep timer running consider minimizing timer window instead of closing it..
+        ///   Looks up a localized string similar to You are about to stop the timer and close the timer window.
         /// </summary>
-        public static string TimerWindowCloseMessageBoxText {
+        public static string TimerWindowCloseTaskDialogInstruction {
             get {
-                return ResourceManager.GetString("TimerWindowCloseMessageBoxText", resourceCulture);
+                return ResourceManager.GetString("TimerWindowCloseTaskDialogInstruction", resourceCulture);
             }
         }
         
@@ -2484,11 +2572,29 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hourglass FAQ.
+        /// </summary>
+        public static string UsageDialogFAQHyperlinkText {
+            get {
+                return ResourceManager.GetString("UsageDialogFAQHyperlinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hourglass.
         /// </summary>
         public static string UsageDialogTitle {
             get {
                 return ResourceManager.GetString("UsageDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What would you do?.
+        /// </summary>
+        public static string WhatWouldYouDoTaskDialogText {
+            get {
+                return ResourceManager.GetString("WhatWouldYouDoTaskDialogText", resourceCulture);
             }
         }
     }

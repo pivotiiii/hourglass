@@ -7,10 +7,11 @@
 namespace Hourglass.Windows
 {
     using System;
-    using System.Diagnostics;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Navigation;
 
+    using Hourglass.Extensions;
     using Hourglass.Managers;
 
     /// <summary>
@@ -37,21 +38,11 @@ namespace Hourglass.Windows
         /// </summary>
         public static string Copyright
         {
-            get
-            {
-                // Finds the copyright line in the license string. Perhaps overkill, but doing it this way means there's
-                // one less place to update the copyright notice.
-                string[] lines = License.Split('\r', '\n');
-                foreach (string line in lines)
-                {
-                    if (line.StartsWith("Copyright"))
-                    {
-                        return line;
-                    }
-                }
-
+            // Finds the copyright line in the license string. Perhaps overkill, but doing it this way means there's
+            // one less place to update the copyright notice.
+            get =>
+                License.Split(Environment.NewLine.ToCharArray()).FirstOrDefault(static line => line.StartsWith("Copyright")) ??
                 throw new Exception("Could not find copyright line in license.");
-            }
         }
 
         /// <summary>
@@ -108,7 +99,7 @@ namespace Hourglass.Windows
             this.MaxWidth = 0.75 * SystemParameters.WorkArea.Width;
             this.MaxHeight = 0.75 * SystemParameters.WorkArea.Height;
         }
-        
+
         /// <summary>
         /// Invoked when the about dialog is closed.
         /// </summary>
@@ -126,12 +117,7 @@ namespace Hourglass.Windows
         /// <param name="e">The event data.</param>
         private void HyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            if (e.Uri.Scheme != "https")
-            {
-                throw new ArgumentException(nameof(e));
-            }
-
-            Process.Start(e.Uri.ToString());
+            e.Uri.Navigate();
         }
 
         /// <summary>

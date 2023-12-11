@@ -16,6 +16,7 @@
     <WarningLevel>4</WarningLevel>
     <Deterministic>true</Deterministic>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -29,6 +30,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <Deterministic>true</Deterministic>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Portable|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -42,6 +44,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <Deterministic>true</Deterministic>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,6 +56,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <Deterministic>true</Deterministic>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Portable|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -65,6 +69,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <Deterministic>true</Deterministic>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Signed|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -76,6 +81,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <Deterministic>true</Deterministic>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Signed Portable|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -88,6 +94,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <Deterministic>true</Deterministic>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
@@ -115,6 +122,7 @@
     <Compile Include="App.cs" />
     <Compile Include="AppEntry.cs" />
     <Compile Include="CommandLineArguments.cs" />
+    <Compile Include="Consts.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
     <Compile Include="Extensions\CultureInfoExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -127,8 +135,39 @@
     <Compile Include="Extensions\ResourceManagerExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\TimerWindowExtensions.cs" />
+    <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />
     <Compile Include="Extensions\WindowsExtensions.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialog.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialog.WindowSubclassHandler.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogButton.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogButtonClickedEventArgs.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogButtons.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogCheckbox.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogClosingEventArgs.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogControl.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogCustomButton.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogCustomButtonCollection.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogCustomButtonStyle.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogExpander.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogFooter.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogHyperlinkClickedEventArgs.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogIcon.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogIconHandle.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogNativeMethods.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogPage.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogProgressBar.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogProgressBarState.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogRadioButton.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogRadioButtonCollection.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogResult.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogStandardButton.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogStandardButtonCollection.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogStandardIcon.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogStandardIconContainer.cs" />
+    <Compile Include="Lib\TaskDialog\TaskDialogStartupLocation.cs" />
+    <Compile Include="Lib\TaskDialog\WindowSubclassHandler.cs" />
+    <Compile Include="Lib\TaskDialog\WindowSubclassHandlerNativeMethods.cs" />
     <Compile Include="Managers\AppManager.cs" />
     <Compile Include="Managers\ErrorManager.cs" />
     <Compile Include="Managers\KeepAwakeManager.cs" />
@@ -136,6 +175,7 @@
     <Compile Include="Managers\NotificationAreaIconManager.cs" />
     <Compile Include="Managers\SettingsManager.cs" />
     <Compile Include="Managers\SoundManager.cs" />
+    <Compile Include="Managers\TaskDialogManager.cs" />
     <Compile Include="Managers\ThemeManager.cs" />
     <Compile Include="Managers\TimerManager.cs" />
     <Compile Include="Managers\TimerOptionsManager.cs" />
@@ -249,6 +289,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="Lib\TaskDialog\github.url" />
     <None Include="Properties\App.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

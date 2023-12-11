@@ -8,6 +8,7 @@
         SizeToContent="WidthAndHeight"
         SnapsToDevicePixels="True"
         Title="{x:Static properties:Resources.UsageDialogTitle}"
+        Closed="UsageDialogClosed"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <DockPanel LastChildFill="True">
@@ -31,6 +32,11 @@
                     <TextBlock Margin="15 0" VerticalAlignment="Center">
                         <Hyperlink Click="AboutHourglassHyperlinkClick">
                             <Run Text="{x:Static properties:Resources.UsageDialogAboutHourglassHyperlinkText}"/>
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock Margin="0" VerticalAlignment="Center">
+                        <Hyperlink NavigateUri="{x:Static local:Consts.FAQUri}" RequestNavigate="HyperlinkRequestNavigate">
+                            <TextBlock Text="{x:Static properties:Resources.UsageDialogFAQHyperlinkText}"/>
                         </Hyperlink>
                     </TextBlock>
                 </DockPanel>

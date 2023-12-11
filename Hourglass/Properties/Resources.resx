@@ -861,7 +861,7 @@ $</value>
     <comment>The window title for the error dialog</comment>
   </data>
   <data name="NotificationAreaIconCommandLineMenuItem" xml:space="preserve">
-    <value>&amp;Command-line usage</value>
+    <value>Command-line &amp;usage</value>
     <comment>The text for the command-line usage menu item, where the character following the optional ampersand (&amp;) is the access key</comment>
   </data>
   <data name="NotificationAreaIconExitMenuItem" xml:space="preserve">
@@ -1049,15 +1049,33 @@ $</value>
     <value>Hourglass</value>
     <comment>The caption used for any message boxes</comment>
   </data>
-  <data name="TimerWindowCloseMessageBoxText" xml:space="preserve">
-    <value>Are you sure you want to stop and remove the timer and close this timer window?
-
-If you want to keep timer running consider minimizing timer window instead of closing it.</value>
-    <comment>The message displayed when the user closes a timer window while a timer is running</comment>
+  <data name="TimerWindowCloseTaskDialogInstruction" xml:space="preserve">
+    <value>You are about to stop the timer and close the timer window</value>
+    <comment>The instruction displayed when the user closes a timer window while a timer is running</comment>
   </data>
-  <data name="ExitMenuMessageBoxText" xml:space="preserve">
-    <value>Are you sure you want to stop all the running timers and exit?</value>
-    <comment>The message displayed when the user exist application via exit menu</comment>
+  <data name="BackTaskDialogCommand" xml:space="preserve">
+    <value>&amp;Back</value>
+    <comment>Back task dialog command</comment>
+  </data>
+  <data name="StopAndCloseWindowCloseTaskDialogCommand" xml:space="preserve">
+    <value>&amp;Stop and close</value>
+    <comment>Stop and close task dialog command</comment>
+  </data>
+  <data name="MinimizeWindowCloseTaskDialogCommand" xml:space="preserve">
+    <value>Mi&amp;nimize</value>
+    <comment>Minimize task dialog command</comment>
+  </data>
+  <data name="ExitMenuTaskDialogInstruction" xml:space="preserve">
+    <value>You are about to stop all the running timers and exit</value>
+    <comment>The instruction displayed when the user exist application via exit menu</comment>
+  </data>
+  <data name="WhatWouldYouDoTaskDialogText" xml:space="preserve">
+    <value>What would you do?</value>
+    <comment>The message displayed when the user confirms action</comment>
+  </data>
+  <data name="StopAndExitMenuTaskDialogCommand" xml:space="preserve">
+    <value>Stop and e&amp;xit</value>
+    <comment>Stop and exit task dialog command</comment>
   </data>
   <data name="ContextMenuAdvancedOptionsMenuItem" xml:space="preserve">
     <value>Advanced options</value>
@@ -1175,9 +1193,17 @@ If you want to keep timer running consider minimizing timer window instead of cl
     <value>New theme</value>
     <comment>The name of a new theme</comment>
   </data>
-  <data name="ThemeManagerWindowSavePrompt" xml:space="preserve">
-    <value>Do you want to save the changes to the current theme?</value>
-    <comment>The prompt displayed when the user tries to close the window or navigate away while there are unsaved changes to a theme</comment>
+  <data name="ThemeManagerWindowSaveTaskDialogInstruction" xml:space="preserve">
+    <value>You are about to save the modified theme</value>
+    <comment>The instruction displayed when the user tries to close the window or navigate away while there are unsaved changes to a theme</comment>
+  </data>
+  <data name="ThemeManagerWindowSaveTaskDialogCommand" xml:space="preserve">
+    <value>&amp;Save and close</value>
+    <comment>Save theme task dialog command</comment>
+  </data>
+  <data name="ThemeManagerWindowDontSaveTaskDialogCommand" xml:space="preserve">
+    <value>Do not save and &amp;close</value>
+    <comment>Do not save and close task dialog command</comment>
   </data>
   <data name="ThemeManagerWindowDarkThemesSectionHeader" xml:space="preserve">
     <value>Dark themes</value>
@@ -1191,9 +1217,13 @@ If you want to keep timer running consider minimizing timer window instead of cl
     <value>Custom themes</value>
     <comment>The section header text for user-provided themes</comment>
   </data>
-  <data name="ThemeManagerWindowDeletePrompt" xml:space="preserve">
-    <value>Are you sure you want to delete the selected theme?</value>
-    <comment>The prompt displayed when the user deletes a theme</comment>
+  <data name="ThemeManagerWindowDeleteTaskDialogInstruction" xml:space="preserve">
+    <value>You are about to delete the selected theme</value>
+    <comment>The instruction displayed when the user deletes a theme</comment>
+  </data>
+  <data name="ThemeManagerWindowDeleteTaskDialogCommand" xml:space="preserve">
+    <value>&amp;Delete</value>
+    <comment>Delete a theme task dialog command</comment>
   </data>
   <data name="ContextMenuNoWindowTitleMenuItem" xml:space="preserve">
     <value>_None</value>
@@ -1271,6 +1301,14 @@ If you want to keep timer running consider minimizing timer window instead of cl
     <value>Prefer 24-_hour time when parsing</value>
     <comment>The text for the prefer 24-hour time when parsing menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
+  <data name="ContextMenuFAQMenuItem" xml:space="preserve">
+    <value>FA_Q</value>
+    <comment>The text for the FAQ menu item, where the character following the optional underscore (_) is the access key</comment>
+  </data>
+  <data name="ContextMenuUsageMenuItem" xml:space="preserve">
+    <value>Command-line _usage</value>
+    <comment>The text for the command-line usage menu item, where the character following the optional underscore (_) is the access key</comment>
+  </data>
   <data name="ContextMenuAboutMenuItem" xml:space="preserve">
     <value>_About</value>
     <comment>The text for the about menu item, where the character following the optional underscore (_) is the access key</comment>
@@ -1306,8 +1344,16 @@ If you want to keep timer running consider minimizing timer window instead of cl
     <value>About Hourglass</value>
     <comment>The text for the hyperlink that launches the about dialog from the usage dialog</comment>
   </data>
+  <data name="UsageDialogFAQHyperlinkText" xml:space="preserve">
+    <value>Hourglass FAQ</value>
+    <comment>The text for the hyperlink that launches the FAQ from the usage dialog</comment>
+  </data>
   <data name="NoTimersAreCurrentlyRunningNotificationAreText" xml:space="preserve">
     <value>No timers are currently running</value>
     <comment>Notification area text if no timers</comment>
+  </data>
+  <data name="FAQUrl" xml:space="preserve">
+    <value>https://chris.dziemborowicz.com/apps/hourglass/#downloads</value>
+    <comment>FAQ URL</comment>
   </data>
 </root>

@@ -47,10 +47,6 @@ namespace Hourglass.Windows
         /// </summary>
         private bool disposed;
 
-        private UsageDialog usageDialog;
-
-        private bool exiting;
-
         private DateTime lastClickTime;
 
         /// <summary>
@@ -352,14 +348,7 @@ namespace Hourglass.Windows
 
         private void CommandLineMenuItemClick(object sender, EventArgs e)
         {
-            if (this.usageDialog == null || PresentationSource.FromVisual(this.usageDialog) == null)
-            {
-                this.usageDialog = CommandLineArguments.ShowUsage();
-            }
-            else
-            {
-                this.usageDialog.BringToFront();
-            }
+            CommandLineArguments.ShowUsage();
         }
 
         /// <summary>
@@ -428,35 +417,24 @@ namespace Hourglass.Windows
         /// <param name="e">The event data.</param>
         private void ExitMenuItemClick(object sender, EventArgs e)
         {
-            if (this.exiting)
-            {
-                return;
-            }
-
             if (Application.Current is null)
             {
-                this.usageDialog?.Close();
                 AppManager.Instance.Dispose();
                 Environment.Exit(0);
                 return;
             }
-
-            this.exiting = true;
 
             if (Application.Current.Windows.OfType<TimerWindow>()
                     .Any(window => window.Options.PromptOnExit &&
                                    window.Timer.State != TimerState.Stopped &&
                                    window.Timer.State != TimerState.Expired))
             {
-                var result = System.Windows.MessageBox.Show(
-                    Resources.ExitMenuMessageBoxText,
-                    Resources.MessageBoxTitle,
-                    MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Exclamation);
+                var result = ((Window)null).ShowTaskDialog(
+                    Resources.ExitMenuTaskDialogInstruction,
+                    Resources.StopAndExitMenuTaskDialogCommand);
 
                 if (result != MessageBoxResult.Yes)
                 {
-                    this.exiting = false;
                     return;
                 }
             }
