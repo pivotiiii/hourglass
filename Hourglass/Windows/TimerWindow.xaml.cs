@@ -410,6 +410,8 @@ namespace Hourglass.Windows
 
         public bool DoNotActivateNextWindow { get; set; }
 
+        public bool ForceClose { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -490,22 +492,29 @@ namespace Hourglass.Windows
         }
 
         /// <summary>
-        /// Brings the window to the front.
-        /// </summary>
-        /// <returns><c>true</c> if the window is brought to the foreground, or <c>false</c> if the window cannot be
-        /// brought to the foreground for any reason.</returns>
-        public bool BringToFront()
-        {
-            return this.BringToFront(RestoreWindowState, Options.AlwaysOnTop);
-        }
-
-        /// <summary>
         /// Brings the window to the front, activates it, and focuses it.
         /// </summary>
         public void BringToFrontAndActivate()
         {
-            this.BringToFront();
-            this.Activate();
+            try
+            {
+                this.Show();
+
+                if (this.WindowState == WindowState.Minimized)
+                {
+                    this.WindowState = this.RestoreWindowState;
+                }
+
+                this.Topmost = false;
+                this.Topmost = true;
+                this.Topmost = this.Options.AlwaysOnTop;
+
+                this.Activate();
+            }
+            catch (InvalidOperationException)
+            {
+                // This happens if the window is closing (waiting for the user to confirm) when this method is called
+            }
         }
 
         /// <summary>
@@ -794,7 +803,7 @@ namespace Hourglass.Windows
             // Bring the window to the front if required
             if (this.Options.PopUpWhenExpired)
             {
-                this.BringToFront();
+                this.BringToFrontAndActivate();
             }
             else if (Settings.Default.ShowInNotificationArea && !this.IsVisible)
             {
@@ -1968,40 +1977,57 @@ namespace Hourglass.Windows
         private void WindowClosing(object sender, CancelEventArgs e)
         {
             // Do not allow the window to be closed if the interface is locked and the timer is running
-            if (this.Options.LockInterface && this.Timer.State != TimerState.Stopped && this.Timer.State != TimerState.Expired)
+            e.Cancel = !this.ForceClose &&
+                       this.Options.LockInterface &&
+                       this.Timer.State != TimerState.Stopped &&
+                       this.Timer.State != TimerState.Expired;
+            if (e.Cancel)
             {
-                e.Cancel = true;
                 return;
             }
 
-            // Prompt for confirmation if required
-            if (!this.DoNotPromptOnExit && this.Options.PromptOnExit && this.Timer.State != TimerState.Stopped && this.Timer.State != TimerState.Expired)
+            if (this.ForceClose ||
+                this.DoNotPromptOnExit ||
+                !this.Options.PromptOnExit ||
+                this.Timer.State == TimerState.Stopped ||
+                this.Timer.State == TimerState.Expired)
             {
-                var result = this.ShowTaskDialog(
-                    Properties.Resources.TimerWindowCloseTaskDialogInstruction,
-                    Properties.Resources.StopAndCloseWindowCloseTaskDialogCommand,
-                    Properties.Resources.MinimizeWindowCloseTaskDialogCommand);
+                // Clean up
+                this.UnbindTimer();
+                this.soundPlayer.Dispose();
 
-                if (result != MessageBoxResult.Yes)
-                {
-                    if (result == MessageBoxResult.No)
-                    {
-                        WindowState = WindowState.Minimized;
-                    }
-                    e.Cancel = true;
-                    return;
-                }
+                Settings.Default.WindowSize = WindowSize.FromWindow(this /* window */);
+
+                UpdateManager.Instance.PropertyChanged -= this.UpdateManagerPropertyChanged;
+                KeepAwakeManager.Instance.StopKeepAwakeFor(this);
+                AppManager.Instance.Persist();
+
+                return;
             }
 
-            // Clean up
-            this.UnbindTimer();
-            this.soundPlayer.Dispose();
+            e.Cancel = true;
+            Dispatcher.BeginInvoke(this.ConfirmClose);
+        }
 
-            Settings.Default.WindowSize = WindowSize.FromWindow(this /* window */);
+        private void ConfirmClose()
+        {
+            this.BringToFrontAndActivate();
 
-            UpdateManager.Instance.PropertyChanged -= this.UpdateManagerPropertyChanged;
-            KeepAwakeManager.Instance.StopKeepAwakeFor(this);
-            AppManager.Instance.Persist();
+            var result = this.ShowTaskDialog(
+                Properties.Resources.TimerWindowCloseTaskDialogInstruction,
+                Properties.Resources.StopAndCloseWindowCloseTaskDialogCommand,
+                Properties.Resources.MinimizeWindowCloseTaskDialogCommand);
+
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    this.ForceClose = true;
+                    this.Close();
+                    return;
+                case MessageBoxResult.No:
+                    this.WindowState = WindowState.Minimized;
+                    return;
+            }
         }
 
         private void WindowClosed(object sender, EventArgs e) =>

@@ -215,7 +215,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Advanced options.
+        ///   Looks up a localized string similar to Advanced _options.
         /// </summary>
         public static string ContextMenuAdvancedOptionsMenuItem {
             get {

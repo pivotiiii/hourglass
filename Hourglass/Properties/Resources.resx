@@ -1078,7 +1078,7 @@ $</value>
     <comment>Stop and exit task dialog command</comment>
   </data>
   <data name="ContextMenuAdvancedOptionsMenuItem" xml:space="preserve">
-    <value>Advanced options</value>
+    <value>Advanced _options</value>
     <comment>The text for the advanced options menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuShutDownWhenExpiredMenuItem" xml:space="preserve">
