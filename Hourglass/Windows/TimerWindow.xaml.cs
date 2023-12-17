@@ -1935,7 +1935,7 @@ namespace Hourglass.Windows
         /// <param name="e">The event data.</param>
         private void WindowMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (e.OriginalSource is Panel)
+            if (!e.OriginalSource.IsTextBoxView())
             {
                 this.IsFullScreen = !this.IsFullScreen;
                 e.Handled = true;

@@ -88,7 +88,7 @@ namespace Hourglass.Extensions
             string monthString;
             if (!months.TryGetValue(month, out monthString))
             {
-                throw new ArgumentOutOfRangeException("month");
+                throw new ArgumentOutOfRangeException(nameof(month));
             }
 
             return monthString;
@@ -104,7 +104,7 @@ namespace Hourglass.Extensions
         {
             if (day < 1 || day > 31)
             {
-                throw new ArgumentOutOfRangeException("day");
+                throw new ArgumentOutOfRangeException(nameof(day));
             }
 
             if (day % 10 == 1 && day / 10 != 1)
@@ -146,7 +146,7 @@ namespace Hourglass.Extensions
         {
             if (month < 1 || month > 12)
             {
-                throw new ArgumentOutOfRangeException("month");
+                throw new ArgumentOutOfRangeException(nameof(month));
             }
 
             if (month < 12)

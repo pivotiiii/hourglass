@@ -124,7 +124,7 @@ namespace Hourglass.Parsing
             {
                 if (match == null)
                 {
-                    throw new ArgumentNullException("match");
+                    throw new ArgumentNullException(nameof(match));
                 }
 
                 if (!match.Success)

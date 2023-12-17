@@ -46,7 +46,7 @@ namespace Hourglass.Timing
         {
             if (timerStartToken == null)
             {
-                throw new ArgumentNullException("timerStartToken");
+                throw new ArgumentNullException(nameof(timerStartToken));
             }
 
             this.timerStartToken = timerStartToken;
@@ -60,7 +60,7 @@ namespace Hourglass.Timing
         {
             if (timerStartInfo == null)
             {
-                throw new ArgumentNullException("timerStartInfo");
+                throw new ArgumentNullException(nameof(timerStartInfo));
             }
 
             this.timerStartToken = timerStartInfo.TimerStartToken;

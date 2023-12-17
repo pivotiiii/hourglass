@@ -83,12 +83,12 @@ namespace Hourglass.Windows
         /// <summary>
         /// The default width of a <see cref="timerWindow"/>.
         /// </summary>
-        private const double BaseWindowWidth = 350;
+        public const double BaseWindowWidth = 370;
 
         /// <summary>
         /// The default height of a <see cref="timerWindow"/>.
         /// </summary>
-        private const double BaseWindowHeight = 150;
+        public const double BaseWindowHeight = 160;
 
         /// <summary>
         /// The reduction factor that relates the base scale factor with the reduced scale factor.
@@ -145,7 +145,7 @@ namespace Hourglass.Windows
             // Validate parameters
             if (window == null)
             {
-                throw new ArgumentNullException("window");
+                throw new ArgumentNullException(nameof(window));
             }
 
             // Validate state
@@ -219,7 +219,7 @@ namespace Hourglass.Windows
             double baseControlsGridMargin = EnvironmentExtensions.IsWindows10OrNewer
                 ? BaseControlsGridMarginForWindows10AndNewer
                 : BaseControlsGridMarginForWindows81AndOlder;
-            this.innerGrid.Margin = new Thickness(reducedScaleFactor * baseControlsGridMargin);
+            this.innerGrid.Margin = new Thickness((reducedScaleFactor * baseControlsGridMargin + 2 * this.innerGrid.GetMinTrackHeight()) / 4);
 
             this.controlsPanel.Margin = new Thickness(
                 left: reducedScaleFactor * BaseControlsPanelMargin,
