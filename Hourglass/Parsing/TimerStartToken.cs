@@ -208,7 +208,7 @@ namespace Hourglass.Parsing
             {
                 if (str == null)
                 {
-                    throw new ArgumentNullException("str");
+                    throw new ArgumentNullException(nameof(str));
                 }
 
                 TimerStartToken timerStartToken = this.ParseInternal(str, provider);

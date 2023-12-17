@@ -184,7 +184,7 @@ namespace Hourglass.Timing
             this.loopSound = false;
             this.windowTitleMode = WindowTitleMode.ApplicationName;
             this.windowSize = new WindowSize(
-                new Rect(double.PositiveInfinity, double.PositiveInfinity, 350, 150),
+                new Rect(double.PositiveInfinity, double.PositiveInfinity, InterfaceScaler.BaseWindowWidth, InterfaceScaler.BaseWindowHeight),
                 WindowState.Normal,
                 WindowState.Normal,
                 false /* isFullScreen */);
@@ -637,7 +637,7 @@ namespace Hourglass.Timing
         {
             if (options == null)
             {
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(options));
             }
 
             this.title = options.title;
@@ -686,7 +686,7 @@ namespace Hourglass.Timing
         {
             if (info == null)
             {
-                throw new ArgumentNullException("info");
+                throw new ArgumentNullException(nameof(info));
             }
 
             this.title = info.Title;

@@ -86,7 +86,7 @@ namespace Hourglass.Timing
         {
             if (options == null)
             {
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(options));
             }
 
             this.timerStart = null;

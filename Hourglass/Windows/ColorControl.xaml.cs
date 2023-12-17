@@ -24,19 +24,19 @@ namespace Hourglass.Windows
         /// A <see cref="DependencyProperty"/> that specifies the text label.
         /// </summary>
         public static readonly DependencyProperty TextProperty
-            = DependencyProperty.Register("Text", typeof(string), typeof(ColorControl));
+            = DependencyProperty.Register(nameof(Text), typeof(string), typeof(ColorControl));
 
         /// <summary>
         /// A <see cref="DependencyProperty"/> that specifies the color.
         /// </summary>
         public static readonly DependencyProperty ColorProperty
-            = DependencyProperty.Register("Color", typeof(Color), typeof(ColorControl));
+            = DependencyProperty.Register(nameof(Color), typeof(Color), typeof(ColorControl));
 
         /// <summary>
         /// A <see cref="DependencyProperty"/> that specifies the theme to which the color belongs.
         /// </summary>
         public static readonly DependencyProperty ThemeProperty
-            = DependencyProperty.Register("Theme", typeof(Theme), typeof(ColorControl));
+            = DependencyProperty.Register(nameof(Theme), typeof(Theme), typeof(ColorControl));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ColorControl"/> class.

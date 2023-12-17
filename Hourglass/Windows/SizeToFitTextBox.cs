@@ -6,7 +6,6 @@
 
 namespace Hourglass.Windows
 {
-    using System;
     using System.Globalization;
     using System.Windows;
     using System.Windows.Controls;
@@ -19,11 +18,13 @@ namespace Hourglass.Windows
     /// </summary>
     public class SizeToFitTextBox : TextBox
     {
+        private FormattedText formattedText;
+
         /// <summary>
         /// Identifies the minimum font size <see cref="DependencyProperty"/>.
         /// </summary>
         public static readonly DependencyProperty MinFontSizeProperty = DependencyProperty.Register(
-            "MinFontSize",
+            nameof(MinFontSize),
             typeof(double),
             typeof(SizeToFitTextBox),
             new PropertyMetadata(double.NaN /* defaultValue */, MinFontSizePropertyChanged));
@@ -32,7 +33,7 @@ namespace Hourglass.Windows
         /// Identifies the maximum font size <see cref="DependencyProperty"/>.
         /// </summary>
         public static readonly DependencyProperty MaxFontSizeProperty = DependencyProperty.Register(
-            "MaxFontSize",
+            nameof(MaxFontSize),
             typeof(double),
             typeof(SizeToFitTextBox),
             new PropertyMetadata(double.NaN /* defaultValue */, MaxFontSizePropertyChanged));
@@ -94,7 +95,7 @@ namespace Hourglass.Windows
         /// </summary>
         private void UpdateFontSize()
         {
-            if (double.IsNaN(this.MinFontSize) || double.IsNaN(this.MaxFontSize))
+            if (!this.MinFontSize.IsFinite() || !this.MaxFontSize.IsFinite())
             {
                 return;
             }
@@ -104,7 +105,7 @@ namespace Hourglass.Windows
                 this.MinFontSize,
                 this.MaxFontSize);
 
-            if (!double.IsInfinity(desiredFontSize) && !double.IsNaN(desiredFontSize) && desiredFontSize > 0.0)
+            if (desiredFontSize.IsFinite() && desiredFontSize > 0.0)
             {
                 this.FontSize = desiredFontSize;
             }
@@ -116,24 +117,32 @@ namespace Hourglass.Windows
         /// <returns>The width of the text in the text box.</returns>
         private double GetTextWidth()
         {
-            Typeface typeface = new Typeface(
-                this.FontFamily,
-                this.FontStyle,
-                this.FontWeight,
-                this.FontStretch);
+            if (formattedText is null)
+            {
+                Typeface typeface = new Typeface(
+                    this.FontFamily,
+                    this.FontStyle,
+                    this.FontWeight,
+                    this.FontStretch);
 
-            double pixelsPerDip = VisualTreeHelper.GetDpi(this).PixelsPerDip;
-
-            FormattedText formattedText = new FormattedText(
-                this.Text,
-                CultureInfo.CurrentCulture,
-                this.FlowDirection,
-                typeface,
-                this.FontSize,
-                this.Foreground,
-                pixelsPerDip);
+                this.formattedText = new FormattedText(
+                    this.Text,
+                    CultureInfo.CurrentCulture,
+                    this.FlowDirection,
+                    typeface,
+                    this.FontSize,
+                    this.Foreground,
+                    GetPixelsPerDip());
+            }
+            else
+            {
+                this.formattedText.PixelsPerDip = GetPixelsPerDip();
+            }
 
             return formattedText.WidthIncludingTrailingWhitespace;
+
+            double GetPixelsPerDip() =>
+                VisualTreeHelper.GetDpi(this).PixelsPerDip;
         }
 
         /// <summary>
@@ -143,11 +152,10 @@ namespace Hourglass.Windows
         private double GetViewWidth()
         {
             // This is the control closest to the text and gives the most accurate width
-            DependencyObject textBoxView = this.FindVisualChild(
-                o => o.GetType().ToString().Equals("System.Windows.Controls.TextBoxView", StringComparison.Ordinal));
+            DependencyObject textBoxView = this.FindVisualChild(WindowExtensions.IsTextBoxView);
 
             // Since TextBoxView is internal, fall back to this if it is not found
-            FrameworkElement view = (textBoxView as FrameworkElement) ?? this;
+            FrameworkElement view = textBoxView as FrameworkElement ?? this;
 
             return view.ActualWidth;
         }

@@ -7,6 +7,7 @@
 namespace Hourglass.Extensions
 {
     using System;
+    using System.Runtime.CompilerServices;
     using System.Windows.Media;
 
     /// <summary>
@@ -19,6 +20,7 @@ namespace Hourglass.Extensions
         /// </summary>
         /// <param name="color">A <see cref="Color"/>.</param>
         /// <returns>An <see cref="int"/> for <paramref name="color"/>.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int ToInt(this Color color)
         {
             return (color.R << 0) | (color.G << 8) | (color.B << 16);

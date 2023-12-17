@@ -10,6 +10,7 @@ namespace Hourglass.Extensions
     using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Interop;
+    using System.Windows.Media;
 
     using KPreisser.UI;
 
@@ -646,5 +647,19 @@ namespace Hourglass.Extensions
             taskDialog?.Close();
             taskDialog = null;
         }
+
+        public static double GetMinTrackHeight(this Visual visual)
+        {
+            const int SM_CYMINTRACK = 35;
+
+            return GetSystemMetrics(SM_CYMINTRACK) /
+                   (PresentationSource.FromVisual(visual)?.CompositionTarget?.TransformToDevice.M22 ?? 1);
+
+            [DllImport("user32.dll")]
+            static extern int GetSystemMetrics(int nIndex);
+        }
+
+        public static bool IsTextBoxView(this object o) =>
+            StringComparer.Ordinal.Equals(o.GetType().FullName, "System.Windows.Controls.TextBoxView");
     }
 }

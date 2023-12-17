@@ -300,7 +300,7 @@ namespace Hourglass.Windows
             // Validate parameters
             if (window == null)
             {
-                throw new ArgumentNullException("window");
+                throw new ArgumentNullException(nameof(window));
             }
 
             // Validate state

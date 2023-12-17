@@ -55,7 +55,7 @@ namespace Hourglass.Timing
         {
             if (string.IsNullOrEmpty(path))
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             this.name = GetNameFromPath(path);
@@ -76,22 +76,22 @@ namespace Hourglass.Timing
         {
             if (string.IsNullOrEmpty(invariantName))
             {
-                throw new ArgumentNullException("invariantName");
+                throw new ArgumentNullException(nameof(invariantName));
             }
 
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
 
             if (streamProvider == null)
             {
-                throw new ArgumentNullException("streamProvider");
+                throw new ArgumentNullException(nameof(streamProvider));
             }
 
             if (duration < TimeSpan.Zero)
             {
-                throw new ArgumentOutOfRangeException("duration");
+                throw new ArgumentOutOfRangeException(nameof(duration));
             }
 
             this.name = name;
@@ -189,7 +189,7 @@ namespace Hourglass.Timing
         {
             if (string.IsNullOrEmpty(path))
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             return System.IO.Path.GetFileNameWithoutExtension(path);
@@ -204,7 +204,7 @@ namespace Hourglass.Timing
         {
             if (string.IsNullOrEmpty(path))
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             string appDirectory = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".";
