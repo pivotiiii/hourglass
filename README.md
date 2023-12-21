@@ -53,6 +53,7 @@ Run `hourglass -h` to display the **Hourglass** command-line reference or select
 - The minimum timer window size is limited by the system settings only.
 - All the timer windows are arranged by the time left where the nearest remaining running timers are followed by the expired ones if any.
 - When the timer window is minimized or closed the next visible non-minimized timer window is activated.
+- The **Window title** submenu is available directly from the timer window context menu.
 
 ### Mics
 

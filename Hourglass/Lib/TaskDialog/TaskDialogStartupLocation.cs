@@ -1,18 +1,17 @@
-﻿namespace KPreisser.UI
+﻿namespace KPreisser.UI;
+
+/// <summary>
+/// 
+/// </summary>
+public enum TaskDialogStartupLocation
 {
     /// <summary>
     /// 
     /// </summary>
-    public enum TaskDialogStartupLocation
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        CenterScreen = 0,
+    CenterScreen = 0,
 
-        /// <summary>
-        /// 
-        /// </summary>
-        CenterParent = 1
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    CenterParent = 1
 }

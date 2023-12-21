@@ -4,34 +4,28 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hourglass.Serialization
+namespace Hourglass.Serialization;
+
+using Parsing;
+using Timing;
+
+/// <summary>
+/// The representation of a <see cref="TimerStart"/> used for XML serialization.
+/// </summary>
+public sealed class TimerStartInfo
 {
-    using Hourglass.Parsing;
-    using Hourglass.Timing;
+    /// <summary>
+    /// Gets or sets the <see cref="TimerStartToken"/>.
+    /// </summary>
+    public TimerStartToken TimerStartToken { get; set; }
 
     /// <summary>
-    /// The representation of a <see cref="TimerStart"/> used for XML serialization.
+    /// Returns a <see cref="TimerStartInfo"/> for a <see cref="TimerStart"/>.
     /// </summary>
-    public class TimerStartInfo
+    /// <param name="timerStart">A <see cref="TimerStart"/>.</param>
+    /// <returns>The <see cref="TimerStartInfo"/> for the <see cref="TimerStart"/>.</returns>
+    public static TimerStartInfo FromTimerStart(TimerStart timerStart)
     {
-        /// <summary>
-        /// Gets or sets the <see cref="TimerStartToken"/>.
-        /// </summary>
-        public TimerStartToken TimerStartToken { get; set; }
-
-        /// <summary>
-        /// Returns a <see cref="TimerStartInfo"/> for a <see cref="TimerStart"/>.
-        /// </summary>
-        /// <param name="timerStart">A <see cref="TimerStart"/>.</param>
-        /// <returns>The <see cref="TimerStartInfo"/> for the <see cref="TimerStart"/>.</returns>
-        public static TimerStartInfo FromTimerStart(TimerStart timerStart)
-        {
-            if (timerStart == null)
-            {
-                return null;
-            }
-
-            return timerStart.ToTimerStartInfo();
-        }
+        return timerStart?.ToTimerStartInfo();
     }
 }

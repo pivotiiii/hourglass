@@ -4,61 +4,60 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hourglass.Extensions
+namespace Hourglass.Extensions;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Media;
+
+/// <summary>
+/// Provides extensions methods for the <see cref="DependencyObject"/> class.
+/// </summary>
+public static class DependencyObjectExtensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Media;
+    /// <summary>
+    /// Returns the first visual child of a <see cref="DependencyObject"/> that matches the specified predicate.
+    /// </summary>
+    /// <param name="parent">A <see cref="DependencyObject"/>.</param>
+    /// <param name="predicate">A predicate.</param>
+    /// <returns>The first visual child of a <see cref="DependencyObject"/> that matches the specified predicate.
+    /// </returns>
+    public static DependencyObject FindVisualChild(this DependencyObject parent, Func<DependencyObject, bool> predicate)
+    {
+        return GetAllVisualChildren(parent).FirstOrDefault(predicate);
+    }
 
     /// <summary>
-    /// Provides extensions methods for the <see cref="DependencyObject"/> class.
+    /// Returns all the visual children of a <see cref="DependencyObject"/>.
     /// </summary>
-    public static class DependencyObjectExtensions
+    /// <param name="parent">A <see cref="DependencyObject"/>.</param>
+    /// <returns>All the visual children of a <see cref="DependencyObject"/>.</returns>
+    public static IEnumerable<DependencyObject> GetAllVisualChildren(this DependencyObject parent)
     {
-        /// <summary>
-        /// Returns the first visual child of a <see cref="DependencyObject"/> that matches the specified predicate.
-        /// </summary>
-        /// <param name="parent">A <see cref="DependencyObject"/>.</param>
-        /// <param name="predicate">A predicate.</param>
-        /// <returns>The first visual child of a <see cref="DependencyObject"/> that matches the specified predicate.
-        /// </returns>
-        public static DependencyObject FindVisualChild(this DependencyObject parent, Func<DependencyObject, bool> predicate)
+        foreach (DependencyObject child in parent.GetVisualChildren())
         {
-            return GetAllVisualChildren(parent).FirstOrDefault(predicate);
-        }
+            yield return child;
 
-        /// <summary>
-        /// Returns all of the visual children of a <see cref="DependencyObject"/>.
-        /// </summary>
-        /// <param name="parent">A <see cref="DependencyObject"/>.</param>
-        /// <returns>All of the visual children of a <see cref="DependencyObject"/>.</returns>
-        public static IEnumerable<DependencyObject> GetAllVisualChildren(this DependencyObject parent)
-        {
-            foreach (DependencyObject child in parent.GetVisualChildren())
+            foreach (DependencyObject childOfChild in GetAllVisualChildren(child))
             {
-                yield return child;
-
-                foreach (DependencyObject childOfChild in GetAllVisualChildren(child))
-                {
-                    yield return childOfChild;
-                }
+                yield return childOfChild;
             }
         }
+    }
 
-        /// <summary>
-        /// Returns the immediate visual children of a <see cref="DependencyObject"/>.
-        /// </summary>
-        /// <param name="parent">A <see cref="DependencyObject"/>.</param>
-        /// <returns>The immediate visual children of a <see cref="DependencyObject"/>.</returns>
-        public static IEnumerable<DependencyObject> GetVisualChildren(this DependencyObject parent)
+    /// <summary>
+    /// Returns the immediate visual children of a <see cref="DependencyObject"/>.
+    /// </summary>
+    /// <param name="parent">A <see cref="DependencyObject"/>.</param>
+    /// <returns>The immediate visual children of a <see cref="DependencyObject"/>.</returns>
+    public static IEnumerable<DependencyObject> GetVisualChildren(this DependencyObject parent)
+    {
+        int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+        for (int i = 0; i < childrenCount; i++)
         {
-            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < childrenCount; i++)
-            {
-                yield return VisualTreeHelper.GetChild(parent, i);
-            }
+            yield return VisualTreeHelper.GetChild(parent, i);
         }
     }
 }

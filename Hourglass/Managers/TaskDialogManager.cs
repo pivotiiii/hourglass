@@ -2,7 +2,9 @@
 
 namespace Hourglass.Managers;
 
-public class TaskDialogManager : Manager
+#pragma warning disable S3881
+public sealed class TaskDialogManager : Manager
+#pragma warning restore S3881
 {
     public static readonly TaskDialogManager Instance = new ();
 
@@ -10,7 +12,9 @@ public class TaskDialogManager : Manager
     {
     }
 
-    protected override void Dispose(bool disposing) =>
+    protected override void Dispose(bool disposing)
+    {
         WindowExtensions.Clean();
+    }
 }
 

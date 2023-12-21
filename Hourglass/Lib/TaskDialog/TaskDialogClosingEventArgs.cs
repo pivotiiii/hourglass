@@ -1,28 +1,27 @@
 ﻿using System.ComponentModel;
 
-namespace KPreisser.UI
+namespace KPreisser.UI;
+
+/// <summary>
+/// 
+/// </summary>
+public class TaskDialogClosingEventArgs : CancelEventArgs
 {
     /// <summary>
     /// 
     /// </summary>
-    public class TaskDialogClosingEventArgs : CancelEventArgs
+    internal TaskDialogClosingEventArgs(TaskDialogButton closeButton)
+        : base()
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        internal TaskDialogClosingEventArgs(TaskDialogButton closeButton)
-            : base()
-        {
-            CloseButton = closeButton;
-        }
+        CloseButton = closeButton;
+    }
 
-        /// <summary>
-        /// Gets the <see cref="TaskDialogButton"/> that is causing the task dialog
-        /// to close.
-        /// </summary>
-        public TaskDialogButton CloseButton
-        {
-            get;
-        }
+    /// <summary>
+    /// Gets the <see cref="TaskDialogButton"/> that is causing the task dialog
+    /// to close.
+    /// </summary>
+    public TaskDialogButton CloseButton
+    {
+        get;
     }
 }

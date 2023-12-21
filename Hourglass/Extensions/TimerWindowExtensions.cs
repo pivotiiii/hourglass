@@ -12,11 +12,15 @@ public static class TimerWindowExtensions
     private static readonly Comparer<TimerWindow> TimeComparer = Comparer<TimerWindow>.Create(CompareTime);
     private static readonly StringComparer TitleComparer = StringComparer.CurrentCultureIgnoreCase;
 
-    public static IEnumerable<TimerWindow> Arrange(this IEnumerable<TimerWindow> windows) =>
-        windows.OrderBy(static window => window, TimeComparer).ThenBy(Title, TitleComparer);
+    public static IEnumerable<TimerWindow> Arrange(this IEnumerable<TimerWindow> windows)
+    {
+        return windows.OrderBy(static window => window, TimeComparer).ThenBy(Title, TitleComparer);
+    }
 
-    public static IEnumerable<TimerWindow> ArrangeDescending(this IEnumerable<TimerWindow> windows) =>
-        windows.OrderByDescending(static window => window, TimeComparer).ThenByDescending(Title, TitleComparer);
+    public static IEnumerable<TimerWindow> ArrangeDescending(this IEnumerable<TimerWindow> windows)
+    {
+        return windows.OrderByDescending(static window => window, TimeComparer).ThenByDescending(Title, TitleComparer);
+    }
 
     public static void BringNextToFrontAndActivate(this TimerWindow thisWindow)
     {
@@ -39,16 +43,23 @@ public static class TimerWindowExtensions
             return GetNextApplicableWindow(allWindows.SkipWhile(NotThisWindow).Skip(1)) ??
                    GetNextApplicableWindow(allWindows.TakeWhile(NotThisWindow));
 
-            bool NotThisWindow(TimerWindow window) =>
-                !ReferenceEquals(thisWindow, window);
+            bool NotThisWindow(TimerWindow window)
+            {
+                return !ReferenceEquals(thisWindow, window);
+            }
 
-            static TimerWindow GetNextApplicableWindow(IEnumerable<TimerWindow> windows) =>
-                windows.FirstOrDefault(static window => window.IsVisible && window.WindowState != WindowState.Minimized);
+            static TimerWindow GetNextApplicableWindow(IEnumerable<TimerWindow> windows)
+            {
+                return windows.FirstOrDefault(static window =>
+                    window.IsVisible && window.WindowState != WindowState.Minimized);
+            }
         }
     }
 
-    private static string Title(TimerWindow window) =>
-        window.Timer.Options.Title;
+    private static string Title(TimerWindow window)
+    {
+        return window.Timer.Options.Title;
+    }
 
     private static int CompareTime(TimerWindow x, TimerWindow y)
     {
@@ -57,12 +68,16 @@ public static class TimerWindowExtensions
             : CompareTimeSpan(x.Timer.TimeLeft,  y.Timer.TimeLeft);
 
         static int CompareTimeSpan(TimeSpan? x, TimeSpan? y) =>
+#pragma warning disable S3358
             x == y ? 0 : x > y ? 1 : -1;
+#pragma warning restore S3358
 
-        static bool IsNotRunning(TimeSpan? x, TimeSpan? y) =>
-            x is null ||
-            y is null ||
-            x == TimeSpan.Zero ||
-            y == TimeSpan.Zero;
+        static bool IsNotRunning(TimeSpan? x, TimeSpan? y)
+        {
+            return x is null ||
+                   y is null ||
+                   x == TimeSpan.Zero ||
+                   y == TimeSpan.Zero;
+        }
     }
 }

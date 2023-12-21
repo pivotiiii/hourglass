@@ -4,89 +4,88 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hourglass.Managers
+namespace Hourglass.Managers;
+
+using System.Linq;
+
+/// <summary>
+/// Manages the app.
+/// </summary>
+public sealed class AppManager : Manager
 {
-    using System.Linq;
+    /// <summary>
+    /// Singleton instance of the <see cref="AppManager"/> class.
+    /// </summary>
+    public static readonly AppManager Instance = new();
 
     /// <summary>
-    /// Manages the app.
+    /// The manager class singleton instances.
     /// </summary>
-    public class AppManager : Manager
+    private static readonly Manager[] Managers =
     {
-        /// <summary>
-        /// Singleton instance of the <see cref="AppManager"/> class.
-        /// </summary>
-        public static readonly AppManager Instance = new AppManager();
+        TaskDialogManager.Instance,
+        ErrorManager.Instance,
+        SettingsManager.Instance,
+        UpdateManager.Instance,
+        KeepAwakeManager.Instance,
+        WakeUpManager.Instance,
+        NotificationAreaIconManager.Instance,
+        ThemeManager.Instance,
+        SoundManager.Instance,
+        TimerStartManager.Instance,
+        TimerOptionsManager.Instance,
+        TimerManager.Instance
+    };
 
-        /// <summary>
-        /// The manager class singleton instances.
-        /// </summary>
-        private static readonly Manager[] Managers =
-        {
-            TaskDialogManager.Instance,
-            ErrorManager.Instance,
-            SettingsManager.Instance,
-            UpdateManager.Instance,
-            KeepAwakeManager.Instance,
-            WakeUpManager.Instance,
-            NotificationAreaIconManager.Instance,
-            ThemeManager.Instance,
-            SoundManager.Instance,
-            TimerStartManager.Instance,
-            TimerOptionsManager.Instance,
-            TimerManager.Instance
-        };
+    /// <summary>
+    /// Prevents a default instance of the <see cref="AppManager"/> class from being created.
+    /// </summary>
+    private AppManager()
+    {
+    }
 
-        /// <summary>
-        /// Prevents a default instance of the <see cref="AppManager"/> class from being created.
-        /// </summary>
-        private AppManager()
+    /// <summary>
+    /// Initializes the class.
+    /// </summary>
+    public override void Initialize()
+    {
+        foreach (Manager manager in Managers)
         {
+            manager.Initialize();
+        }
+    }
+
+    /// <summary>
+    /// Persists the state of the class.
+    /// </summary>
+    public override void Persist()
+    {
+        foreach (Manager manager in Managers.Reverse())
+        {
+            manager.Persist();
+        }
+    }
+
+    /// <summary>
+    /// Disposes the manager.
+    /// </summary>
+    /// <param name="disposing">A value indicating whether this method was invoked by an explicit call to <see
+    /// cref="Dispose"/>.</param>
+    protected override void Dispose(bool disposing)
+    {
+        if (Disposed)
+        {
+            return;
         }
 
-        /// <summary>
-        /// Initializes the class.
-        /// </summary>
-        public override void Initialize()
-        {
-            foreach (Manager manager in Managers)
-            {
-                manager.Initialize();
-            }
-        }
-
-        /// <summary>
-        /// Persists the state of the class.
-        /// </summary>
-        public override void Persist()
+        if (disposing)
         {
             foreach (Manager manager in Managers.Reverse())
             {
-                manager.Persist();
+                manager.Dispose();
             }
         }
 
-        /// <summary>
-        /// Disposes the manager.
-        /// </summary>
-        /// <param name="disposing">A value indicating whether this method was invoked by an explicit call to <see
-        /// cref="Dispose"/>.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (this.Disposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                foreach (Manager manager in Managers.Reverse())
-                {
-                    manager.Dispose();
-                }
-            }
-
-            base.Dispose(disposing);
-        }
+        base.Dispose(disposing);
     }
 }

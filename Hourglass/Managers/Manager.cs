@@ -4,80 +4,65 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hourglass.Managers
+namespace Hourglass.Managers;
+
+using System;
+
+/// <summary>
+/// A base class for singleton manager classes.
+/// </summary>
+public abstract class Manager : IDisposable
 {
-    using System;
+    /// <summary>
+    /// Indicates whether this object has been disposed.
+    /// </summary>
+    private bool _disposed;
 
     /// <summary>
-    /// A base class for singleton manager classes.
+    /// Gets a value indicating whether this object has been disposed.
     /// </summary>
-    public abstract class Manager : IDisposable
+    protected bool Disposed => _disposed;
+
+    /// <summary>
+    /// Initializes the class.
+    /// </summary>
+    public virtual void Initialize()
     {
-        /// <summary>
-        /// Indicates whether this object has been disposed.
-        /// </summary>
-        private bool disposed;
+    }
 
-        /// <summary>
-        /// Gets a value indicating whether this object has been disposed.
-        /// </summary>
-        protected bool Disposed
+    /// <summary>
+    /// Persists the state of the class.
+    /// </summary>
+    public virtual void Persist()
+    {
+    }
+
+    /// <summary>
+    /// Disposes the manager.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true /* disposing */);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Disposes the manager.
+    /// </summary>
+    /// <param name="disposing">A value indicating whether this method was invoked by an explicit call to <see
+    /// cref="Dispose"/>.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
         {
-            get { return this.disposed; }
+            return;
         }
 
-        /// <summary>
-        /// Initializes the class.
-        /// </summary>
-        public virtual void Initialize()
+        _disposed = true;
+
+        if (disposing)
         {
-        }
-
-        /// <summary>
-        /// Persists the state of the class.
-        /// </summary>
-        public virtual void Persist()
-        {
-        }
-
-        /// <summary>
-        /// Disposes the manager.
-        /// </summary>
-        public void Dispose()
-        {
-            this.Dispose(true /* disposing */);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Disposes the manager.
-        /// </summary>
-        /// <param name="disposing">A value indicating whether this method was invoked by an explicit call to <see
-        /// cref="Dispose"/>.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (this.disposed)
-            {
-                return;
-            }
-
-            this.disposed = true;
-
-            if (disposing)
-            {
-                // Do nothing
-            }
-        }
-
-        /// <summary>
-        /// Throws a <see cref="ObjectDisposedException"/> if the object has been disposed.
-        /// </summary>
-        protected void ThrowIfDisposed()
-        {
-            if (this.disposed)
-            {
-                throw new ObjectDisposedException(this.GetType().FullName);
-            }
+            // Do nothing
         }
     }
 }

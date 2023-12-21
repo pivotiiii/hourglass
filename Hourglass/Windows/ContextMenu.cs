@@ -4,1571 +4,1574 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hourglass.Windows
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using System.Windows.Threading;
+namespace Hourglass.Windows;
 
-    using Hourglass.Extensions;
-    using Hourglass.Managers;
-    using Hourglass.Properties;
-    using Hourglass.Timing;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Threading;
+
+using Extensions;
+using Managers;
+using Properties;
+using Timing;
+
+/// <summary>
+/// A <see cref="System.Windows.Controls.ContextMenu"/> for the <see cref="TimerWindow"/>.
+/// </summary>
+public sealed class ContextMenu : System.Windows.Controls.ContextMenu
+{
+    #region Private Members
 
     /// <summary>
-    /// A <see cref="System.Windows.Controls.ContextMenu"/> for the <see cref="TimerWindow"/>.
+    /// The <see cref="TimerWindow"/> that uses this context menu.
     /// </summary>
-    public class ContextMenu : System.Windows.Controls.ContextMenu
+    private TimerWindow _timerWindow;
+
+    /// <summary>
+    /// A <see cref="DispatcherTimer"/> used to raise events.
+    /// </summary>
+    private DispatcherTimer _dispatcherTimer;
+
+    /// <summary>
+    /// The "Always on top" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _alwaysOnTopMenuItem;
+
+    /// <summary>
+    /// The "Full screen" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _fullScreenMenuItem;
+
+    /// <summary>
+    /// The "Prompt on exit" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _promptOnExitMenuItem;
+
+    /// <summary>
+    /// The "Show progress in taskbar" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _showProgressInTaskbarMenuItem;
+
+    /// <summary>
+    /// The "Show in notification area" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _showInNotificationAreaMenuItem;
+
+    /// <summary>
+    /// The "Loop timer" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _loopTimerMenuItem;
+
+    /// <summary>
+    /// The "Pop up when expired" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _popUpWhenExpiredMenuItem;
+
+    /// <summary>
+    /// The "Close when expired" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _closeWhenExpiredMenuItem;
+
+    /// <summary>
+    /// The "Recent inputs" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _recentInputsMenuItem;
+
+    /// <summary>
+    /// The "Clear recent inputs" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _clearRecentInputsMenuItem;
+
+    /// <summary>
+    /// The "Saved timers" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _savedTimersMenuItem;
+
+    /// <summary>
+    /// The "Open all saved timers" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _openAllSavedTimersMenuItem;
+
+    /// <summary>
+    /// The "Clear saved timers" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _clearSavedTimersMenuItem;
+
+    /// <summary>
+    /// The "Theme" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _themeMenuItem;
+
+    /// <summary>
+    /// The "Light theme" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _lightThemeMenuItem;
+
+    /// <summary>
+    /// The "Dark theme" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _darkThemeMenuItem;
+
+    /// <summary>
+    /// The "Manage themes" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _manageThemesMenuItem;
+
+    /// <summary>
+    /// The "Theme" <see cref="MenuItem"/>s associated with <see cref="Theme"/>s.
+    /// </summary>
+    private IList<MenuItem> _selectableThemeMenuItems;
+
+    /// <summary>
+    /// The "Sound" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _soundMenuItem;
+
+    /// <summary>
+    /// The "Sound" <see cref="MenuItem"/>s associated with <see cref="Sound"/>s.
+    /// </summary>
+    private IList<MenuItem> _selectableSoundMenuItems;
+
+    /// <summary>
+    /// The "Loop sound" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _loopSoundMenuItem;
+
+    /// <summary>
+    /// The "Do not keep computer awake" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _doNotKeepComputerAwakeMenuItem;
+
+    /// <summary>
+    /// The "Open saved timers on startup" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _openSavedTimersOnStartupMenuItem;
+
+    /// <summary>
+    /// The "Prefer 24-hour time when parsing" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _prefer24HourTimeMenuItem;
+
+    /// <summary>
+    /// The "Reverse progress bar" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _reverseProgressBarMenuItem;
+
+    /// <summary>
+    /// The "Show time elapsed" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _showTimeElapsedMenuItem;
+
+    /// <summary>
+    /// The "Shut down when expired" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _shutDownWhenExpiredMenuItem;
+
+    /// <summary>
+    /// The "Window title" <see cref="MenuItem"/>s associated with <see cref="WindowTitleMode"/>s.
+    /// </summary>
+    private IList<MenuItem> _selectableWindowTitleMenuItems;
+
+    /// <summary>
+    /// The "Restore" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _restoreMenuItem;
+
+    /// <summary>
+    /// The "Minimize" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _minimizeMenuItem;
+
+    /// <summary>
+    /// The "Maximize" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _maximizeMenuItem;
+
+    /// <summary>
+    /// Separates the "Restore", "Minimize", and "Maximize" menu items from the "Close" menu item.
+    /// </summary>
+    private Separator _windowStateItemsSeparator;
+
+    #endregion
+
+    /// <summary>
+    /// Gets the date and time the menu was last visible.
+    /// </summary>
+    public DateTime LastShown { get; private set; } = DateTime.MinValue;
+
+    /// <summary>
+    /// Binds the <see cref="ContextMenu"/> to a <see cref="TimerWindow"/>.
+    /// </summary>
+    /// <param name="window">A <see cref="TimerWindow"/>.</param>
+    public void Bind(TimerWindow window)
     {
-        #region Private Members
-
-        /// <summary>
-        /// The <see cref="TimerWindow"/> that uses this context menu.
-        /// </summary>
-        private TimerWindow timerWindow;
-
-        /// <summary>
-        /// A <see cref="DispatcherTimer"/> used to raise events.
-        /// </summary>
-        private DispatcherTimer dispatcherTimer;
-
-        /// <summary>
-        /// The "New timer" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem newTimerMenuItem;
-
-        /// <summary>
-        /// The "Always on top" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem alwaysOnTopMenuItem;
-
-        /// <summary>
-        /// The "Full screen" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem fullScreenMenuItem;
-
-        /// <summary>
-        /// The "Prompt on exit" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem promptOnExitMenuItem;
-
-        /// <summary>
-        /// The "Show progress in taskbar" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem showProgressInTaskbarMenuItem;
-
-        /// <summary>
-        /// The "Show in notification area" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem showInNotificationAreaMenuItem;
-
-        /// <summary>
-        /// The "Loop timer" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem loopTimerMenuItem;
-
-        /// <summary>
-        /// The "Pop up when expired" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem popUpWhenExpiredMenuItem;
-
-        /// <summary>
-        /// The "Close when expired" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem closeWhenExpiredMenuItem;
-
-        /// <summary>
-        /// The "Recent inputs" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem recentInputsMenuItem;
-
-        /// <summary>
-        /// The "Clear recent inputs" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem clearRecentInputsMenuItem;
-
-        /// <summary>
-        /// The "Saved timers" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem savedTimersMenuItem;
-
-        /// <summary>
-        /// The "Open all saved timers" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem openAllSavedTimersMenuItem;
-
-        /// <summary>
-        /// The "Clear saved timers" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem clearSavedTimersMenuItem;
-
-        /// <summary>
-        /// The "Theme" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem themeMenuItem;
-
-        /// <summary>
-        /// The "Light theme" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem lightThemeMenuItem;
-
-        /// <summary>
-        /// The "Dark theme" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem darkThemeMenuItem;
-
-        /// <summary>
-        /// The "Manage themes" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem manageThemesMenuItem;
-
-        /// <summary>
-        /// The "Theme" <see cref="MenuItem"/>s associated with <see cref="Theme"/>s.
-        /// </summary>
-        private IList<MenuItem> selectableThemeMenuItems;
-
-        /// <summary>
-        /// The "Sound" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem soundMenuItem;
-
-        /// <summary>
-        /// The "Sound" <see cref="MenuItem"/>s associated with <see cref="Sound"/>s.
-        /// </summary>
-        private IList<MenuItem> selectableSoundMenuItems;
-
-        /// <summary>
-        /// The "Loop sound" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem loopSoundMenuItem;
-
-        /// <summary>
-        /// The "Advanced options" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem advancedOptionsMenuItem;
-
-        /// <summary>
-        /// The "Do not keep computer awake" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem doNotKeepComputerAwakeMenuItem;
-
-        /// <summary>
-        /// The "Open saved timers on startup" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem openSavedTimersOnStartupMenuItem;
-
-        /// <summary>
-        /// The "Prefer 24-hour time when parsing" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem prefer24HourTimeMenuItem;
-
-        /// <summary>
-        /// The "Reverse progress bar" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem reverseProgressBarMenuItem;
-
-        /// <summary>
-        /// The "Show time elapsed" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem showTimeElapsedMenuItem;
-
-        /// <summary>
-        /// The "Shut down when expired" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem shutDownWhenExpiredMenuItem;
-
-        /// <summary>
-        /// The "Window title" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem windowTitleMenuItem;
-
-        /// <summary>
-        /// The "None" window title <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem noWindowTitleMenuItem;
-
-        /// <summary>
-        /// The "Application name" window title <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem applicationNameWindowTitleMenuItem;
-
-        /// <summary>
-        /// The "Time left" window title <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem timeLeftWindowTitleMenuItem;
-
-        /// <summary>
-        /// The "Time elapsed" window title <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem timeElapsedWindowTitleMenuItem;
-
-        /// <summary>
-        /// The "Timer title" window title <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem timerTitleWindowTitleMenuItem;
-
-        /// <summary>
-        /// The "Timer title + time left" window title <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem timerTitlePlusTimeLeftWindowTitleMenuItem;
-
-        /// <summary>
-        /// The "Timer title + time elapsed" window title <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem timerTitlePlusTimeElapsedWindowTitleMenuItem;
-
-        /// <summary>
-        /// The "Time left + timer title" window title <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem timeLeftPlusTimerTitleWindowTitleMenuItem;
-
-        /// <summary>
-        /// The "Time elapsed + timer title" window title <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem timeElapsedPlusTimerTitleWindowTitleMenuItem;
-
-        /// <summary>
-        /// The "Window title" <see cref="MenuItem"/>s associated with <see cref="WindowTitleMode"/>s.
-        /// </summary>
-        private IList<MenuItem> selectableWindowTitleMenuItems;
-
-        private MenuItem faqMenuItem;
-
-        private MenuItem usageMenuItem;
-
-        /// <summary>
-        /// The "About" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem aboutMenuItem;
-
-        /// <summary>
-        /// The "Restore" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem restoreMenuItem;
-
-        /// <summary>
-        /// The "Minimize" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem minimizeMenuItem;
-
-        /// <summary>
-        /// The "Maximize" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem maximizeMenuItem;
-
-        /// <summary>
-        /// Separates the "Restore", "Minimize", and "Maximize" menu items from the "Close" menu item.
-        /// </summary>
-        private Separator windowStateItemsSeparator;
-
-        /// <summary>
-        /// The "Close" <see cref="MenuItem"/>.
-        /// </summary>
-        private MenuItem closeMenuItem;
-
-        /// <summary>
-        /// The date and time the menu was last visible.
-        /// </summary>
-        private DateTime lastShowed = DateTime.MinValue;
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the date and time the menu was last visible.
-        /// </summary>
-        public DateTime LastShowed
+        // Validate state
+        if (_timerWindow is not null)
         {
-            get { return this.lastShowed; }
+            throw new InvalidOperationException(@"Timer window is already created.");
         }
 
-        #endregion
+        SetValue(TextOptions.TextFormattingModeProperty, TextFormattingMode.Display);
 
-        #region Public Methods
+        // Initialize members
+        _timerWindow = window ?? throw new ArgumentNullException(nameof(window));
 
-        /// <summary>
-        /// Binds the <see cref="ContextMenu"/> to a <see cref="TimerWindow"/>.
-        /// </summary>
-        /// <param name="window">A <see cref="TimerWindow"/>.</param>
-        public void Bind(TimerWindow window)
+        _timerWindow.ContextMenuOpening += WindowContextMenuOpening;
+        _timerWindow.ContextMenuClosing += WindowContextMenuClosing;
+        _timerWindow.ContextMenu = this;
+
+        _dispatcherTimer = new(DispatcherPriority.Normal, Dispatcher)
         {
-            // Validate parameters
-            if (window == null)
+            Interval = TimeSpan.FromSeconds(1)
+        };
+        _dispatcherTimer.Tick += DispatcherTimerTick;
+
+        _selectableThemeMenuItems = new List<MenuItem>();
+        _selectableSoundMenuItems = new List<MenuItem>();
+        _selectableWindowTitleMenuItems = new List<MenuItem>();
+
+        // Build the menu
+        BuildMenu();
+    }
+
+    #region Private Methods (Lifecycle)
+
+    /// <summary>
+    /// Invoked when the context menu is opened.
+    /// </summary>
+    /// <param name="sender">The bound <see cref="TimerWindow"/>.</param>
+    /// <param name="e">The event data.</param>
+    private void WindowContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        // Do not show the context menu if the user interface is locked
+        if (_timerWindow.Options.LockInterface)
+        {
+            e.Handled = true;
+            return;
+        }
+
+        // Update dynamic items
+        UpdateRecentInputsMenuItem();
+        UpdateSavedTimersMenuItem();
+        UpdateThemeMenuItem();
+        UpdateSoundMenuItem();
+        UpdateWindowStateMenuItems();
+
+        // Update binding
+        UpdateMenuFromOptions();
+
+        LastShown = DateTime.Now;
+        _dispatcherTimer.Start();
+    }
+
+    /// <summary>
+    /// Invoked when the <see cref="_dispatcherTimer"/> interval has elapsed.
+    /// </summary>
+    /// <param name="sender">The <see cref="DispatcherTimer"/>.</param>
+    /// <param name="e">The event data.</param>
+    private void DispatcherTimerTick(object sender, EventArgs e)
+    {
+        LastShown = DateTime.Now;
+        UpdateSavedTimersHeaders();
+    }
+
+    /// <summary>
+    /// Invoked just before the context menu is closed.
+    /// </summary>
+    /// <param name="sender">The bound <see cref="TimerWindow"/>.</param>
+    /// <param name="e">The event data.</param>
+    private void WindowContextMenuClosing(object sender, ContextMenuEventArgs e)
+    {
+        UpdateOptionsFromMenu();
+
+        LastShown = DateTime.Now;
+        _dispatcherTimer.Stop();
+
+        AppManager.Instance.Persist();
+    }
+
+    #endregion
+
+    #region Private Methods (Binding)
+
+    /// <summary>
+    /// Reads the options from the <see cref="TimerOptions"/> and applies them to this menu.
+    /// </summary>
+    private void UpdateMenuFromOptions()
+    {
+        // Always on top
+        _alwaysOnTopMenuItem.IsChecked = _timerWindow.Options.AlwaysOnTop;
+
+        // Full screen
+        _fullScreenMenuItem.IsChecked = _timerWindow.IsFullScreen;
+
+        // Prompt on exit
+        _promptOnExitMenuItem.IsChecked = _timerWindow.Options.PromptOnExit;
+
+        // Show progress in taskbar
+        _showProgressInTaskbarMenuItem.IsChecked = _timerWindow.Options.ShowProgressInTaskbar;
+
+        // Show in notification area
+        _showInNotificationAreaMenuItem.IsChecked = Settings.Default.ShowInNotificationArea;
+
+        // Loop timer
+        if (_timerWindow.Timer.SupportsLooping)
+        {
+            _loopTimerMenuItem.IsEnabled = true;
+            _loopTimerMenuItem.IsChecked = _timerWindow.Options.LoopTimer;
+        }
+        else
+        {
+            _loopTimerMenuItem.IsEnabled = false;
+            _loopTimerMenuItem.IsChecked = false;
+        }
+
+        // Pop up when expired
+        _popUpWhenExpiredMenuItem.IsChecked = _timerWindow.Options.PopUpWhenExpired;
+
+        // Close when expired
+        if ((!_timerWindow.Options.LoopTimer || !_timerWindow.Timer.SupportsLooping) && !_timerWindow.Options.LoopSound)
+        {
+            _closeWhenExpiredMenuItem.IsChecked = _timerWindow.Options.CloseWhenExpired;
+            _closeWhenExpiredMenuItem.IsEnabled = true;
+        }
+        else
+        {
+            _closeWhenExpiredMenuItem.IsChecked = false;
+            _closeWhenExpiredMenuItem.IsEnabled = false;
+        }
+
+        // Theme
+        foreach (MenuItem menuItem in _selectableThemeMenuItems)
+        {
+            Theme menuItemTheme = (Theme)menuItem.Tag;
+            menuItem.IsChecked = menuItemTheme == _timerWindow.Options.Theme;
+            if (_timerWindow.Options.Theme.Type == ThemeType.UserProvided)
             {
-                throw new ArgumentNullException(nameof(window));
-            }
-
-            // Validate state
-            if (this.timerWindow != null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            // Initialize members
-            this.timerWindow = window;
-
-            this.timerWindow.ContextMenuOpening += this.WindowContextMenuOpening;
-            this.timerWindow.ContextMenuClosing += this.WindowContextMenuClosing;
-            this.timerWindow.ContextMenu = this;
-
-            this.dispatcherTimer = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
-            this.dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
-            this.dispatcherTimer.Tick += this.DispatcherTimerTick;
-
-            this.selectableThemeMenuItems = new List<MenuItem>();
-            this.selectableSoundMenuItems = new List<MenuItem>();
-            this.selectableWindowTitleMenuItems = new List<MenuItem>();
-
-            // Build the menu
-            this.BuildMenu();
-        }
-
-        #endregion
-
-        #region Private Methods (Lifecycle)
-
-        /// <summary>
-        /// Invoked when the context menu is opened.
-        /// </summary>
-        /// <param name="sender">The bound <see cref="TimerWindow"/>.</param>
-        /// <param name="e">The event data.</param>
-        private void WindowContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            // Do not show the context menu if the user interface is locked
-            if (this.timerWindow.Options.LockInterface)
-            {
-                e.Handled = true;
-                return;
-            }
-
-            // Update dynamic items
-            this.UpdateRecentInputsMenuItem();
-            this.UpdateSavedTimersMenuItem();
-            this.UpdateThemeMenuItem();
-            this.UpdateSoundMenuItem();
-            this.UpdateWindowStateMenuItems();
-
-            // Update binding
-            this.UpdateMenuFromOptions();
-
-            this.lastShowed = DateTime.Now;
-            this.dispatcherTimer.Start();
-        }
-
-        /// <summary>
-        /// Invoked when the <see cref="dispatcherTimer"/> interval has elapsed.
-        /// </summary>
-        /// <param name="sender">The <see cref="DispatcherTimer"/>.</param>
-        /// <param name="e">The event data.</param>
-        private void DispatcherTimerTick(object sender, EventArgs e)
-        {
-            this.lastShowed = DateTime.Now;
-            this.UpdateSavedTimersHeaders();
-        }
-
-        /// <summary>
-        /// Invoked just before the context menu is closed.
-        /// </summary>
-        /// <param name="sender">The bound <see cref="TimerWindow"/>.</param>
-        /// <param name="e">The event data.</param>
-        private void WindowContextMenuClosing(object sender, ContextMenuEventArgs e)
-        {
-            this.UpdateOptionsFromMenu();
-
-            this.lastShowed = DateTime.Now;
-            this.dispatcherTimer.Stop();
-
-            AppManager.Instance.Persist();
-        }
-
-        #endregion
-
-        #region Private Methods (Binding)
-
-        /// <summary>
-        /// Reads the options from the <see cref="TimerOptions"/> and applies them to this menu.
-        /// </summary>
-        private void UpdateMenuFromOptions()
-        {
-            // Always on top
-            this.alwaysOnTopMenuItem.IsChecked = this.timerWindow.Options.AlwaysOnTop;
-
-            // Full screen
-            this.fullScreenMenuItem.IsChecked = this.timerWindow.IsFullScreen;
-
-            // Prompt on exit
-            this.promptOnExitMenuItem.IsChecked = this.timerWindow.Options.PromptOnExit;
-
-            // Show progress in taskbar
-            this.showProgressInTaskbarMenuItem.IsChecked = this.timerWindow.Options.ShowProgressInTaskbar;
-
-            // Show in notification area
-            this.showInNotificationAreaMenuItem.IsChecked = Settings.Default.ShowInNotificationArea;
-
-            // Loop timer
-            if (this.timerWindow.Timer.SupportsLooping)
-            {
-                this.loopTimerMenuItem.IsEnabled = true;
-                this.loopTimerMenuItem.IsChecked = this.timerWindow.Options.LoopTimer;
+                menuItem.Visibility = menuItemTheme.Type == ThemeType.BuiltInLight || menuItemTheme.Type == ThemeType.UserProvided
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
             }
             else
             {
-                this.loopTimerMenuItem.IsEnabled = false;
-                this.loopTimerMenuItem.IsChecked = false;
+                menuItem.Visibility = menuItemTheme.Type == _timerWindow.Options.Theme.Type || menuItemTheme.Type == ThemeType.UserProvided
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
             }
+        }
 
-            // Pop up when expired
-            this.popUpWhenExpiredMenuItem.IsChecked = this.timerWindow.Options.PopUpWhenExpired;
+        _lightThemeMenuItem.IsChecked = _timerWindow.Options.Theme.Type == ThemeType.BuiltInLight;
+        _darkThemeMenuItem.IsChecked = _timerWindow.Options.Theme.Type == ThemeType.BuiltInDark;
 
-            // Close when expired
-            if ((!this.timerWindow.Options.LoopTimer || !this.timerWindow.Timer.SupportsLooping) && !this.timerWindow.Options.LoopSound)
-            {
-                this.closeWhenExpiredMenuItem.IsChecked = this.timerWindow.Options.CloseWhenExpired;
-                this.closeWhenExpiredMenuItem.IsEnabled = true;
-            }
-            else
-            {
-                this.closeWhenExpiredMenuItem.IsChecked = false;
-                this.closeWhenExpiredMenuItem.IsEnabled = false;
-            }
+        // Sound
+        foreach (MenuItem menuItem in _selectableSoundMenuItems)
+        {
+            menuItem.IsChecked = menuItem.Tag == _timerWindow.Options.Sound;
+        }
 
-            // Theme
-            foreach (MenuItem menuItem in this.selectableThemeMenuItems)
+        // Loop sound
+        _loopSoundMenuItem.IsChecked = _timerWindow.Options.LoopSound;
+
+        // Do not keep computer awake
+        _doNotKeepComputerAwakeMenuItem.IsChecked = _timerWindow.Options.DoNotKeepComputerAwake;
+
+        // Open saved timers on startup
+        _openSavedTimersOnStartupMenuItem.IsChecked = Settings.Default.OpenSavedTimersOnStartup;
+
+        // Prefer 24-hour time when parsing
+        _prefer24HourTimeMenuItem.IsChecked = Settings.Default.Prefer24HourTime;
+
+        // Reverse progress bar
+        _reverseProgressBarMenuItem.IsChecked = _timerWindow.Options.ReverseProgressBar;
+
+        // Show time elapsed
+        _showTimeElapsedMenuItem.IsChecked = _timerWindow.Options.ShowTimeElapsed;
+
+        // Shut down when expired
+        if ((!_timerWindow.Options.LoopTimer || !_timerWindow.Timer.SupportsLooping) && !_timerWindow.Options.LoopSound)
+        {
+            _shutDownWhenExpiredMenuItem.IsChecked = _timerWindow.Options.ShutDownWhenExpired;
+            _shutDownWhenExpiredMenuItem.IsEnabled = true;
+        }
+        else
+        {
+            _shutDownWhenExpiredMenuItem.IsChecked = false;
+            _shutDownWhenExpiredMenuItem.IsEnabled = false;
+        }
+
+        // Window title
+        foreach (MenuItem menuItem in _selectableWindowTitleMenuItems)
+        {
+            WindowTitleMode windowTitleMode = (WindowTitleMode)menuItem.Tag;
+            menuItem.IsChecked = windowTitleMode == _timerWindow.Options.WindowTitleMode;
+        }
+    }
+
+    /// <summary>
+    /// Reads the options from this menu and applies them to the <see cref="TimerOptions"/>.
+    /// </summary>
+    private void UpdateOptionsFromMenu()
+    {
+        // Always on top
+        _timerWindow.Options.AlwaysOnTop = _alwaysOnTopMenuItem.IsChecked;
+
+        // Full screen
+        _timerWindow.IsFullScreen = _fullScreenMenuItem.IsChecked;
+
+        // Prompt on exit
+        _timerWindow.Options.PromptOnExit = _promptOnExitMenuItem.IsChecked;
+
+        // Show progress in taskbar
+        _timerWindow.Options.ShowProgressInTaskbar = _showProgressInTaskbarMenuItem.IsChecked;
+
+        // Show in notification area
+        Settings.Default.ShowInNotificationArea = _showInNotificationAreaMenuItem.IsChecked;
+
+        // Loop timer
+        if (_loopTimerMenuItem.IsEnabled)
+        {
+            _timerWindow.Options.LoopTimer = _loopTimerMenuItem.IsChecked;
+        }
+
+        // Pop up when expired
+        _timerWindow.Options.PopUpWhenExpired = _popUpWhenExpiredMenuItem.IsChecked;
+
+        // Close when expired
+        if (_closeWhenExpiredMenuItem.IsEnabled)
+        {
+            _timerWindow.Options.CloseWhenExpired = _closeWhenExpiredMenuItem.IsChecked;
+        }
+
+        // Sound
+        MenuItem selectedSoundMenuItem = _selectableSoundMenuItems.FirstOrDefault(mi => mi.IsChecked);
+        _timerWindow.Options.Sound = selectedSoundMenuItem?.Tag as Sound;
+
+        // Loop sound
+        _timerWindow.Options.LoopSound = _loopSoundMenuItem.IsChecked;
+
+        // Do not keep computer awake
+        _timerWindow.Options.DoNotKeepComputerAwake = _doNotKeepComputerAwakeMenuItem.IsChecked;
+
+        // Open saved timers on startup
+        Settings.Default.OpenSavedTimersOnStartup = _openSavedTimersOnStartupMenuItem.IsChecked;
+
+        // Prefer 24-hour time when parsing
+        Settings.Default.Prefer24HourTime = _prefer24HourTimeMenuItem.IsChecked;
+
+        // Reverse progress bar
+        _timerWindow.Options.ReverseProgressBar = _reverseProgressBarMenuItem.IsChecked;
+
+        // Show time elapsed
+        _timerWindow.Options.ShowTimeElapsed = _showTimeElapsedMenuItem.IsChecked;
+
+        // Shut down when expired
+        if (_shutDownWhenExpiredMenuItem.IsEnabled)
+        {
+            _timerWindow.Options.ShutDownWhenExpired = _shutDownWhenExpiredMenuItem.IsChecked;
+        }
+
+        // Window title
+        MenuItem selectedWindowTitleMenuItem = _selectableWindowTitleMenuItems.FirstOrDefault(mi => mi.IsChecked);
+        _timerWindow.Options.WindowTitleMode = selectedWindowTitleMenuItem is not null
+            ? (WindowTitleMode)selectedWindowTitleMenuItem.Tag
+            : WindowTitleMode.ApplicationName;
+    }
+
+    /// <summary>
+    /// Invoked when a checkable <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void CheckableMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        UpdateOptionsFromMenu();
+        UpdateMenuFromOptions();
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Builds or rebuilds the context menu.
+    /// </summary>
+    private void BuildMenu()
+    {
+        Items.Clear();
+
+        // New timer
+        MenuItem newTimerMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuNewTimerMenuItem
+        };
+        newTimerMenuItem.Click += NewTimerMenuItemClick;
+        Items.Add(newTimerMenuItem);
+
+        Items.Add(new Separator());
+
+        // Always on top
+        _alwaysOnTopMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuAlwaysOnTopMenuItem,
+            IsCheckable = true
+        };
+        _alwaysOnTopMenuItem.Click += CheckableMenuItemClick;
+        Items.Add(_alwaysOnTopMenuItem);
+
+        // Full screen
+        _fullScreenMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuFullScreenMenuItem,
+            IsCheckable = true
+        };
+        _fullScreenMenuItem.Click += CheckableMenuItemClick;
+        Items.Add(_fullScreenMenuItem);
+
+        // Window title
+        MenuItem windowTitleMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuWindowTitleMenuItem
+        };
+
+        // No window title
+        MenuItem noWindowTitleMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuNoWindowTitleMenuItem,
+            IsCheckable = true,
+            Tag = WindowTitleMode.None
+        };
+        noWindowTitleMenuItem.Click += WindowTitleMenuItemClick;
+        noWindowTitleMenuItem.Click += CheckableMenuItemClick;
+        windowTitleMenuItem.Items.Add(noWindowTitleMenuItem);
+        _selectableWindowTitleMenuItems.Add(noWindowTitleMenuItem);
+
+        windowTitleMenuItem.Items.Add(new Separator());
+
+        // Application name (window title)
+        MenuItem applicationNameWindowTitleMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuApplicationNameWindowTitleMenuItem,
+            IsCheckable = true,
+            Tag = WindowTitleMode.ApplicationName
+        };
+        applicationNameWindowTitleMenuItem.Click += WindowTitleMenuItemClick;
+        applicationNameWindowTitleMenuItem.Click += CheckableMenuItemClick;
+        windowTitleMenuItem.Items.Add(applicationNameWindowTitleMenuItem);
+        _selectableWindowTitleMenuItems.Add(applicationNameWindowTitleMenuItem);
+
+        windowTitleMenuItem.Items.Add(new Separator());
+
+        // Time left (window title)
+        MenuItem timeLeftWindowTitleMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuTimeLeftWindowTitleMenuItem,
+            IsCheckable = true,
+            Tag = WindowTitleMode.TimeLeft
+        };
+        timeLeftWindowTitleMenuItem.Click += WindowTitleMenuItemClick;
+        timeLeftWindowTitleMenuItem.Click += CheckableMenuItemClick;
+        windowTitleMenuItem.Items.Add(timeLeftWindowTitleMenuItem);
+        _selectableWindowTitleMenuItems.Add(timeLeftWindowTitleMenuItem);
+
+        // Time elapsed (window title)
+        MenuItem timeElapsedWindowTitleMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuTimeElapsedWindowTitleMenuItem,
+            IsCheckable = true,
+            Tag = WindowTitleMode.TimeElapsed
+        };
+        timeElapsedWindowTitleMenuItem.Click += WindowTitleMenuItemClick;
+        timeElapsedWindowTitleMenuItem.Click += CheckableMenuItemClick;
+        windowTitleMenuItem.Items.Add(timeElapsedWindowTitleMenuItem);
+        _selectableWindowTitleMenuItems.Add(timeElapsedWindowTitleMenuItem);
+
+        // Timer title (window title)
+        MenuItem timerTitleWindowTitleMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuTimerTitleWindowTitleMenuItem,
+            IsCheckable = true,
+            Tag = WindowTitleMode.TimerTitle
+        };
+        timerTitleWindowTitleMenuItem.Click += WindowTitleMenuItemClick;
+        timerTitleWindowTitleMenuItem.Click += CheckableMenuItemClick;
+        windowTitleMenuItem.Items.Add(timerTitleWindowTitleMenuItem);
+        _selectableWindowTitleMenuItems.Add(timerTitleWindowTitleMenuItem);
+
+        windowTitleMenuItem.Items.Add(new Separator());
+
+        // Time left + timer title (window title)
+        MenuItem timeLeftPlusTimerTitleWindowTitleMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuTimeLeftPlusTimerTitleWindowTitleMenuItem,
+            IsCheckable = true,
+            Tag = WindowTitleMode.TimeLeftPlusTimerTitle
+        };
+        timeLeftPlusTimerTitleWindowTitleMenuItem.Click += WindowTitleMenuItemClick;
+        timeLeftPlusTimerTitleWindowTitleMenuItem.Click += CheckableMenuItemClick;
+        windowTitleMenuItem.Items.Add(timeLeftPlusTimerTitleWindowTitleMenuItem);
+        _selectableWindowTitleMenuItems.Add(timeLeftPlusTimerTitleWindowTitleMenuItem);
+
+        // Time elapsed + timer title (window title)
+        MenuItem timeElapsedPlusTimerTitleWindowTitleMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuTimeElapsedPlusTimerTitleWindowTitleMenuItem,
+            IsCheckable = true,
+            Tag = WindowTitleMode.TimeElapsedPlusTimerTitle
+        };
+        timeElapsedPlusTimerTitleWindowTitleMenuItem.Click += WindowTitleMenuItemClick;
+        timeElapsedPlusTimerTitleWindowTitleMenuItem.Click += CheckableMenuItemClick;
+        windowTitleMenuItem.Items.Add(timeElapsedPlusTimerTitleWindowTitleMenuItem);
+        _selectableWindowTitleMenuItems.Add(timeElapsedPlusTimerTitleWindowTitleMenuItem);
+
+        windowTitleMenuItem.Items.Add(new Separator());
+
+        // Timer title + time left (window title)
+        MenuItem timerTitlePlusTimeLeftWindowTitleMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuTimerTitlePlusTimeLeftWindowTitleMenuItem,
+            IsCheckable = true,
+            Tag = WindowTitleMode.TimerTitlePlusTimeLeft
+        };
+        timerTitlePlusTimeLeftWindowTitleMenuItem.Click += WindowTitleMenuItemClick;
+        timerTitlePlusTimeLeftWindowTitleMenuItem.Click += CheckableMenuItemClick;
+        windowTitleMenuItem.Items.Add(timerTitlePlusTimeLeftWindowTitleMenuItem);
+        _selectableWindowTitleMenuItems.Add(timerTitlePlusTimeLeftWindowTitleMenuItem);
+
+        // Timer title + time elapsed (window title)
+        MenuItem timerTitlePlusTimeElapsedWindowTitleMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuTimerTitlePlusTimeElapsedWindowTitleMenuItem,
+            IsCheckable = true,
+            Tag = WindowTitleMode.TimerTitlePlusTimeElapsed
+        };
+        timerTitlePlusTimeElapsedWindowTitleMenuItem.Click += WindowTitleMenuItemClick;
+        timerTitlePlusTimeElapsedWindowTitleMenuItem.Click += CheckableMenuItemClick;
+        windowTitleMenuItem.Items.Add(timerTitlePlusTimeElapsedWindowTitleMenuItem);
+        _selectableWindowTitleMenuItems.Add(timerTitlePlusTimeElapsedWindowTitleMenuItem);
+
+        Items.Add(windowTitleMenuItem);
+
+        Items.Add(new Separator());
+
+        // Prompt on exit
+        _promptOnExitMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuPromptOnExitMenuItem,
+            IsCheckable = true
+        };
+        _promptOnExitMenuItem.Click += CheckableMenuItemClick;
+        Items.Add(_promptOnExitMenuItem);
+
+        // Show progress in taskbar
+        _showProgressInTaskbarMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuShowProgressInTaskbarMenuItem,
+            IsCheckable = true
+        };
+        _showProgressInTaskbarMenuItem.Click += CheckableMenuItemClick;
+        Items.Add(_showProgressInTaskbarMenuItem);
+
+        // Show in notification area
+        _showInNotificationAreaMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuShowInNotificationAreaMenuItem,
+            IsCheckable = true
+        };
+        _showInNotificationAreaMenuItem.Click += CheckableMenuItemClick;
+        Items.Add(_showInNotificationAreaMenuItem);
+
+        Items.Add(new Separator());
+
+        // Loop timer
+        _loopTimerMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuLoopTimerMenuItem,
+            IsCheckable = true
+        };
+        _loopTimerMenuItem.Click += CheckableMenuItemClick;
+        Items.Add(_loopTimerMenuItem);
+
+        // Pop up when expired
+        _popUpWhenExpiredMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuPopUpWhenExpiredMenuItem,
+            IsCheckable = true
+        };
+        _popUpWhenExpiredMenuItem.Click += CheckableMenuItemClick;
+        Items.Add(_popUpWhenExpiredMenuItem);
+
+        // Close when expired
+        _closeWhenExpiredMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuCloseWhenExpiredMenuItem,
+            IsCheckable = true
+        };
+        _closeWhenExpiredMenuItem.Click += CheckableMenuItemClick;
+        Items.Add(_closeWhenExpiredMenuItem);
+
+        Items.Add(new Separator());
+
+        // Recent inputs
+        _recentInputsMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuRecentInputsMenuItem
+        };
+        Items.Add(_recentInputsMenuItem);
+
+        // Saved timers
+        _savedTimersMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuSavedTimersMenuItem
+        };
+        Items.Add(_savedTimersMenuItem);
+
+        Items.Add(new Separator());
+
+        // Theme
+        _themeMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuThemeMenuItem
+        };
+        Items.Add(_themeMenuItem);
+
+        // Sound
+        _soundMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuSoundMenuItem
+        };
+        Items.Add(_soundMenuItem);
+
+        Items.Add(new Separator());
+
+        // Advanced options
+        MenuItem advancedOptionsMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuAdvancedOptionsMenuItem
+        };
+        Items.Add(advancedOptionsMenuItem);
+
+        // Do not keep computer awake
+        _doNotKeepComputerAwakeMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuDoNotKeepComputerAwakeMenuItem,
+            IsCheckable = true
+        };
+        _doNotKeepComputerAwakeMenuItem.Click += CheckableMenuItemClick;
+        advancedOptionsMenuItem.Items.Add(_doNotKeepComputerAwakeMenuItem);
+
+        // Open saved timers on startup
+        _openSavedTimersOnStartupMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuOpenSavedTimersOnStartupMenuItem,
+            IsCheckable = true
+        };
+        _openSavedTimersOnStartupMenuItem.Click += CheckableMenuItemClick;
+        advancedOptionsMenuItem.Items.Add(_openSavedTimersOnStartupMenuItem);
+
+        // Prefer 24-hour time when parsing
+        _prefer24HourTimeMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuPrefer24HourTimeMenuItem,
+            IsCheckable = true
+        };
+        _prefer24HourTimeMenuItem.Click += CheckableMenuItemClick;
+        advancedOptionsMenuItem.Items.Add(_prefer24HourTimeMenuItem);
+
+        // Reverse progress bar
+        _reverseProgressBarMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuReverseProgressBarMenuItem,
+            IsCheckable = true
+        };
+        _reverseProgressBarMenuItem.Click += CheckableMenuItemClick;
+        advancedOptionsMenuItem.Items.Add(_reverseProgressBarMenuItem);
+
+        // Show time elapsed
+        _showTimeElapsedMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuShowTimeElapsedMenuItem,
+            IsCheckable = true
+        };
+        _showTimeElapsedMenuItem.Click += CheckableMenuItemClick;
+        advancedOptionsMenuItem.Items.Add(_showTimeElapsedMenuItem);
+
+        // Shut down when expired
+        _shutDownWhenExpiredMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuShutDownWhenExpiredMenuItem,
+            IsCheckable = true
+        };
+        _shutDownWhenExpiredMenuItem.Click += CheckableMenuItemClick;
+        advancedOptionsMenuItem.Items.Add(_shutDownWhenExpiredMenuItem);
+
+        Items.Add(new Separator());
+
+        // FAQ
+        MenuItem faqMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuFAQMenuItem
+        };
+        faqMenuItem.Click += FAQMenuItemClick;
+        Items.Add(faqMenuItem);
+
+        // Usage
+        MenuItem usageMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuUsageMenuItem
+        };
+        usageMenuItem.Click += UsageMenuItemClick;
+        Items.Add(usageMenuItem);
+
+        Items.Add(new Separator());
+
+        // About
+        MenuItem aboutMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuAboutMenuItem
+        };
+        aboutMenuItem.Click += AboutMenuItemClick;
+        Items.Add(aboutMenuItem);
+
+        Items.Add(new Separator());
+
+        // Restore
+        _restoreMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuRestoreMenuItem
+        };
+        _restoreMenuItem.Click += RestoreMenuItemClick;
+        Items.Add(_restoreMenuItem);
+
+        // Minimize
+        _minimizeMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuMinimizeMenuItem
+        };
+        _minimizeMenuItem.Click += MinimizeMenuItemClick;
+        Items.Add(_minimizeMenuItem);
+
+        // Maximize
+        _maximizeMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuMaximizeMenuItem
+        };
+        _maximizeMenuItem.Click += MaximizeMenuItemClick;
+        Items.Add(_maximizeMenuItem);
+
+        _windowStateItemsSeparator = new();
+        Items.Add(_windowStateItemsSeparator);
+
+        // Close
+        MenuItem closeMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuCloseMenuItem
+        };
+        closeMenuItem.Click += CloseMenuItemClick;
+        Items.Add(closeMenuItem);
+    }
+
+
+    /// <summary>
+    /// Invoked when the "New timer" <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void NewTimerMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        TimerWindow window = new();
+        window.RestoreFromWindow(_timerWindow);
+        window.Show();
+    }
+
+    #region Private Methods (Recent Inputs)
+
+    /// <summary>
+    /// Updates the <see cref="_recentInputsMenuItem"/>.
+    /// </summary>
+    private void UpdateRecentInputsMenuItem()
+    {
+        _recentInputsMenuItem.Items.Clear();
+
+        if (TimerStartManager.Instance.TimerStarts.Count == 0)
+        {
+            MenuItem noRecentInputsMenuItem = new()
             {
-                Theme menuItemTheme = (Theme)menuItem.Tag;
-                menuItem.IsChecked = menuItemTheme == this.timerWindow.Options.Theme;
-                if (this.timerWindow.Options.Theme.Type == ThemeType.UserProvided)
+                Header = Properties.Resources.ContextMenuNoRecentInputsMenuItem,
+                Foreground = Brushes.DarkGray
+            };
+
+            _recentInputsMenuItem.Items.Add(noRecentInputsMenuItem);
+        }
+        else
+        {
+            foreach (TimerStart timerStart in TimerStartManager.Instance.TimerStarts)
+            {
+                MenuItem timerMenuItem = new()
                 {
-                    menuItem.Visibility = menuItemTheme.Type == ThemeType.BuiltInLight || menuItemTheme.Type == ThemeType.UserProvided
-                        ? Visibility.Visible
-                        : Visibility.Collapsed;
-                }
-                else
+                    Header = timerStart.ToString(),
+                    Tag = timerStart
+                };
+                timerMenuItem.Click += RecentInputMenuItemClick;
+
+                _recentInputsMenuItem.Items.Add(timerMenuItem);
+            }
+        }
+
+        _recentInputsMenuItem.Items.Add(new Separator());
+
+        if (_clearRecentInputsMenuItem is null)
+        {
+            _clearRecentInputsMenuItem = new()
+            {
+                Header = Properties.Resources.ContextMenuClearRecentInputsMenuItem
+            };
+            _clearRecentInputsMenuItem.Click += ClearRecentInputsMenuItemClick;
+        }
+
+        _recentInputsMenuItem.Items.Add(_clearRecentInputsMenuItem);
+    }
+
+    /// <summary>
+    /// Invoked when a recent <see cref="TimerStart"/> <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void RecentInputMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        MenuItem menuItem = (MenuItem)sender;
+        TimerStart timerStart = (TimerStart)menuItem.Tag;
+
+        TimerWindow window;
+        if (_timerWindow.Timer.State == TimerState.Stopped || _timerWindow.Timer.State == TimerState.Expired)
+        {
+            window = _timerWindow;
+        }
+        else
+        {
+            window = new();
+            window.Options.Set(_timerWindow.Options);
+            window.RestoreFromWindow(_timerWindow);
+        }
+
+        window.Show(timerStart);
+    }
+
+    /// <summary>
+    /// Invoked when the "Clear recent inputs" <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void ClearRecentInputsMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        TimerStartManager.Instance.Clear();
+    }
+
+    #endregion
+
+    #region Private Methods (Saved Timers)
+
+    /// <summary>
+    /// Updates the <see cref="_savedTimersMenuItem"/>.
+    /// </summary>
+    private void UpdateSavedTimersMenuItem()
+    {
+        _savedTimersMenuItem.Items.Clear();
+
+        IList<Timer> savedTimers = TimerManager.Instance.ResumableTimers;
+
+        if (savedTimers.Count == 0)
+        {
+            MenuItem noRunningTimersMenuItem = new()
+            {
+                Header = Properties.Resources.ContextMenuNoSavedTimersMenuItem,
+                Foreground = Brushes.DarkGray
+            };
+
+            _savedTimersMenuItem.Items.Add(noRunningTimersMenuItem);
+        }
+        else
+        {
+            foreach (Timer savedTimer in savedTimers)
+            {
+                savedTimer.Update();
+
+                MenuItem timerMenuItem = new()
                 {
-                    menuItem.Visibility = menuItemTheme.Type == this.timerWindow.Options.Theme.Type || menuItemTheme.Type == ThemeType.UserProvided
-                        ? Visibility.Visible
-                        : Visibility.Collapsed;
-                }
-            }
+                    Header = GetHeaderForTimer(savedTimer),
+                    Icon = GetIconForTimer(savedTimer),
+                    Tag = savedTimer
+                };
+                timerMenuItem.Click += SavedTimerMenuItemClick;
 
-            this.lightThemeMenuItem.IsChecked = this.timerWindow.Options.Theme.Type == ThemeType.BuiltInLight;
-            this.darkThemeMenuItem.IsChecked = this.timerWindow.Options.Theme.Type == ThemeType.BuiltInDark;
-
-            // Sound
-            foreach (MenuItem menuItem in this.selectableSoundMenuItems)
-            {
-                menuItem.IsChecked = menuItem.Tag == this.timerWindow.Options.Sound;
-            }
-
-            // Loop sound
-            this.loopSoundMenuItem.IsChecked = this.timerWindow.Options.LoopSound;
-
-            // Do not keep computer awake
-            this.doNotKeepComputerAwakeMenuItem.IsChecked = this.timerWindow.Options.DoNotKeepComputerAwake;
-
-            // Open saved timers on startup
-            this.openSavedTimersOnStartupMenuItem.IsChecked = Settings.Default.OpenSavedTimersOnStartup;
-
-            // Prefer 24-hour time when parsing
-            this.prefer24HourTimeMenuItem.IsChecked = Settings.Default.Prefer24HourTime;
-
-            // Reverse progress bar
-            this.reverseProgressBarMenuItem.IsChecked = this.timerWindow.Options.ReverseProgressBar;
-
-            // Show time elapsed
-            this.showTimeElapsedMenuItem.IsChecked = this.timerWindow.Options.ShowTimeElapsed;
-
-            // Shut down when expired
-            if ((!this.timerWindow.Options.LoopTimer || !this.timerWindow.Timer.SupportsLooping) && !this.timerWindow.Options.LoopSound)
-            {
-                this.shutDownWhenExpiredMenuItem.IsChecked = this.timerWindow.Options.ShutDownWhenExpired;
-                this.shutDownWhenExpiredMenuItem.IsEnabled = true;
-            }
-            else
-            {
-                this.shutDownWhenExpiredMenuItem.IsChecked = false;
-                this.shutDownWhenExpiredMenuItem.IsEnabled = false;
-            }
-
-            // Window title
-            foreach (MenuItem menuItem in this.selectableWindowTitleMenuItems)
-            {
-                WindowTitleMode windowTitleMode = (WindowTitleMode)menuItem.Tag;
-                menuItem.IsChecked = windowTitleMode == this.timerWindow.Options.WindowTitleMode;
+                _savedTimersMenuItem.Items.Add(timerMenuItem);
             }
         }
 
-        /// <summary>
-        /// Reads the options from this menu and applies them to the <see cref="TimerOptions"/>.
-        /// </summary>
-        private void UpdateOptionsFromMenu()
+        _savedTimersMenuItem.Items.Add(new Separator());
+
+        if (_openAllSavedTimersMenuItem is null)
         {
-            // Always on top
-            this.timerWindow.Options.AlwaysOnTop = this.alwaysOnTopMenuItem.IsChecked;
-
-            // Full screen
-            this.timerWindow.IsFullScreen = this.fullScreenMenuItem.IsChecked;
-
-            // Prompt on exit
-            this.timerWindow.Options.PromptOnExit = this.promptOnExitMenuItem.IsChecked;
-
-            // Show progress in taskbar
-            this.timerWindow.Options.ShowProgressInTaskbar = this.showProgressInTaskbarMenuItem.IsChecked;
-
-            // Show in notification area
-            Settings.Default.ShowInNotificationArea = this.showInNotificationAreaMenuItem.IsChecked;
-
-            // Loop timer
-            if (this.loopTimerMenuItem.IsEnabled)
+            _openAllSavedTimersMenuItem = new()
             {
-                this.timerWindow.Options.LoopTimer = this.loopTimerMenuItem.IsChecked;
-            }
-
-            // Pop up when expired
-            this.timerWindow.Options.PopUpWhenExpired = this.popUpWhenExpiredMenuItem.IsChecked;
-
-            // Close when expired
-            if (this.closeWhenExpiredMenuItem.IsEnabled)
-            {
-                this.timerWindow.Options.CloseWhenExpired = this.closeWhenExpiredMenuItem.IsChecked;
-            }
-
-            // Sound
-            MenuItem selectedSoundMenuItem = this.selectableSoundMenuItems.FirstOrDefault(mi => mi.IsChecked);
-            this.timerWindow.Options.Sound = selectedSoundMenuItem != null ? selectedSoundMenuItem.Tag as Sound : null;
-
-            // Loop sound
-            this.timerWindow.Options.LoopSound = this.loopSoundMenuItem.IsChecked;
-
-            // Do not keep computer awake
-            this.timerWindow.Options.DoNotKeepComputerAwake = this.doNotKeepComputerAwakeMenuItem.IsChecked;
-
-            // Open saved timers on startup
-            Settings.Default.OpenSavedTimersOnStartup = this.openSavedTimersOnStartupMenuItem.IsChecked;
-
-            // Prefer 24-hour time when parsing
-            Settings.Default.Prefer24HourTime = this.prefer24HourTimeMenuItem.IsChecked;
-
-            // Reverse progress bar
-            this.timerWindow.Options.ReverseProgressBar = this.reverseProgressBarMenuItem.IsChecked;
-
-            // Show time elapsed
-            this.timerWindow.Options.ShowTimeElapsed = this.showTimeElapsedMenuItem.IsChecked;
-
-            // Shut down when expired
-            if (this.shutDownWhenExpiredMenuItem.IsEnabled)
-            {
-                this.timerWindow.Options.ShutDownWhenExpired = this.shutDownWhenExpiredMenuItem.IsChecked;
-            }
-
-            // Window title
-            MenuItem selectedWindowTitleMenuItem = this.selectableWindowTitleMenuItems.FirstOrDefault(mi => mi.IsChecked);
-            this.timerWindow.Options.WindowTitleMode = selectedWindowTitleMenuItem != null
-                ? (WindowTitleMode)selectedWindowTitleMenuItem.Tag
-                : WindowTitleMode.ApplicationName;
+                Header = Properties.Resources.ContextMenuOpenAllSavedTimersMenuItem
+            };
+            _openAllSavedTimersMenuItem.Click += OpenAllSavedTimersMenuItemClick;
         }
 
-        /// <summary>
-        /// Invoked when a checkable <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void CheckableMenuItemClick(object sender, RoutedEventArgs e)
+        _savedTimersMenuItem.Items.Add(_openAllSavedTimersMenuItem);
+
+        if (_clearSavedTimersMenuItem is null)
         {
-            this.UpdateOptionsFromMenu();
-            this.UpdateMenuFromOptions();
+            _clearSavedTimersMenuItem = new()
+            {
+                Header = Properties.Resources.ContextMenuClearSavedTimersMenuItem
+            };
+            _clearSavedTimersMenuItem.Click += ClearSavedTimersMenuItemClick;
         }
 
-        #endregion
+        _savedTimersMenuItem.Items.Add(_clearSavedTimersMenuItem);
+    }
 
-        #region Private Methods (Building)
-
-        /// <summary>
-        /// Builds or rebuilds the context menu.
-        /// </summary>
-        private void BuildMenu()
+    /// <summary>
+    /// Updates the <see cref="MenuItem.Header"/> of the items in the <see cref="_savedTimersMenuItem"/>.
+    /// </summary>
+    private void UpdateSavedTimersHeaders()
+    {
+        foreach (MenuItem menuItem in _savedTimersMenuItem.Items.OfType<MenuItem>())
         {
-            this.Items.Clear();
+            if (menuItem.Tag is Timer timer)
+            {
+                menuItem.Header = GetHeaderForTimer(timer);
+                menuItem.Icon = GetIconForTimer(timer);
+            }
+        }
+    }
 
-            // New timer
-            this.newTimerMenuItem = new MenuItem();
-            this.newTimerMenuItem.Header = Properties.Resources.ContextMenuNewTimerMenuItem;
-            this.newTimerMenuItem.Click += this.NewTimerMenuItemClick;
-            this.Items.Add(this.newTimerMenuItem);
+    /// <summary>
+    /// Returns an object that can be set for the <see cref="MenuItem.Header"/> of a <see cref="MenuItem"/> that
+    /// displays a <see cref="Timer"/>.
+    /// </summary>
+    /// <param name="timer">A <see cref="Timer"/>.</param>
+    /// <returns>An object that can be set for the <see cref="MenuItem.Header"/>.</returns>
+    private object GetHeaderForTimer(Timer timer)
+    {
+        return timer.ToString();
+    }
 
-            this.Items.Add(new Separator());
+    /// <summary>
+    /// Returns an object that can be set for the <see cref="MenuItem.Icon"/> of a <see cref="MenuItem"/> that
+    /// displays a <see cref="Timer"/>.
+    /// </summary>
+    /// <param name="timer">A <see cref="Timer"/>.</param>
+    /// <returns>An object that can be set for the <see cref="MenuItem.Icon"/>.</returns>
+    private object GetIconForTimer(Timer timer)
+    {
+        Border outerBorder = new()
+        {
+            BorderBrush = new SolidColorBrush(Colors.LightGray),
+            BorderThickness = new(1),
+            CornerRadius = new(2),
+            Width = 16,
+            Height = 6
+        };
 
-            // Always on top
-            this.alwaysOnTopMenuItem = new MenuItem();
-            this.alwaysOnTopMenuItem.Header = Properties.Resources.ContextMenuAlwaysOnTopMenuItem;
-            this.alwaysOnTopMenuItem.IsCheckable = true;
-            this.alwaysOnTopMenuItem.Click += this.CheckableMenuItemClick;
-            this.Items.Add(this.alwaysOnTopMenuItem);
+        if (timer.State == TimerState.Expired)
+        {
+            Border progress = new()
+            {
+                Background = new SolidColorBrush(Color.FromRgb(199, 80, 80)),
+                Width = 16,
+                Height = 6
+            };
 
-            // Full screen
-            this.fullScreenMenuItem = new MenuItem();
-            this.fullScreenMenuItem.Header = Properties.Resources.ContextMenuFullScreenMenuItem;
-            this.fullScreenMenuItem.IsCheckable = true;
-            this.fullScreenMenuItem.Click += this.CheckableMenuItemClick;
-            this.Items.Add(this.fullScreenMenuItem);
+            outerBorder.Child = progress;
+        }
+        else if (!timer.Options.ReverseProgressBar && timer.TimeLeftAsPercentage.HasValue)
+        {
+            Border progress = new()
+            {
+                Background = timer.Options.Theme.ProgressBarBrush,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Width = MathExtensions.LimitToRange(timer.TimeLeftAsPercentage.Value / 100.0 * 16.0, 0.0, 16.0),
+                Height = 6
+            };
 
-            // Prompt on exit
-            this.promptOnExitMenuItem = new MenuItem();
-            this.promptOnExitMenuItem.Header = Properties.Resources.ContextMenuPromptOnExitMenuItem;
-            this.promptOnExitMenuItem.IsCheckable = true;
-            this.promptOnExitMenuItem.Click += this.CheckableMenuItemClick;
-            this.Items.Add(this.promptOnExitMenuItem);
+            outerBorder.Child = progress;
+        }
+        else if (timer.Options.ReverseProgressBar && timer.TimeElapsedAsPercentage.HasValue)
+        {
+            Border progress = new()
+            {
+                Background = timer.Options.Theme.ProgressBarBrush,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Width = MathExtensions.LimitToRange(timer.TimeElapsedAsPercentage.Value / 100.0 * 16.0, 0.0, 16.0),
+                Height = 6
+            };
 
-            // Show progress in taskbar
-            this.showProgressInTaskbarMenuItem = new MenuItem();
-            this.showProgressInTaskbarMenuItem.Header = Properties.Resources.ContextMenuShowProgressInTaskbarMenuItem;
-            this.showProgressInTaskbarMenuItem.IsCheckable = true;
-            this.showProgressInTaskbarMenuItem.Click += this.CheckableMenuItemClick;
-            this.Items.Add(this.showProgressInTaskbarMenuItem);
-
-            // Show in notification area
-            this.showInNotificationAreaMenuItem = new MenuItem();
-            this.showInNotificationAreaMenuItem.Header = Properties.Resources.ContextMenuShowInNotificationAreaMenuItem;
-            this.showInNotificationAreaMenuItem.IsCheckable = true;
-            this.showInNotificationAreaMenuItem.Click += this.CheckableMenuItemClick;
-            this.Items.Add(this.showInNotificationAreaMenuItem);
-
-            this.Items.Add(new Separator());
-
-            // Loop timer
-            this.loopTimerMenuItem = new MenuItem();
-            this.loopTimerMenuItem.Header = Properties.Resources.ContextMenuLoopTimerMenuItem;
-            this.loopTimerMenuItem.IsCheckable = true;
-            this.loopTimerMenuItem.Click += this.CheckableMenuItemClick;
-            this.Items.Add(this.loopTimerMenuItem);
-
-            // Pop up when expired
-            this.popUpWhenExpiredMenuItem = new MenuItem();
-            this.popUpWhenExpiredMenuItem.Header = Properties.Resources.ContextMenuPopUpWhenExpiredMenuItem;
-            this.popUpWhenExpiredMenuItem.IsCheckable = true;
-            this.popUpWhenExpiredMenuItem.Click += this.CheckableMenuItemClick;
-            this.Items.Add(this.popUpWhenExpiredMenuItem);
-
-            // Close when expired
-            this.closeWhenExpiredMenuItem = new MenuItem();
-            this.closeWhenExpiredMenuItem.Header = Properties.Resources.ContextMenuCloseWhenExpiredMenuItem;
-            this.closeWhenExpiredMenuItem.IsCheckable = true;
-            this.closeWhenExpiredMenuItem.Click += this.CheckableMenuItemClick;
-            this.Items.Add(this.closeWhenExpiredMenuItem);
-
-            this.Items.Add(new Separator());
-
-            // Recent inputs
-            this.recentInputsMenuItem = new MenuItem();
-            this.recentInputsMenuItem.Header = Properties.Resources.ContextMenuRecentInputsMenuItem;
-            this.Items.Add(this.recentInputsMenuItem);
-
-            // Saved timers
-            this.savedTimersMenuItem = new MenuItem();
-            this.savedTimersMenuItem.Header = Properties.Resources.ContextMenuSavedTimersMenuItem;
-            this.Items.Add(this.savedTimersMenuItem);
-
-            this.Items.Add(new Separator());
-
-            // Theme
-            this.themeMenuItem = new MenuItem();
-            this.themeMenuItem.Header = Properties.Resources.ContextMenuThemeMenuItem;
-            this.Items.Add(this.themeMenuItem);
-
-            // Sound
-            this.soundMenuItem = new MenuItem();
-            this.soundMenuItem.Header = Properties.Resources.ContextMenuSoundMenuItem;
-            this.Items.Add(this.soundMenuItem);
-
-            this.Items.Add(new Separator());
-
-            // Advanced options
-            this.advancedOptionsMenuItem = new MenuItem();
-            this.advancedOptionsMenuItem.Header = Properties.Resources.ContextMenuAdvancedOptionsMenuItem;
-            this.Items.Add(this.advancedOptionsMenuItem);
-
-            // Do not keep computer awake
-            this.doNotKeepComputerAwakeMenuItem = new MenuItem();
-            this.doNotKeepComputerAwakeMenuItem.Header = Properties.Resources.ContextMenuDoNotKeepComputerAwakeMenuItem;
-            this.doNotKeepComputerAwakeMenuItem.IsCheckable = true;
-            this.doNotKeepComputerAwakeMenuItem.Click += this.CheckableMenuItemClick;
-            this.advancedOptionsMenuItem.Items.Add(this.doNotKeepComputerAwakeMenuItem);
-
-            // Open saved timers on startup
-            this.openSavedTimersOnStartupMenuItem = new MenuItem();
-            this.openSavedTimersOnStartupMenuItem.Header = Properties.Resources.ContextMenuOpenSavedTimersOnStartupMenuItem;
-            this.openSavedTimersOnStartupMenuItem.IsCheckable = true;
-            this.openSavedTimersOnStartupMenuItem.Click += this.CheckableMenuItemClick;
-            this.advancedOptionsMenuItem.Items.Add(this.openSavedTimersOnStartupMenuItem);
-
-            // Prefer 24-hour time when parsing
-            this.prefer24HourTimeMenuItem = new MenuItem();
-            this.prefer24HourTimeMenuItem.Header = Properties.Resources.ContextMenuPrefer24HourTimeMenuItem;
-            this.prefer24HourTimeMenuItem.IsCheckable = true;
-            this.prefer24HourTimeMenuItem.Click += this.CheckableMenuItemClick;
-            this.advancedOptionsMenuItem.Items.Add(this.prefer24HourTimeMenuItem);
-
-            // Reverse progress bar
-            this.reverseProgressBarMenuItem = new MenuItem();
-            this.reverseProgressBarMenuItem.Header = Properties.Resources.ContextMenuReverseProgressBarMenuItem;
-            this.reverseProgressBarMenuItem.IsCheckable = true;
-            this.reverseProgressBarMenuItem.Click += this.CheckableMenuItemClick;
-            this.advancedOptionsMenuItem.Items.Add(this.reverseProgressBarMenuItem);
-
-            // Show time elapsed
-            this.showTimeElapsedMenuItem = new MenuItem();
-            this.showTimeElapsedMenuItem.Header = Properties.Resources.ContextMenuShowTimeElapsedMenuItem;
-            this.showTimeElapsedMenuItem.IsCheckable = true;
-            this.showTimeElapsedMenuItem.Click += this.CheckableMenuItemClick;
-            this.advancedOptionsMenuItem.Items.Add(this.showTimeElapsedMenuItem);
-
-            // Shut down when expired
-            this.shutDownWhenExpiredMenuItem = new MenuItem();
-            this.shutDownWhenExpiredMenuItem.Header = Properties.Resources.ContextMenuShutDownWhenExpiredMenuItem;
-            this.shutDownWhenExpiredMenuItem.IsCheckable = true;
-            this.shutDownWhenExpiredMenuItem.Click += this.CheckableMenuItemClick;
-            this.advancedOptionsMenuItem.Items.Add(this.shutDownWhenExpiredMenuItem);
-
-            // Window title
-            this.windowTitleMenuItem = new MenuItem();
-            this.windowTitleMenuItem.Header = Properties.Resources.ContextMenuWindowTitleMenuItem;
-            this.advancedOptionsMenuItem.Items.Add(this.windowTitleMenuItem);
-
-            // No window title
-            this.noWindowTitleMenuItem = new MenuItem();
-            this.noWindowTitleMenuItem.Header = Properties.Resources.ContextMenuNoWindowTitleMenuItem;
-            this.noWindowTitleMenuItem.IsCheckable = true;
-            this.noWindowTitleMenuItem.Tag = WindowTitleMode.None;
-            this.noWindowTitleMenuItem.Click += this.WindowTitleMenuItemClick;
-            this.noWindowTitleMenuItem.Click += this.CheckableMenuItemClick;
-            this.windowTitleMenuItem.Items.Add(this.noWindowTitleMenuItem);
-            this.selectableWindowTitleMenuItems.Add(this.noWindowTitleMenuItem);
-
-            this.windowTitleMenuItem.Items.Add(new Separator());
-
-            // Application name (window title)
-            this.applicationNameWindowTitleMenuItem = new MenuItem();
-            this.applicationNameWindowTitleMenuItem.Header = Properties.Resources.ContextMenuApplicationNameWindowTitleMenuItem;
-            this.applicationNameWindowTitleMenuItem.IsCheckable = true;
-            this.applicationNameWindowTitleMenuItem.Tag = WindowTitleMode.ApplicationName;
-            this.applicationNameWindowTitleMenuItem.Click += this.WindowTitleMenuItemClick;
-            this.applicationNameWindowTitleMenuItem.Click += this.CheckableMenuItemClick;
-            this.windowTitleMenuItem.Items.Add(this.applicationNameWindowTitleMenuItem);
-            this.selectableWindowTitleMenuItems.Add(this.applicationNameWindowTitleMenuItem);
-
-            this.windowTitleMenuItem.Items.Add(new Separator());
-
-            // Time left (window title)
-            this.timeLeftWindowTitleMenuItem = new MenuItem();
-            this.timeLeftWindowTitleMenuItem.Header = Properties.Resources.ContextMenuTimeLeftWindowTitleMenuItem;
-            this.timeLeftWindowTitleMenuItem.IsCheckable = true;
-            this.timeLeftWindowTitleMenuItem.Tag = WindowTitleMode.TimeLeft;
-            this.timeLeftWindowTitleMenuItem.Click += this.WindowTitleMenuItemClick;
-            this.timeLeftWindowTitleMenuItem.Click += this.CheckableMenuItemClick;
-            this.windowTitleMenuItem.Items.Add(this.timeLeftWindowTitleMenuItem);
-            this.selectableWindowTitleMenuItems.Add(this.timeLeftWindowTitleMenuItem);
-
-            // Time elapsed (window title)
-            this.timeElapsedWindowTitleMenuItem = new MenuItem();
-            this.timeElapsedWindowTitleMenuItem.Header = Properties.Resources.ContextMenuTimeElapsedWindowTitleMenuItem;
-            this.timeElapsedWindowTitleMenuItem.IsCheckable = true;
-            this.timeElapsedWindowTitleMenuItem.Tag = WindowTitleMode.TimeElapsed;
-            this.timeElapsedWindowTitleMenuItem.Click += this.WindowTitleMenuItemClick;
-            this.timeElapsedWindowTitleMenuItem.Click += this.CheckableMenuItemClick;
-            this.windowTitleMenuItem.Items.Add(this.timeElapsedWindowTitleMenuItem);
-            this.selectableWindowTitleMenuItems.Add(this.timeElapsedWindowTitleMenuItem);
-
-            // Timer title (window title)
-            this.timerTitleWindowTitleMenuItem = new MenuItem();
-            this.timerTitleWindowTitleMenuItem.Header = Properties.Resources.ContextMenuTimerTitleWindowTitleMenuItem;
-            this.timerTitleWindowTitleMenuItem.IsCheckable = true;
-            this.timerTitleWindowTitleMenuItem.Tag = WindowTitleMode.TimerTitle;
-            this.timerTitleWindowTitleMenuItem.Click += this.WindowTitleMenuItemClick;
-            this.timerTitleWindowTitleMenuItem.Click += this.CheckableMenuItemClick;
-            this.windowTitleMenuItem.Items.Add(this.timerTitleWindowTitleMenuItem);
-            this.selectableWindowTitleMenuItems.Add(this.timerTitleWindowTitleMenuItem);
-
-            this.windowTitleMenuItem.Items.Add(new Separator());
-
-            // Time left + timer title (window title)
-            this.timeLeftPlusTimerTitleWindowTitleMenuItem = new MenuItem();
-            this.timeLeftPlusTimerTitleWindowTitleMenuItem.Header = Properties.Resources.ContextMenuTimeLeftPlusTimerTitleWindowTitleMenuItem;
-            this.timeLeftPlusTimerTitleWindowTitleMenuItem.IsCheckable = true;
-            this.timeLeftPlusTimerTitleWindowTitleMenuItem.Tag = WindowTitleMode.TimeLeftPlusTimerTitle;
-            this.timeLeftPlusTimerTitleWindowTitleMenuItem.Click += this.WindowTitleMenuItemClick;
-            this.timeLeftPlusTimerTitleWindowTitleMenuItem.Click += this.CheckableMenuItemClick;
-            this.windowTitleMenuItem.Items.Add(this.timeLeftPlusTimerTitleWindowTitleMenuItem);
-            this.selectableWindowTitleMenuItems.Add(this.timeLeftPlusTimerTitleWindowTitleMenuItem);
-
-            // Time elapsed + timer title (window title)
-            this.timeElapsedPlusTimerTitleWindowTitleMenuItem = new MenuItem();
-            this.timeElapsedPlusTimerTitleWindowTitleMenuItem.Header = Properties.Resources.ContextMenuTimeElapsedPlusTimerTitleWindowTitleMenuItem;
-            this.timeElapsedPlusTimerTitleWindowTitleMenuItem.IsCheckable = true;
-            this.timeElapsedPlusTimerTitleWindowTitleMenuItem.Tag = WindowTitleMode.TimeElapsedPlusTimerTitle;
-            this.timeElapsedPlusTimerTitleWindowTitleMenuItem.Click += this.WindowTitleMenuItemClick;
-            this.timeElapsedPlusTimerTitleWindowTitleMenuItem.Click += this.CheckableMenuItemClick;
-            this.windowTitleMenuItem.Items.Add(this.timeElapsedPlusTimerTitleWindowTitleMenuItem);
-            this.selectableWindowTitleMenuItems.Add(this.timeElapsedPlusTimerTitleWindowTitleMenuItem);
-
-            this.windowTitleMenuItem.Items.Add(new Separator());
-
-            // Timer title + time left (window title)
-            this.timerTitlePlusTimeLeftWindowTitleMenuItem = new MenuItem();
-            this.timerTitlePlusTimeLeftWindowTitleMenuItem.Header = Properties.Resources.ContextMenuTimerTitlePlusTimeLeftWindowTitleMenuItem;
-            this.timerTitlePlusTimeLeftWindowTitleMenuItem.IsCheckable = true;
-            this.timerTitlePlusTimeLeftWindowTitleMenuItem.Tag = WindowTitleMode.TimerTitlePlusTimeLeft;
-            this.timerTitlePlusTimeLeftWindowTitleMenuItem.Click += this.WindowTitleMenuItemClick;
-            this.timerTitlePlusTimeLeftWindowTitleMenuItem.Click += this.CheckableMenuItemClick;
-            this.windowTitleMenuItem.Items.Add(this.timerTitlePlusTimeLeftWindowTitleMenuItem);
-            this.selectableWindowTitleMenuItems.Add(this.timerTitlePlusTimeLeftWindowTitleMenuItem);
-
-            // Timer title + time elapsed (window title)
-            this.timerTitlePlusTimeElapsedWindowTitleMenuItem = new MenuItem();
-            this.timerTitlePlusTimeElapsedWindowTitleMenuItem.Header = Properties.Resources.ContextMenuTimerTitlePlusTimeElapsedWindowTitleMenuItem;
-            this.timerTitlePlusTimeElapsedWindowTitleMenuItem.IsCheckable = true;
-            this.timerTitlePlusTimeElapsedWindowTitleMenuItem.Tag = WindowTitleMode.TimerTitlePlusTimeElapsed;
-            this.timerTitlePlusTimeElapsedWindowTitleMenuItem.Click += this.WindowTitleMenuItemClick;
-            this.timerTitlePlusTimeElapsedWindowTitleMenuItem.Click += this.CheckableMenuItemClick;
-            this.windowTitleMenuItem.Items.Add(this.timerTitlePlusTimeElapsedWindowTitleMenuItem);
-            this.selectableWindowTitleMenuItems.Add(this.timerTitlePlusTimeElapsedWindowTitleMenuItem);
-
-            this.Items.Add(new Separator());
-
-            // FAQ
-            this.faqMenuItem = new MenuItem();
-            this.faqMenuItem.Header = Properties.Resources.ContextMenuFAQMenuItem;
-            this.faqMenuItem.Click += this.FAQMenuItemClick;
-            this.Items.Add(this.faqMenuItem);
-
-            // Usage
-            this.usageMenuItem = new MenuItem();
-            this.usageMenuItem.Header = Properties.Resources.ContextMenuUsageMenuItem;
-            this.usageMenuItem.Click += this.UsageMenuItemClick;
-            this.Items.Add(this.usageMenuItem);
-
-            this.Items.Add(new Separator());
-
-            // About
-            this.aboutMenuItem = new MenuItem();
-            this.aboutMenuItem.Header = Properties.Resources.ContextMenuAboutMenuItem;
-            this.aboutMenuItem.Click += this.AboutMenuItemClick;
-            this.Items.Add(this.aboutMenuItem);
-
-            this.Items.Add(new Separator());
-
-            // Restore
-            this.restoreMenuItem = new MenuItem();
-            this.restoreMenuItem.Header = Properties.Resources.ContextMenuRestoreMenuItem;
-            this.restoreMenuItem.Click += this.RestoreMenuItemClick;
-            this.Items.Add(this.restoreMenuItem);
-
-            // Minimize
-            this.minimizeMenuItem = new MenuItem();
-            this.minimizeMenuItem.Header = Properties.Resources.ContextMenuMinimizeMenuItem;
-            this.minimizeMenuItem.Click += this.MinimizeMenuItemClick;
-            this.Items.Add(this.minimizeMenuItem);
-
-            // Maximize
-            this.maximizeMenuItem = new MenuItem();
-            this.maximizeMenuItem.Header = Properties.Resources.ContextMenuMaximizeMenuItem;
-            this.maximizeMenuItem.Click += this.MaximizeMenuItemClick;
-            this.Items.Add(this.maximizeMenuItem);
-
-            this.windowStateItemsSeparator = new Separator();
-            this.Items.Add(this.windowStateItemsSeparator);
-
-            // Close
-            this.closeMenuItem = new MenuItem();
-            this.closeMenuItem.Header = Properties.Resources.ContextMenuCloseMenuItem;
-            this.closeMenuItem.Click += this.CloseMenuItemClick;
-            this.Items.Add(this.closeMenuItem);
+            outerBorder.Child = progress;
         }
 
-        #endregion
+        return outerBorder;
+    }
 
-        #region Private Methods (New Timer)
+    /// <summary>
+    /// Invoked when a saved timer <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void SavedTimerMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        MenuItem menuItem = (MenuItem)sender;
+        Timer savedTimer = (Timer)menuItem.Tag;
+        ShowSavedTimer(savedTimer);
+    }
 
-        /// <summary>
-        /// Invoked when the "New timer" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void NewTimerMenuItemClick(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Invoked when the "Open all saved timers" <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void OpenAllSavedTimersMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        foreach (Timer savedTimer in TimerManager.Instance.ResumableTimers)
         {
-            TimerWindow window = new TimerWindow();
-            window.RestoreFromWindow(this.timerWindow);
+            ShowSavedTimer(savedTimer);
+        }
+    }
+
+    /// <summary>
+    /// Shows an existing <see cref="Timer"/>.
+    /// </summary>
+    /// <param name="savedTimer">An existing <see cref="Timer"/>.</param>
+    private void ShowSavedTimer(Timer savedTimer)
+    {
+        if (_timerWindow.Timer.State == TimerState.Stopped || _timerWindow.Timer.State == TimerState.Expired)
+        {
+            ShowSavedTimerInCurrentWindow(savedTimer);
+        }
+        else
+        {
+            ShowSavedTimerInNewWindow(savedTimer);
+        }
+    }
+
+    /// <summary>
+    /// Shows an existing <see cref="Timer"/> in the current <see cref="TimerWindow"/>.
+    /// </summary>
+    /// <param name="savedTimer">An existing <see cref="Timer"/>.</param>
+    private void ShowSavedTimerInCurrentWindow(Timer savedTimer)
+    {
+        if (savedTimer.Options.WindowSize is not null)
+        {
+            _timerWindow.Restore(savedTimer.Options.WindowSize);
+        }
+
+        _timerWindow.Show(savedTimer);
+        UpdateMenuFromOptions();
+    }
+
+    /// <summary>
+    /// Shows an existing <see cref="Timer"/> in a new <see cref="TimerWindow"/>.
+    /// </summary>
+    /// <param name="savedTimer">An existing <see cref="Timer"/>.</param>
+    private void ShowSavedTimerInNewWindow(Timer savedTimer)
+    {
+        TimerWindow newTimerWindow = new();
+
+        if (savedTimer.Options.WindowSize is not null)
+        {
+            newTimerWindow.Restore(savedTimer.Options.WindowSize);
+        }
+        else
+        {
+            newTimerWindow.RestoreFromWindow(_timerWindow);
+        }
+
+        newTimerWindow.Show(savedTimer);
+    }
+
+    /// <summary>
+    /// Invoked when the "Clear saved timers" <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void ClearSavedTimersMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        TimerManager.Instance.ClearResumableTimers();
+    }
+
+    #endregion
+
+    #region Private Methods (Theme)
+
+    /// <summary>
+    /// Updates the <see cref="_themeMenuItem"/>.
+    /// </summary>
+    private void UpdateThemeMenuItem()
+    {
+        _themeMenuItem.Items.Clear();
+        _selectableThemeMenuItems.Clear();
+
+        // Switch between light and dark themes
+        if (_lightThemeMenuItem is null)
+        {
+            _lightThemeMenuItem = new()
+            {
+                Header = Properties.Resources.ContextMenuLightThemeMenuItem,
+                Tag = ThemeType.BuiltInLight
+            };
+            _lightThemeMenuItem.Click += ThemeTypeMenuItemClick;
+        }
+
+        _themeMenuItem.Items.Add(_lightThemeMenuItem);
+
+        if (_darkThemeMenuItem is null)
+        {
+            _darkThemeMenuItem = new()
+            {
+                Header = Properties.Resources.ContextMenuDarkThemeMenuItem,
+                Tag = ThemeType.BuiltInDark
+            };
+            _darkThemeMenuItem.Click += ThemeTypeMenuItemClick;
+        }
+
+        _themeMenuItem.Items.Add(_darkThemeMenuItem);
+
+        // Built-in themes
+        CreateThemeMenuItemsFromList(ThemeManager.Instance.BuiltInThemes);
+
+        // User-provided themes
+        if (ThemeManager.Instance.UserProvidedThemes.Count > 0)
+        {
+            CreateThemeMenuItemsFromList(ThemeManager.Instance.UserProvidedThemes);
+        }
+
+        // Manage themes
+        _themeMenuItem.Items.Add(new Separator());
+
+        if (_manageThemesMenuItem is null)
+        {
+            _manageThemesMenuItem = new()
+            {
+                Header = Properties.Resources.ContextMenuManageThemesMenuItem
+            };
+            _manageThemesMenuItem.Click += ManageThemesMenuItemClick;
+        }
+
+        _themeMenuItem.Items.Add(_manageThemesMenuItem);
+    }
+
+    /// <summary>
+    /// Creates a <see cref="MenuItem"/> for each <see cref="Theme"/> in the collection.
+    /// </summary>
+    /// <param name="themes">A collection of <see cref="Theme"/>s.</param>
+    private void CreateThemeMenuItemsFromList(IList<Theme> themes)
+    {
+        _themeMenuItem.Items.Add(new Separator());
+
+        foreach (Theme theme in themes)
+        {
+            CreateThemeMenuItem(theme);
+        }
+    }
+
+    /// <summary>
+    /// Creates a <see cref="MenuItem"/> for a <see cref="Theme"/>.
+    /// </summary>
+    /// <param name="theme">A <see cref="Theme"/>.</param>
+    private void CreateThemeMenuItem(Theme theme)
+    {
+        MenuItem menuItem = new()
+        {
+            Header = GetHeaderForTheme(theme),
+            Tag = theme,
+            IsCheckable = true
+        };
+        menuItem.Click += ThemeMenuItemClick;
+        menuItem.Click += CheckableMenuItemClick;
+
+        _themeMenuItem.Items.Add(menuItem);
+        _selectableThemeMenuItems.Add(menuItem);
+    }
+
+    /// <summary>
+    /// Returns an object that can be set for the <see cref="MenuItem.Header"/> of a <see cref="MenuItem"/> that
+    /// displays a <see cref="Theme"/>.
+    /// </summary>
+    /// <param name="theme">A <see cref="Theme"/>.</param>
+    /// <returns>An object that can be set for the <see cref="MenuItem.Header"/>.</returns>
+    private object GetHeaderForTheme(Theme theme)
+    {
+        Border border = new()
+        {
+            Background = theme.ProgressBarBrush,
+            CornerRadius = new(2),
+            Width = 8,
+            Height = 8
+        };
+
+        TextBlock textBlock = new()
+        {
+            Text = theme.Name ?? Properties.Resources.ContextMenuUnnamedTheme,
+            Margin = new(5, 0, 0, 0)
+        };
+
+        StackPanel stackPanel = new()
+        {
+            Orientation = Orientation.Horizontal
+        };
+        stackPanel.Children.Add(border);
+        stackPanel.Children.Add(textBlock);
+        return stackPanel;
+    }
+
+    /// <summary>
+    /// Invoked when a theme type <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void ThemeTypeMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        MenuItem clickedMenuItem = (MenuItem)sender;
+        ThemeType type = (ThemeType)clickedMenuItem.Tag;
+
+        _timerWindow.Options.Theme = type == ThemeType.BuiltInDark
+            ? _timerWindow.Options.Theme.DarkVariant
+            : _timerWindow.Options.Theme.LightVariant;
+    }
+
+    /// <summary>
+    /// Invoked when a theme <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void ThemeMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        foreach (MenuItem menuItem in _selectableThemeMenuItems)
+        {
+            menuItem.IsChecked = ReferenceEquals(menuItem, sender);
+        }
+
+        MenuItem selectedMenuItem = (MenuItem)sender;
+        _timerWindow.Options.Theme = (Theme)selectedMenuItem.Tag;
+    }
+
+    /// <summary>
+    /// Invoked when the "Manage themes" <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void ManageThemesMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        ThemeManagerWindow window = Application.Current.Windows.OfType<ThemeManagerWindow>().FirstOrDefault();
+        if (window is not null)
+        {
+            window.SetTimerWindow(_timerWindow);
+            window.BringToFrontAndActivate();
+        }
+        else
+        {
+            window = new(_timerWindow);
             window.Show();
         }
+    }
 
-        #endregion
+    #endregion
 
-        #region Private Methods (Recent Inputs)
+    #region Private Methods (Sound)
 
-        /// <summary>
-        /// Updates the <see cref="recentInputsMenuItem"/>.
-        /// </summary>
-        private void UpdateRecentInputsMenuItem()
+    /// <summary>
+    /// Updates the <see cref="_soundMenuItem"/>.
+    /// </summary>
+    private void UpdateSoundMenuItem()
+    {
+        _soundMenuItem.Items.Clear();
+        _selectableSoundMenuItems.Clear();
+
+        // Sounds
+        CreateSoundMenuItem(Sound.NoSound);
+        CreateSoundMenuItemsFromList(SoundManager.Instance.BuiltInSounds);
+        CreateSoundMenuItemsFromList(SoundManager.Instance.UserProvidedSounds);
+
+        // Options
+        _soundMenuItem.Items.Add(new Separator());
+
+        if (_loopSoundMenuItem is null)
         {
-            this.recentInputsMenuItem.Items.Clear();
-
-            if (TimerStartManager.Instance.TimerStarts.Count == 0)
+            _loopSoundMenuItem = new()
             {
-                MenuItem noRecentInputsMenuItem = new MenuItem();
-                noRecentInputsMenuItem.Header = Properties.Resources.ContextMenuNoRecentInputsMenuItem;
-                noRecentInputsMenuItem.Foreground = Brushes.DarkGray;
-
-                this.recentInputsMenuItem.Items.Add(noRecentInputsMenuItem);
-            }
-            else
-            {
-                foreach (TimerStart timerStart in TimerStartManager.Instance.TimerStarts)
-                {
-                    MenuItem timerMenuItem = new MenuItem();
-                    timerMenuItem.Header = timerStart.ToString();
-                    timerMenuItem.Tag = timerStart;
-                    timerMenuItem.Click += this.RecentInputMenuItemClick;
-
-                    this.recentInputsMenuItem.Items.Add(timerMenuItem);
-                }
-            }
-
-            this.recentInputsMenuItem.Items.Add(new Separator());
-
-            if (this.clearRecentInputsMenuItem == null)
-            {
-                this.clearRecentInputsMenuItem = new MenuItem();
-                this.clearRecentInputsMenuItem.Header = Properties.Resources.ContextMenuClearRecentInputsMenuItem;
-                this.clearRecentInputsMenuItem.Click += this.ClearRecentInputsMenuItemClick;
-            }
-
-            this.recentInputsMenuItem.Items.Add(this.clearRecentInputsMenuItem);
+                Header = Properties.Resources.ContextMenuLoopSoundMenuItem,
+                IsCheckable = true
+            };
+            _loopSoundMenuItem.Click += CheckableMenuItemClick;
         }
 
-        /// <summary>
-        /// Invoked when a recent <see cref="TimerStart"/> <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void RecentInputMenuItemClick(object sender, RoutedEventArgs e)
+        _soundMenuItem.Items.Add(_loopSoundMenuItem);
+    }
+
+    /// <summary>
+    /// Creates a <see cref="MenuItem"/> for a <see cref="Sound"/>.
+    /// </summary>
+    /// <param name="sound">A <see cref="Sound"/>.</param>
+    private void CreateSoundMenuItem(Sound sound)
+    {
+        MenuItem menuItem = new()
         {
-            MenuItem menuItem = (MenuItem)sender;
-            TimerStart timerStart = (TimerStart)menuItem.Tag;
+            Header = sound is not null ? sound.Name : Properties.Resources.ContextMenuNoSoundMenuItem,
+            Tag = sound,
+            IsCheckable = true
+        };
+        menuItem.Click += SoundMenuItemClick;
+        menuItem.Click += CheckableMenuItemClick;
 
-            TimerWindow window;
-            if (this.timerWindow.Timer.State == TimerState.Stopped || this.timerWindow.Timer.State == TimerState.Expired)
-            {
-                window = this.timerWindow;
-            }
-            else
-            {
-                window = new TimerWindow();
-                window.Options.Set(this.timerWindow.Options);
-                window.RestoreFromWindow(this.timerWindow);
-            }
+        _soundMenuItem.Items.Add(menuItem);
+        _selectableSoundMenuItems.Add(menuItem);
+    }
 
-            window.Show(timerStart);
-        }
-
-        /// <summary>
-        /// Invoked when the "Clear recent inputs" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void ClearRecentInputsMenuItemClick(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Creates a <see cref="MenuItem"/> for each <see cref="Sound"/> in the collection.
+    /// </summary>
+    /// <param name="sounds">A collection of <see cref="Sound"/>s.</param>
+    private void CreateSoundMenuItemsFromList(IList<Sound> sounds)
+    {
+        if (sounds.Count > 0)
         {
-            TimerStartManager.Instance.Clear();
-        }
-
-        #endregion
-
-        #region Private Methods (Saved Timers)
-
-        /// <summary>
-        /// Updates the <see cref="savedTimersMenuItem"/>.
-        /// </summary>
-        private void UpdateSavedTimersMenuItem()
-        {
-            this.savedTimersMenuItem.Items.Clear();
-
-            IList<Timer> savedTimers = TimerManager.Instance.ResumableTimers;
-
-            if (savedTimers.Count == 0)
+            _soundMenuItem.Items.Add(new Separator());
+            foreach (Sound sound in sounds)
             {
-                MenuItem noRunningTimersMenuItem = new MenuItem();
-                noRunningTimersMenuItem.Header = Properties.Resources.ContextMenuNoSavedTimersMenuItem;
-                noRunningTimersMenuItem.Foreground = Brushes.DarkGray;
-
-                this.savedTimersMenuItem.Items.Add(noRunningTimersMenuItem);
-            }
-            else
-            {
-                foreach (Timer savedTimer in savedTimers)
-                {
-                    savedTimer.Update();
-
-                    MenuItem timerMenuItem = new MenuItem();
-                    timerMenuItem.Header = this.GetHeaderForTimer(savedTimer);
-                    timerMenuItem.Icon = this.GetIconForTimer(savedTimer);
-                    timerMenuItem.Tag = savedTimer;
-                    timerMenuItem.Click += this.SavedTimerMenuItemClick;
-
-                    this.savedTimersMenuItem.Items.Add(timerMenuItem);
-                }
-            }
-
-            this.savedTimersMenuItem.Items.Add(new Separator());
-
-            if (this.openAllSavedTimersMenuItem == null)
-            {
-                this.openAllSavedTimersMenuItem = new MenuItem();
-                this.openAllSavedTimersMenuItem.Header = Properties.Resources.ContextMenuOpenAllSavedTimersMenuItem;
-                this.openAllSavedTimersMenuItem.Click += this.OpenAllSavedTimersMenuItemClick;
-            }
-
-            this.savedTimersMenuItem.Items.Add(this.openAllSavedTimersMenuItem);
-
-            if (this.clearSavedTimersMenuItem == null)
-            {
-                this.clearSavedTimersMenuItem = new MenuItem();
-                this.clearSavedTimersMenuItem.Header = Properties.Resources.ContextMenuClearSavedTimersMenuItem;
-                this.clearSavedTimersMenuItem.Click += this.ClearSavedTimersMenuItemClick;
-            }
-
-            this.savedTimersMenuItem.Items.Add(this.clearSavedTimersMenuItem);
-        }
-
-        /// <summary>
-        /// Updates the <see cref="MenuItem.Header"/> of the items in the <see cref="savedTimersMenuItem"/>.
-        /// </summary>
-        private void UpdateSavedTimersHeaders()
-        {
-            foreach (MenuItem menuItem in this.savedTimersMenuItem.Items.OfType<MenuItem>())
-            {
-                Timer timer = menuItem.Tag as Timer;
-                if (timer != null)
-                {
-                    menuItem.Header = this.GetHeaderForTimer(timer);
-                    menuItem.Icon = this.GetIconForTimer(timer);
-                }
+                CreateSoundMenuItem(sound);
             }
         }
+    }
 
-        /// <summary>
-        /// Returns an object that can be set for the <see cref="MenuItem.Header"/> of a <see cref="MenuItem"/> that
-        /// displays a <see cref="Timer"/>.
-        /// </summary>
-        /// <param name="timer">A <see cref="Timer"/>.</param>
-        /// <returns>An object that can be set for the <see cref="MenuItem.Header"/>.</returns>
-        private object GetHeaderForTimer(Timer timer)
+    /// <summary>
+    /// Invoked when a sound <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void SoundMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        foreach (MenuItem menuItem in _selectableSoundMenuItems)
         {
-            return timer.ToString();
+            menuItem.IsChecked = ReferenceEquals(menuItem, sender);
         }
+    }
 
-        /// <summary>
-        /// Returns an object that can be set for the <see cref="MenuItem.Icon"/> of a <see cref="MenuItem"/> that
-        /// displays a <see cref="Timer"/>.
-        /// </summary>
-        /// <param name="timer">A <see cref="Timer"/>.</param>
-        /// <returns>An object that can be set for the <see cref="MenuItem.Icon"/>.</returns>
-        private object GetIconForTimer(Timer timer)
+    #endregion
+
+    /// <summary>
+    /// Invoked when a window title <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void WindowTitleMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        foreach (MenuItem menuItem in _selectableWindowTitleMenuItems)
         {
-            Border outerBorder = new Border();
-            outerBorder.BorderBrush = new SolidColorBrush(Colors.LightGray);
-            outerBorder.BorderThickness = new Thickness(1);
-            outerBorder.CornerRadius = new CornerRadius(2);
-            outerBorder.Width = 16;
-            outerBorder.Height = 6;
-
-            if (timer.State == TimerState.Expired)
-            {
-                Border progress = new Border();
-                progress.Background = new SolidColorBrush(Color.FromRgb(199, 80, 80));
-                progress.Width = 16;
-                progress.Height = 6;
-
-                outerBorder.Child = progress;
-            }
-            else if (!timer.Options.ReverseProgressBar && timer.TimeLeftAsPercentage.HasValue)
-            {
-                Border progress = new Border();
-                progress.Background = timer.Options.Theme.ProgressBarBrush;
-                progress.HorizontalAlignment = HorizontalAlignment.Left;
-                progress.Width = MathExtensions.LimitToRange(timer.TimeLeftAsPercentage.Value / 100.0 * 16.0, 0.0, 16.0);
-                progress.Height = 6;
-
-                outerBorder.Child = progress;
-            }
-            else if (timer.Options.ReverseProgressBar && timer.TimeElapsedAsPercentage.HasValue)
-            {
-                Border progress = new Border();
-                progress.Background = timer.Options.Theme.ProgressBarBrush;
-                progress.HorizontalAlignment = HorizontalAlignment.Left;
-                progress.Width = MathExtensions.LimitToRange(timer.TimeElapsedAsPercentage.Value / 100.0 * 16.0, 0.0, 16.0);
-                progress.Height = 6;
-
-                outerBorder.Child = progress;
-            }
-
-            return outerBorder;
+            menuItem.IsChecked = ReferenceEquals(menuItem, sender);
         }
+    }
 
-        /// <summary>
-        /// Invoked when a saved timer <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void SavedTimerMenuItemClick(object sender, RoutedEventArgs e)
+    #region Private Methods (Window State)
+
+    /// <summary>
+    /// Updates the <see cref="_restoreMenuItem"/>, <see cref="_minimizeMenuItem"/>, and
+    /// <see cref="_maximizeMenuItem"/>.
+    /// </summary>
+    private void UpdateWindowStateMenuItems()
+    {
+        _restoreMenuItem.IsEnabled = _timerWindow.WindowState != WindowState.Normal;
+        _minimizeMenuItem.IsEnabled = _timerWindow.WindowState != WindowState.Minimized;
+        _maximizeMenuItem.IsEnabled = _timerWindow.WindowState != WindowState.Maximized;
+
+        if (_timerWindow.IsFullScreen || _timerWindow.Options.WindowTitleMode == WindowTitleMode.None)
         {
-            MenuItem menuItem = (MenuItem)sender;
-            Timer savedTimer = (Timer)menuItem.Tag;
-            this.ShowSavedTimer(savedTimer);
+            // "Restore", "Minimize", and "Maximize" are not on the window, so we provide our own.
+            _restoreMenuItem.Visibility = Visibility.Visible;
+            _minimizeMenuItem.Visibility = Visibility.Visible;
+            _maximizeMenuItem.Visibility = Visibility.Visible;
+            _windowStateItemsSeparator.Visibility = Visibility.Visible;
         }
-
-        /// <summary>
-        /// Invoked when the "Open all saved timers" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void OpenAllSavedTimersMenuItemClick(object sender, RoutedEventArgs e)
+        else
         {
-            foreach (Timer savedTimer in TimerManager.Instance.ResumableTimers)
-            {
-                this.ShowSavedTimer(savedTimer);
-            }
+            // "Restore", "Minimize", and "Maximize" are on the window, so no need for them here.
+            _restoreMenuItem.Visibility = Visibility.Collapsed;
+            _minimizeMenuItem.Visibility = Visibility.Collapsed;
+            _maximizeMenuItem.Visibility = Visibility.Collapsed;
+            _windowStateItemsSeparator.Visibility = Visibility.Collapsed;
         }
+    }
 
-        /// <summary>
-        /// Shows an existing <see cref="Timer"/>.
-        /// </summary>
-        /// <param name="savedTimer">An existing <see cref="Timer"/>.</param>
-        private void ShowSavedTimer(Timer savedTimer)
+    private void FAQMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        Consts.FAQUri.Navigate();
+    }
+
+    private void UsageMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        CommandLineArguments.ShowUsage();
+    }
+
+    /// <summary>
+    /// Invoked when the "About" <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void AboutMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        AboutDialog.ShowOrActivate();
+    }
+
+    /// <summary>
+    /// Invoked when the "Restore" <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void RestoreMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        if (_timerWindow.IsFullScreen)
         {
-            if (this.timerWindow.Timer.State == TimerState.Stopped || this.timerWindow.Timer.State == TimerState.Expired)
-            {
-                this.ShowSavedTimerInCurrentWindow(savedTimer);
-            }
-            else
-            {
-                this.ShowSavedTimerInNewWindow(savedTimer);
-            }
+            // Must set the menu item value here, since it will sync to the TimerWindow on menu close.
+            _fullScreenMenuItem.IsChecked = false;
+            _timerWindow.IsFullScreen = false;
         }
-
-        /// <summary>
-        /// Shows an existing <see cref="Timer"/> in the current <see cref="TimerWindow"/>.
-        /// </summary>
-        /// <param name="savedTimer">An existing <see cref="Timer"/>.</param>
-        private void ShowSavedTimerInCurrentWindow(Timer savedTimer)
+        else
         {
-            if (savedTimer.Options.WindowSize != null)
-            {
-                this.timerWindow.Restore(savedTimer.Options.WindowSize);
-            }
-
-            this.timerWindow.Show(savedTimer);
-            this.UpdateMenuFromOptions();
+            _timerWindow.WindowState = WindowState.Normal;
         }
+    }
 
-        /// <summary>
-        /// Shows an existing <see cref="Timer"/> in a new <see cref="TimerWindow"/>.
-        /// </summary>
-        /// <param name="savedTimer">An existing <see cref="Timer"/>.</param>
-        private void ShowSavedTimerInNewWindow(Timer savedTimer)
-        {
-            TimerWindow newTimerWindow = new TimerWindow();
+    /// <summary>
+    /// Invoked when the "Minimize" <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void MinimizeMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        _timerWindow.WindowState = WindowState.Minimized;
+    }
 
-            if (savedTimer.Options.WindowSize != null)
-            {
-                newTimerWindow.Restore(savedTimer.Options.WindowSize);
-            }
-            else
-            {
-                newTimerWindow.RestoreFromWindow(this.timerWindow);
-            }
+    /// <summary>
+    /// Invoked when the "Maximize" <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void MaximizeMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        _timerWindow.WindowState = WindowState.Maximized;
+    }
 
-            newTimerWindow.Show(savedTimer);
-        }
+    #endregion
 
-        /// <summary>
-        /// Invoked when the "Clear saved timers" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void ClearSavedTimersMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            TimerManager.Instance.ClearResumableTimers();
-        }
-
-        #endregion
-
-        #region Private Methods (Theme)
-
-        /// <summary>
-        /// Updates the <see cref="themeMenuItem"/>.
-        /// </summary>
-        private void UpdateThemeMenuItem()
-        {
-            this.themeMenuItem.Items.Clear();
-            this.selectableThemeMenuItems.Clear();
-
-            // Switch between light and dark themes
-            if (this.lightThemeMenuItem == null)
-            {
-                this.lightThemeMenuItem = new MenuItem();
-                this.lightThemeMenuItem.Header = Properties.Resources.ContextMenuLightThemeMenuItem;
-                this.lightThemeMenuItem.Tag = ThemeType.BuiltInLight;
-                this.lightThemeMenuItem.Click += this.ThemeTypeMenuItemClick;
-            }
-
-            this.themeMenuItem.Items.Add(this.lightThemeMenuItem);
-
-            if (this.darkThemeMenuItem == null)
-            {
-                this.darkThemeMenuItem = new MenuItem();
-                this.darkThemeMenuItem.Header = Properties.Resources.ContextMenuDarkThemeMenuItem;
-                this.darkThemeMenuItem.Tag = ThemeType.BuiltInDark;
-                this.darkThemeMenuItem.Click += this.ThemeTypeMenuItemClick;
-            }
-
-            this.themeMenuItem.Items.Add(this.darkThemeMenuItem);
-
-            // Built-in themes
-            this.CreateThemeMenuItemsFromList(ThemeManager.Instance.BuiltInThemes);
-
-            // User-provided themes
-            if (ThemeManager.Instance.UserProvidedThemes.Count > 0)
-            {
-                this.CreateThemeMenuItemsFromList(ThemeManager.Instance.UserProvidedThemes);
-            }
-
-            // Manage themes
-            this.themeMenuItem.Items.Add(new Separator());
-
-            if (this.manageThemesMenuItem == null)
-            {
-                this.manageThemesMenuItem = new MenuItem();
-                this.manageThemesMenuItem.Header = Properties.Resources.ContextMenuManageThemesMenuItem;
-                this.manageThemesMenuItem.Click += this.ManageThemesMenuItemClick;
-            }
-
-            this.themeMenuItem.Items.Add(this.manageThemesMenuItem);
-        }
-
-        /// <summary>
-        /// Creates a <see cref="MenuItem"/> for each <see cref="Theme"/> in the collection.
-        /// </summary>
-        /// <param name="themes">A collection of <see cref="Theme"/>s.</param>
-        private void CreateThemeMenuItemsFromList(IList<Theme> themes)
-        {
-            this.themeMenuItem.Items.Add(new Separator());
-
-            foreach (Theme theme in themes)
-            {
-                this.CreateThemeMenuItem(theme);
-            }
-        }
-
-        /// <summary>
-        /// Creates a <see cref="MenuItem"/> for a <see cref="Theme"/>.
-        /// </summary>
-        /// <param name="theme">A <see cref="Theme"/>.</param>
-        private void CreateThemeMenuItem(Theme theme)
-        {
-            MenuItem menuItem = new MenuItem();
-            menuItem.Header = this.GetHeaderForTheme(theme);
-            menuItem.Tag = theme;
-            menuItem.IsCheckable = true;
-            menuItem.Click += this.ThemeMenuItemClick;
-            menuItem.Click += this.CheckableMenuItemClick;
-
-            this.themeMenuItem.Items.Add(menuItem);
-            this.selectableThemeMenuItems.Add(menuItem);
-        }
-
-        /// <summary>
-        /// Returns an object that can be set for the <see cref="MenuItem.Header"/> of a <see cref="MenuItem"/> that
-        /// displays a <see cref="Theme"/>.
-        /// </summary>
-        /// <param name="theme">A <see cref="Theme"/>.</param>
-        /// <returns>An object that can be set for the <see cref="MenuItem.Header"/>.</returns>
-        private object GetHeaderForTheme(Theme theme)
-        {
-            Border border = new Border();
-            border.Background = theme.ProgressBarBrush;
-            border.CornerRadius = new CornerRadius(2);
-            border.Width = 8;
-            border.Height = 8;
-
-            TextBlock textBlock = new TextBlock();
-            textBlock.Text = theme.Name ?? Properties.Resources.ContextMenuUnnamedTheme;
-            textBlock.Margin = new Thickness(5, 0, 0, 0);
-
-            StackPanel stackPanel = new StackPanel();
-            stackPanel.Orientation = Orientation.Horizontal;
-            stackPanel.Children.Add(border);
-            stackPanel.Children.Add(textBlock);
-            return stackPanel;
-        }
-
-        /// <summary>
-        /// Invoked when a theme type <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void ThemeTypeMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            MenuItem clickedMenuItem = (MenuItem)sender;
-            ThemeType type = (ThemeType)clickedMenuItem.Tag;
-
-            if (type == ThemeType.BuiltInDark)
-            {
-                this.timerWindow.Options.Theme = this.timerWindow.Options.Theme.DarkVariant;
-            }
-            else
-            {
-                this.timerWindow.Options.Theme = this.timerWindow.Options.Theme.LightVariant;
-            }
-        }
-
-        /// <summary>
-        /// Invoked when a theme <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void ThemeMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            foreach (MenuItem menuItem in this.selectableThemeMenuItems)
-            {
-                menuItem.IsChecked = object.ReferenceEquals(menuItem, sender);
-            }
-
-            MenuItem selectedMenuItem = (MenuItem)sender;
-            this.timerWindow.Options.Theme = (Theme)selectedMenuItem.Tag;
-        }
-
-        /// <summary>
-        /// Invoked when the "Manage themes" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void ManageThemesMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            ThemeManagerWindow window = Application.Current.Windows.OfType<ThemeManagerWindow>().FirstOrDefault();
-            if (window != null)
-            {
-                window.SetTimerWindow(this.timerWindow);
-                window.BringToFrontAndActivate();
-            }
-            else
-            {
-                window = new ThemeManagerWindow(this.timerWindow);
-                window.Show();
-            }
-        }
-
-        #endregion
-
-        #region Private Methods (Sound)
-
-        /// <summary>
-        /// Updates the <see cref="soundMenuItem"/>.
-        /// </summary>
-        private void UpdateSoundMenuItem()
-        {
-            this.soundMenuItem.Items.Clear();
-            this.selectableSoundMenuItems.Clear();
-
-            // Sounds
-            this.CreateSoundMenuItem(Sound.NoSound);
-            this.CreateSoundMenuItemsFromList(SoundManager.Instance.BuiltInSounds);
-            this.CreateSoundMenuItemsFromList(SoundManager.Instance.UserProvidedSounds);
-
-            // Options
-            this.soundMenuItem.Items.Add(new Separator());
-
-            if (this.loopSoundMenuItem == null)
-            {
-                this.loopSoundMenuItem = new MenuItem();
-                this.loopSoundMenuItem.Header = Properties.Resources.ContextMenuLoopSoundMenuItem;
-                this.loopSoundMenuItem.IsCheckable = true;
-                this.loopSoundMenuItem.Click += this.CheckableMenuItemClick;
-            }
-
-            this.soundMenuItem.Items.Add(this.loopSoundMenuItem);
-        }
-
-        /// <summary>
-        /// Creates a <see cref="MenuItem"/> for a <see cref="Sound"/>.
-        /// </summary>
-        /// <param name="sound">A <see cref="Sound"/>.</param>
-        private void CreateSoundMenuItem(Sound sound)
-        {
-            MenuItem menuItem = new MenuItem();
-            menuItem.Header = sound != null ? sound.Name : Properties.Resources.ContextMenuNoSoundMenuItem;
-            menuItem.Tag = sound;
-            menuItem.IsCheckable = true;
-            menuItem.Click += this.SoundMenuItemClick;
-            menuItem.Click += this.CheckableMenuItemClick;
-
-            this.soundMenuItem.Items.Add(menuItem);
-            this.selectableSoundMenuItems.Add(menuItem);
-        }
-
-        /// <summary>
-        /// Creates a <see cref="MenuItem"/> for each <see cref="Sound"/> in the collection.
-        /// </summary>
-        /// <param name="sounds">A collection of <see cref="Sound"/>s.</param>
-        private void CreateSoundMenuItemsFromList(IList<Sound> sounds)
-        {
-            if (sounds.Count > 0)
-            {
-                this.soundMenuItem.Items.Add(new Separator());
-                foreach (Sound sound in sounds)
-                {
-                    this.CreateSoundMenuItem(sound);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Invoked when a sound <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void SoundMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            foreach (MenuItem menuItem in this.selectableSoundMenuItems)
-            {
-                menuItem.IsChecked = object.ReferenceEquals(menuItem, sender);
-            }
-        }
-
-        #endregion
-
-        #region Private Methods (Window Title)
-
-        /// <summary>
-        /// Invoked when a window title <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void WindowTitleMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            foreach (MenuItem menuItem in this.selectableWindowTitleMenuItems)
-            {
-                menuItem.IsChecked = object.ReferenceEquals(menuItem, sender);
-            }
-        }
-
-        #endregion
-
-        #region Private Methods (Window State)
-
-        /// <summary>
-        /// Updates the <see cref="restoreMenuItem"/>, <see cref="minimizeMenuItem"/>, and
-        /// <see cref="maximizeMenuItem"/>.
-        /// </summary>
-        private void UpdateWindowStateMenuItems()
-        {
-            this.restoreMenuItem.IsEnabled = this.timerWindow.WindowState != WindowState.Normal;
-            this.minimizeMenuItem.IsEnabled = this.timerWindow.WindowState != WindowState.Minimized;
-            this.maximizeMenuItem.IsEnabled = this.timerWindow.WindowState != WindowState.Maximized;
-
-            if (this.timerWindow.IsFullScreen || this.timerWindow.Options.WindowTitleMode == WindowTitleMode.None)
-            {
-                // "Restore", "Minimize", and "Maximize" are not on the window, so we provide our own.
-                this.restoreMenuItem.Visibility = Visibility.Visible;
-                this.minimizeMenuItem.Visibility = Visibility.Visible;
-                this.maximizeMenuItem.Visibility = Visibility.Visible;
-                this.windowStateItemsSeparator.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                // "Restore", "Minimize", and "Maximize" are on the window, so no need for them here.
-                this.restoreMenuItem.Visibility = Visibility.Collapsed;
-                this.minimizeMenuItem.Visibility = Visibility.Collapsed;
-                this.maximizeMenuItem.Visibility = Visibility.Collapsed;
-                this.windowStateItemsSeparator.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void FAQMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            Consts.FAQUri.Navigate();
-        }
-
-        private void UsageMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            CommandLineArguments.ShowUsage();
-        }
-
-        /// <summary>
-        /// Invoked when the "About" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void AboutMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            AboutDialog.ShowOrActivate();
-        }
-
-        /// <summary>
-        /// Invoked when the "Restore" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void RestoreMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            if (this.timerWindow.IsFullScreen)
-            {
-                // Must set the menu item value here, since it will sync to the TimerWindow on menu close.
-                this.fullScreenMenuItem.IsChecked = false;
-                this.timerWindow.IsFullScreen = false;
-            }
-            else
-            {
-                this.timerWindow.WindowState = WindowState.Normal;
-            }
-        }
-
-        /// <summary>
-        /// Invoked when the "Minimize" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void MinimizeMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            this.timerWindow.WindowState = WindowState.Minimized;
-        }
-
-        /// <summary>
-        /// Invoked when the "Maximize" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void MaximizeMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            this.timerWindow.WindowState = WindowState.Maximized;
-        }
-
-        #endregion
-
-        #region Private Methods (Close)
-
-        /// <summary>
-        /// Invoked when the "Close" <see cref="MenuItem"/> is clicked.
-        /// </summary>
-        /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
-        /// <param name="e">The event data.</param>
-        private void CloseMenuItemClick(object sender, RoutedEventArgs e)
-        {
-            this.timerWindow.Close();
-        }
-
-        #endregion
+    /// <summary>
+    /// Invoked when the "Close" <see cref="MenuItem"/> is clicked.
+    /// </summary>
+    /// <param name="sender">The <see cref="MenuItem"/> where the event handler is attached.</param>
+    /// <param name="e">The event data.</param>
+    private void CloseMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        _timerWindow.Close();
     }
 }

@@ -1,55 +1,54 @@
 ﻿using System;
 
-namespace KPreisser.UI
+namespace KPreisser.UI;
+
+public partial class TaskDialog
 {
-    public partial class TaskDialog
+    private class WindowSubclassHandler : UI.WindowSubclassHandler
     {
-        private class WindowSubclassHandler : UI.WindowSubclassHandler
+        private readonly TaskDialog _taskDialog;
+
+        private bool _processedShowWindowMessage;
+
+        public WindowSubclassHandler(TaskDialog taskDialog)
+            : base(taskDialog?._hwndDialog ?? throw new ArgumentNullException(nameof(taskDialog)))
         {
-            private readonly TaskDialog _taskDialog;
+            _taskDialog = taskDialog;
+        }
 
-            private bool _processedShowWindowMessage;
-
-            public WindowSubclassHandler(TaskDialog taskDialog)
-                : base(taskDialog?._hwndDialog ?? throw new ArgumentNullException(nameof(taskDialog)))
+        protected override unsafe IntPtr WndProc(int msg, IntPtr wParam, IntPtr lParam)
+        {
+            switch (msg)
             {
-                _taskDialog = taskDialog;
-            }
+                case TaskDialogNativeMethods.WM_WINDOWPOSCHANGED:
+                    IntPtr result = base.WndProc(msg, wParam, lParam);
 
-            protected override unsafe IntPtr WndProc(int msg, IntPtr wParam, IntPtr lParam)
-            {
-                switch (msg)
-                {
-                    case TaskDialogNativeMethods.WM_WINDOWPOSCHANGED:
-                        IntPtr result = base.WndProc(msg, wParam, lParam);
+                    ref TaskDialogNativeMethods.WINDOWPOS windowPos =
+                        ref *(TaskDialogNativeMethods.WINDOWPOS*)lParam;
 
-                        ref TaskDialogNativeMethods.WINDOWPOS windowPos =
-                                ref *(TaskDialogNativeMethods.WINDOWPOS*)lParam;
+                    if ((windowPos.flags & TaskDialogNativeMethods.WINDOWPOS_FLAGS.SWP_SHOWWINDOW) ==
+                        TaskDialogNativeMethods.WINDOWPOS_FLAGS.SWP_SHOWWINDOW &&
+                        !_processedShowWindowMessage)
+                    {
+                        _processedShowWindowMessage = true;
 
-                        if ((windowPos.flags & TaskDialogNativeMethods.WINDOWPOS_FLAGS.SWP_SHOWWINDOW) ==
-                                TaskDialogNativeMethods.WINDOWPOS_FLAGS.SWP_SHOWWINDOW &&
-                                !_processedShowWindowMessage)
-                        {
-                            _processedShowWindowMessage = true;
+                        // The task dialog window has been shown for the first time.
+                        _taskDialog.OnShown(EventArgs.Empty);
+                    }
 
-                            // The task dialog window has been shown for the first time.
-                            _taskDialog.OnShown(EventArgs.Empty);
-                        }
+                    return result;
 
-                        return result;
+                case ContinueButtonClickHandlingMessage:
+                    // We received the message which we posted earlier when
+                    // handling a TDN_BUTTON_CLICKED notification, so we should
+                    // no longer ignore such notifications.
+                    _taskDialog._ignoreButtonClickedNotifications = false;
 
-                    case ContinueButtonClickHandlingMessage:
-                        // We received the message which we posted earlier when
-                        // handling a TDN_BUTTON_CLICKED notification, so we should
-                        // no longer ignore such notifications.
-                        _taskDialog._ignoreButtonClickedNotifications = false;
+                    // Do not forward the message to the base class.
+                    return IntPtr.Zero;
 
-                        // Do not forward the message to the base class.
-                        return IntPtr.Zero;
-
-                    default:
-                        return base.WndProc(msg, wParam, lParam);
-                }
+                default:
+                    return base.WndProc(msg, wParam, lParam);
             }
         }
     }

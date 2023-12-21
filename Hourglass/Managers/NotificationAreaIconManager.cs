@@ -4,66 +4,62 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hourglass.Managers
+namespace Hourglass.Managers;
+
+using Windows;
+
+/// <summary>
+/// Manages the <see cref="NotificationAreaIcon"/>.
+/// </summary>
+public sealed class NotificationAreaIconManager : Manager
 {
-    using Hourglass.Windows;
+    /// <summary>
+    /// Singleton instance of the <see cref="NotificationAreaIconManager"/> class.
+    /// </summary>
+    public static readonly NotificationAreaIconManager Instance = new();
 
     /// <summary>
-    /// Manages the <see cref="NotificationAreaIcon"/>.
+    /// The icon for the app in the notification area of the taskbar.
     /// </summary>
-    public class NotificationAreaIconManager : Manager
+    private NotificationAreaIcon _notifyIcon;
+
+    /// <summary>
+    /// Prevents a default instance of the <see cref="NotificationAreaIconManager"/> class from being created.
+    /// </summary>
+    private NotificationAreaIconManager()
     {
-        /// <summary>
-        /// Singleton instance of the <see cref="NotificationAreaIconManager"/> class.
-        /// </summary>
-        public static readonly NotificationAreaIconManager Instance = new NotificationAreaIconManager();
+    }
 
-        /// <summary>
-        /// The icon for the app in the notification area of the taskbar.
-        /// </summary>
-        private NotificationAreaIcon notifyIcon;
+    /// <summary>
+    /// Gets the icon for the app in the notification area of the taskbar.
+    /// </summary>
+    public NotificationAreaIcon NotifyIcon => _notifyIcon;
 
-        /// <summary>
-        /// Prevents a default instance of the <see cref="NotificationAreaIconManager"/> class from being created.
-        /// </summary>
-        private NotificationAreaIconManager()
+    /// <summary>
+    /// Initializes the class.
+    /// </summary>
+    public override void Initialize()
+    {
+        _notifyIcon = new();
+    }
+
+    /// <summary>
+    /// Disposes the manager.
+    /// </summary>
+    /// <param name="disposing">A value indicating whether this method was invoked by an explicit call to <see
+    /// cref="Dispose"/>.</param>
+    protected override void Dispose(bool disposing)
+    {
+        if (Disposed)
         {
+            return;
         }
 
-        /// <summary>
-        /// Gets the icon for the app in the notification area of the taskbar.
-        /// </summary>
-        public NotificationAreaIcon NotifyIcon
+        if (disposing)
         {
-            get { return this.notifyIcon; }
+            _notifyIcon.Dispose();
         }
 
-        /// <summary>
-        /// Initializes the class.
-        /// </summary>
-        public override void Initialize()
-        {
-            this.notifyIcon = new NotificationAreaIcon();
-        }
-
-        /// <summary>
-        /// Disposes the manager.
-        /// </summary>
-        /// <param name="disposing">A value indicating whether this method was invoked by an explicit call to <see
-        /// cref="Dispose"/>.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (this.Disposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                this.notifyIcon.Dispose();
-            }
-
-            base.Dispose(disposing);
-        }
+        base.Dispose(disposing);
     }
 }

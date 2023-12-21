@@ -9,7 +9,7 @@ namespace Hourglass.Test
     using System;
     using System.Globalization;
 
-    using Hourglass.Parsing;
+    using Parsing;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,7 +17,7 @@ namespace Hourglass.Test
     /// Contains tests for the <see cref="TimeSpanToken"/> class.
     /// </summary>
     [TestClass]
-    public class TimeSpanTokenTest
+    public sealed class TimeSpanTokenTest
     {
         #region Parse Invalid Input
 
