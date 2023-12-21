@@ -9,7 +9,7 @@ namespace Hourglass.Test
     using System;
     using System.Globalization;
 
-    using Hourglass.Parsing;
+    using Parsing;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,7 +17,7 @@ namespace Hourglass.Test
     /// Contains tests for the <see cref="DateTimeToken"/> class.
     /// </summary>
     [TestClass]
-    public class DateTimeTokenTest
+    public sealed class DateTimeTokenTest
     {
         #region Parse Invalid Input
 
@@ -7887,7 +7887,7 @@ namespace Hourglass.Test
         }
 
         #endregion
-        
+
         #region Parse Special Date (New Year's Eve)
 
         /// <summary>

@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
+        TextOptions.TextFormattingMode="Display"
+        RenderOptions.ClearTypeHint="Enabled"
         SnapsToDevicePixels="True"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -33,6 +35,7 @@
     <Grid Background="#F9F9F9">
         <StackPanel>
             <TextBlock x:Name="TitleTextBlock"
+                       TextOptions.TextFormattingMode="Ideal"
                        Background="#C75050"
                        FontFamily="Segoe UI Light, Segoe UI"
                        FontSize="20"

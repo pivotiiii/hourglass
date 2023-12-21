@@ -23,24 +23,23 @@ namespace Hourglass.Properties
     /// <summary>
     /// A <see cref="SettingsProvider"/> that stores settings in an XML document in the same directory as the assembly.
     /// </summary>
-    public class PortableSettingsProvider : SettingsProvider
+    public sealed class PortableSettingsProvider : SettingsProvider
     {
         /// <summary>
         /// Gets or sets the name of the currently running application.
         /// </summary>
         public override string ApplicationName
         {
-            get { return Assembly.GetExecutingAssembly().GetName().Name; }
+            get => Assembly.GetExecutingAssembly().GetName().Name;
+#pragma warning disable S3237
             set { /* Do nothing */ }
+#pragma warning restore S3237
         }
 
         /// <summary>
         /// Gets the friendly name used to refer to the provider during configuration.
         /// </summary>
-        public override string Name
-        {
-            get { return this.GetType().FullName; }
-        }
+        public override string Name => GetType().FullName;
 
         /// <summary>
         /// Initializes the provider.
@@ -50,7 +49,7 @@ namespace Hourglass.Properties
         /// specified in the configuration for this provider.</param>
         public override void Initialize(string name, NameValueCollection config)
         {
-            base.Initialize(this.ApplicationName, config);
+            base.Initialize(ApplicationName, config);
         }
 
         /// <summary>
@@ -87,55 +86,54 @@ namespace Hourglass.Properties
         /// settings to set.</param>
         public override void SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection collection)
         {
-            using (XmlWriter writer = GetSettingsDocumentWriter())
+            using XmlWriter writer = GetSettingsDocumentWriter();
+
+            // <?xml version="1.0" encoding="utf-8"?>
+            writer.WriteStartDocument();
+
+            // <configuration>
+            writer.WriteStartElement("configuration");
+
+            // <userSettings>
+            writer.WriteStartElement("userSettings");
+
+            // <{...}.Settings>
+            writer.WriteStartElement(typeof(Settings).FullName!);
+
+            foreach (SettingsPropertyValue value in GetSerializableSettingsPropertyValues(collection))
             {
-                // <?xml version="1.0" encoding="utf-8"?>
-                writer.WriteStartDocument();
+                // <setting name="{...}" serializeAs="{...}">
+                writer.WriteStartElement("setting");
+                writer.WriteAttributeString("name", value.Name);
+                writer.WriteAttributeString("serializeAs", value.Property.SerializeAs.ToString());
 
-                // <configuration>
-                writer.WriteStartElement("configuration");
-
-                // <userSettings>
-                writer.WriteStartElement("userSettings");
-
-                // <{...}.Settings>
-                writer.WriteStartElement(typeof(Settings).FullName);
-
-                foreach (SettingsPropertyValue value in GetSerializableSettingsPropertyValues(collection))
+                // <value>
+                writer.WriteStartElement("value");
+                if (value.Property.SerializeAs == SettingsSerializeAs.String)
                 {
-                    // <setting name="{...}" serializeAs="{...}">
-                    writer.WriteStartElement("setting");
-                    writer.WriteAttributeString("name", value.Name);
-                    writer.WriteAttributeString("serializeAs", value.Property.SerializeAs.ToString());
-
-                    // <value>
-                    writer.WriteStartElement("value");
-                    if (value.Property.SerializeAs == SettingsSerializeAs.String)
-                    {
-                        writer.WriteValue(value.SerializedValue.ToString());
-                    }
-                    else
-                    {
-                        XmlSerializer serializer = new XmlSerializer(value.Property.PropertyType);
-                        serializer.Serialize(writer, value.PropertyValue);
-                    }
-
-                    // </value>
-                    writer.WriteEndElement();
-
-                    // </setting>
-                    writer.WriteEndElement();
+                    writer.WriteValue(value.SerializedValue.ToString());
+                }
+                else
+                {
+                    XmlSerializer serializer = new(value.Property.PropertyType);
+                    serializer.Serialize(writer, value.PropertyValue);
                 }
 
-                // </{...}.Settings>
+                // </value>
                 writer.WriteEndElement();
 
-                // </userSettings>
-                writer.WriteEndElement();
-
-                // </configuration>
+                // </setting>
                 writer.WriteEndElement();
             }
+
+            // </{...}.Settings>
+            writer.WriteEndElement();
+
+            // </userSettings>
+            writer.WriteEndElement();
+
+            // </configuration>
+            writer.WriteEndElement();
         }
 
         /// <summary>
@@ -145,7 +143,7 @@ namespace Hourglass.Properties
         private static string GetSettingsDocumentPath()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            FileInfo assemblyFileInfo = new FileInfo(assembly.Location);
+            FileInfo assemblyFileInfo = new(assembly.Location);
             string directory = assemblyFileInfo.DirectoryName ?? ".";
             string fileName = Path.GetFileNameWithoutExtension(assemblyFileInfo.Name) + ".config";
             return Path.Combine(directory, fileName);
@@ -161,12 +159,14 @@ namespace Hourglass.Properties
         /// for each <see cref="SettingsProperty"/> in the <see cref="SettingsPropertyCollection"/>.</returns>
         private static SettingsPropertyValueCollection GetSettingsPropertyValueCollection(SettingsPropertyCollection collection)
         {
-            SettingsPropertyValueCollection values = new SettingsPropertyValueCollection();
+            SettingsPropertyValueCollection values = new();
 
             foreach (SettingsProperty property in collection)
             {
-                SettingsPropertyValue value = new SettingsPropertyValue(property);
-                value.SerializedValue = property.DefaultValue;
+                SettingsPropertyValue value = new(property)
+                {
+                    SerializedValue = property.DefaultValue
+                };
                 values.Add(value);
             }
 
@@ -183,7 +183,7 @@ namespace Hourglass.Properties
             try
             {
                 string path = GetSettingsDocumentPath();
-                XmlDocument document = new XmlDocument();
+                XmlDocument document = new();
                 document.Load(path);
                 return document;
             }
@@ -202,14 +202,14 @@ namespace Hourglass.Properties
         /// found in the XML document.</returns>
         private static string TryGetSerializedValue(XmlDocument document, string propertyName)
         {
-            if (document == null)
+            if (document is null)
             {
                 return null;
             }
 
             string query = string.Format(CultureInfo.InvariantCulture, "//setting[@name='{0}']/value", propertyName);
             XmlNode node = document.SelectSingleNode(query);
-            return node != null ? node.InnerXml : null;
+            return node?.InnerXml;
         }
 
         /// <summary>
@@ -222,8 +222,8 @@ namespace Hourglass.Properties
         {
             return collection
                 .Cast<SettingsPropertyValue>()
-                .Where(v => v.Property.SerializeAs == SettingsSerializeAs.String || v.Property.SerializeAs == SettingsSerializeAs.Xml)
-                .OrderBy(v => v.Name, StringComparer.Create(CultureInfo.InvariantCulture, false /* ignoreCase */));
+                .Where(static v => v.Property.SerializeAs == SettingsSerializeAs.String || v.Property.SerializeAs == SettingsSerializeAs.Xml)
+                .OrderBy(static v => v.Name, StringComparer.Create(CultureInfo.InvariantCulture, false /* ignoreCase */));
         }
 
         /// <summary>

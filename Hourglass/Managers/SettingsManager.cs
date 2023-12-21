@@ -4,46 +4,45 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hourglass.Managers
+namespace Hourglass.Managers;
+
+using Properties;
+
+/// <summary>
+/// Manages default settings.
+/// </summary>
+public sealed class SettingsManager : Manager
 {
-    using Hourglass.Properties;
+    /// <summary>
+    /// Singleton instance of the <see cref="SettingsManager"/> class.
+    /// </summary>
+    public static readonly SettingsManager Instance = new();
 
     /// <summary>
-    /// Manages default settings.
+    /// Prevents a default instance of the <see cref="SettingsManager"/> class from being created.
     /// </summary>
-    public class SettingsManager : Manager
+    private SettingsManager()
     {
-        /// <summary>
-        /// Singleton instance of the <see cref="SettingsManager"/> class.
-        /// </summary>
-        public static readonly SettingsManager Instance = new SettingsManager();
+    }
 
-        /// <summary>
-        /// Prevents a default instance of the <see cref="SettingsManager"/> class from being created.
-        /// </summary>
-        private SettingsManager()
+    /// <summary>
+    /// Initializes the class.
+    /// </summary>
+    public override void Initialize()
+    {
+        if (Settings.Default.UpgradeRequired)
         {
-        }
-
-        /// <summary>
-        /// Initializes the class.
-        /// </summary>
-        public override void Initialize()
-        {
-            if (Settings.Default.UpgradeRequired)
-            {
-                Settings.Default.Upgrade();
-                Settings.Default.UpgradeRequired = false;
-                Settings.Default.Save();
-            }
-        }
-
-        /// <summary>
-        /// Persists the state of the class.
-        /// </summary>
-        public override void Persist()
-        {
+            Settings.Default.Upgrade();
+            Settings.Default.UpgradeRequired = false;
             Settings.Default.Save();
         }
+    }
+
+    /// <summary>
+    /// Persists the state of the class.
+    /// </summary>
+    public override void Persist()
+    {
+        Settings.Default.Save();
     }
 }

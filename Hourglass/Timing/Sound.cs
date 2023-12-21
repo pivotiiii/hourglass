@@ -4,76 +4,53 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hourglass.Timing
-{
-    using System;
-    using System.IO;
-    using System.Reflection;
+namespace Hourglass.Timing;
 
-    using Hourglass.Managers;
+using System;
+using System.IO;
+using System.Reflection;
+
+using static System.IO.Path;
+
+using Managers;
+
+/// <summary>
+/// A sound that can be used to notify the user that a timer has expired.
+/// </summary>
+public sealed class Sound
+{
+    /// <summary>
+    /// A method that returns a stream to the sound data.
+    /// </summary>
+    private readonly Func<UnmanagedMemoryStream> _streamProvider;
 
     /// <summary>
-    /// A sound that can be used to notify the user that a timer has expired.
+    /// Initializes a new instance of the <see cref="Sound"/> class for a sound stored in the file system.
     /// </summary>
-    public class Sound
+    /// <param name="path">The path to the sound file.</param>
+    public Sound(string path)
     {
-        /// <summary>
-        /// The friendly name for this sound.
-        /// </summary>
-        private readonly string name;
-
-        /// <summary>
-        /// A unique identifier for this sound.
-        /// </summary>
-        private readonly string identifier;
-
-        /// <summary>
-        /// A value indicating whether this sound is stored in the assembly.
-        /// </summary>
-        private readonly bool isBuiltIn;
-
-        /// <summary>
-        /// The path to the sound file.
-        /// </summary>
-        private readonly string path;
-
-        /// <summary>
-        /// A method that returns a stream to the sound data.
-        /// </summary>
-        private readonly Func<UnmanagedMemoryStream> streamProvider;
-
-        /// <summary>
-        /// The length of the sound, or <c>null</c> if the length of the sound is unknown.
-        /// </summary>
-        private readonly TimeSpan? duration;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Sound"/> class for a sound stored in the file system.
-        /// </summary>
-        /// <param name="path">The path to the sound file.</param>
-        public Sound(string path)
-        {
             if (string.IsNullOrEmpty(path))
             {
                 throw new ArgumentNullException(nameof(path));
             }
 
-            this.name = GetNameFromPath(path);
-            this.identifier = GetIdentifierFromPath(path);
-            this.isBuiltIn = false;
-            this.path = path;
-            this.duration = null;
+            Name = GetNameFromPath(path);
+            Identifier = GetIdentifierFromPath(path);
+            IsBuiltIn = false;
+            Path = path;
+            Duration = null;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Sound"/> class for a sound stored in the assembly.
-        /// </summary>
-        /// <param name="invariantName">The culture-insensitive name of the color. (Optional.)</param>
-        /// <param name="name">The friendly name for the sound.</param>
-        /// <param name="streamProvider">A method that returns a stream to the sound data.</param>
-        /// <param name="duration">The length of the sound.</param>
-        public Sound(string invariantName, string name, Func<UnmanagedMemoryStream> streamProvider, TimeSpan duration)
-        {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Sound"/> class for a sound stored in the assembly.
+    /// </summary>
+    /// <param name="invariantName">The culture-insensitive name of the color. (Optional.)</param>
+    /// <param name="name">The friendly name for the sound.</param>
+    /// <param name="streamProvider">A method that returns a stream to the sound data.</param>
+    /// <param name="duration">The length of the sound.</param>
+    public Sound(string invariantName, string name, Func<UnmanagedMemoryStream> streamProvider, TimeSpan duration)
+    {
             if (string.IsNullOrEmpty(invariantName))
             {
                 throw new ArgumentNullException(nameof(invariantName));
@@ -84,136 +61,110 @@ namespace Hourglass.Timing
                 throw new ArgumentNullException(nameof(name));
             }
 
-            if (streamProvider == null)
-            {
-                throw new ArgumentNullException(nameof(streamProvider));
-            }
-
             if (duration < TimeSpan.Zero)
             {
                 throw new ArgumentOutOfRangeException(nameof(duration));
             }
 
-            this.name = name;
-            this.identifier = "resource:" + invariantName;
-            this.isBuiltIn = true;
-            this.streamProvider = streamProvider;
-            this.duration = duration;
+            Name = name;
+            Identifier = "resource:" + invariantName;
+            IsBuiltIn = true;
+            Duration = duration;
+
+            _streamProvider = streamProvider ?? throw new ArgumentNullException(nameof(streamProvider));
         }
 
-        /// <summary>
-        /// Gets the default sound.
-        /// </summary>
-        public static Sound DefaultSound
-        {
-            get { return SoundManager.Instance.DefaultSound; }
-        }
+    /// <summary>
+    /// Gets the default sound.
+    /// </summary>
+    public static Sound DefaultSound => SoundManager.Instance.DefaultSound;
 
-        /// <summary>
-        /// Gets a sound representing no sound.
-        /// </summary>
-        public static Sound NoSound
-        {
-            get { return null; }
-        }
+    /// <summary>
+    /// Gets a sound representing no sound.
+    /// </summary>
+    public static Sound NoSound => null;
 
-        /// <summary>
-        /// Gets the friendly name for this sound.
-        /// </summary>
-        public string Name
-        {
-            get { return this.name; }
-        }
+    /// <summary>
+    /// Gets the friendly name for this sound.
+    /// </summary>
+    public string Name { get; }
 
-        /// <summary>
-        /// Gets the unique identifier for this sound.
-        /// </summary>
-        public string Identifier
-        {
-            get { return this.identifier; }
-        }
+    /// <summary>
+    /// Gets the unique identifier for this sound.
+    /// </summary>
+    public string Identifier { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether this sound is stored in the assembly.
-        /// </summary>
-        public bool IsBuiltIn
-        {
-            get { return this.isBuiltIn; }
-        }
+    /// <summary>
+    /// Gets a value indicating whether this sound is stored in the assembly.
+    /// </summary>
+    public bool IsBuiltIn { get; }
 
-        /// <summary>
-        /// Gets the path to the sound file.
-        /// </summary>
-        public string Path
-        {
-            get { return this.path; }
-        }
+    /// <summary>
+    /// Gets the path to the sound file.
+    /// </summary>
+    public string Path { get; }
 
-        /// <summary>
-        /// Gets the length of the sound, or <c>null</c> if the length of the sound is unknown.
-        /// </summary>
-        public TimeSpan? Duration
-        {
-            get { return this.duration; }
-        }
+    /// <summary>
+    /// Gets the length of the sound, or <c>null</c> if the length of the sound is unknown.
+    /// </summary>
+    public TimeSpan? Duration { get; }
 
-        /// <summary>
-        /// Returns a <see cref="Sound"/> for the specified identifier, or <c>null</c> if the identifier is <c>null</c>
-        /// or empty.
-        /// </summary>
-        /// <param name="identifier">The identifier for the sound.</param>
-        /// <returns>A <see cref="Sound"/> for the specified identifier, or <c>null</c> if the identifier is
-        /// <c>null</c> or empty.</returns>
-        public static Sound FromIdentifier(string identifier)
-        {
+    /// <summary>
+    /// Returns a <see cref="Sound"/> for the specified identifier, or <c>null</c> if the identifier is <c>null</c>
+    /// or empty.
+    /// </summary>
+    /// <param name="identifier">The identifier for the sound.</param>
+    /// <returns>A <see cref="Sound"/> for the specified identifier, or <c>null</c> if the identifier is
+    /// <c>null</c> or empty.</returns>
+    public static Sound FromIdentifier(string identifier)
+    {
             return SoundManager.Instance.GetSoundOrDefaultByIdentifier(identifier);
         }
 
-        /// <summary>
-        /// Returns a stream with the sound data.
-        /// </summary>
-        /// <returns>A stream with the sound data.</returns>
-        public Stream GetStream()
-        {
-            return this.streamProvider != null
-                ? (Stream)this.streamProvider()
-                : new FileStream(this.path, FileMode.Open, FileAccess.Read, FileShare.Read);
+    /// <summary>
+    /// Returns a stream with the sound data.
+    /// </summary>
+    /// <returns>A stream with the sound data.</returns>
+    public Stream GetStream()
+    {
+            return _streamProvider is not null
+                ? _streamProvider()
+                : new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
-        /// <summary>
-        /// Returns the friendly name for a sound file.
-        /// </summary>
-        /// <param name="path">The path to the sound file.</param>
-        /// <returns>The friendly name for a sound file.</returns>
-        protected static string GetNameFromPath(string path)
-        {
+    /// <summary>
+    /// Returns the friendly name for a sound file.
+    /// </summary>
+    /// <param name="path">The path to the sound file.</param>
+    /// <returns>The friendly name for a sound file.</returns>
+    private static string GetNameFromPath(string path)
+    {
             if (string.IsNullOrEmpty(path))
             {
                 throw new ArgumentNullException(nameof(path));
             }
 
-            return System.IO.Path.GetFileNameWithoutExtension(path);
+            return GetFileNameWithoutExtension(path);
         }
 
-        /// <summary>
-        /// Returns the unique identifier for a sound file.
-        /// </summary>
-        /// <param name="path">The path to the sound file.</param>
-        /// <returns>The unique identifier for a sound file.</returns>
-        protected static string GetIdentifierFromPath(string path)
-        {
+    /// <summary>
+    /// Returns the unique identifier for a sound file.
+    /// </summary>
+    /// <param name="path">The path to the sound file.</param>
+    /// <returns>The unique identifier for a sound file.</returns>
+    private static string GetIdentifierFromPath(string path)
+    {
             if (string.IsNullOrEmpty(path))
             {
                 throw new ArgumentNullException(nameof(path));
             }
 
-            string appDirectory = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".";
-            string fullPath = System.IO.Path.GetFullPath(path);
+            string appDirectory = GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".";
+            string fullPath = GetFullPath(path);
 
             // Return a relative path if the sound is in or under the app directory, or otherwise return the full path
             return fullPath.StartsWith(appDirectory, StringComparison.OrdinalIgnoreCase)
                 ? "file:." + fullPath.Substring(appDirectory.Length)
                 : "file:" + path;
         }
-    }
 }

@@ -9,6 +9,9 @@
         Width="525"
         ResizeMode="NoResize"
         SizeToContent="Height"
+        SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display"
+        RenderOptions.ClearTypeHint="Enabled"
         Closing="WindowClosing"
         WindowStartupLocation="CenterScreen">
     <StackPanel>

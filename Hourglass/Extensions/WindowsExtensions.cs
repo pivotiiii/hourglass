@@ -4,43 +4,42 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hourglass.Extensions
+namespace Hourglass.Extensions;
+
+using System.Linq;
+using System.Management;
+
+/// <summary>
+/// Provides utility methods for interacting with the Windows environment.
+/// </summary>
+public static class WindowsExtensions
 {
-    using System.Linq;
-    using System.Management;
-
     /// <summary>
-    /// Provides utility methods for interacting with the Windows environment.
+    /// Shuts down the computer.
     /// </summary>
-    public static class WindowsExtensions
+    /// <returns><c>true</c> if the computer was shut down successfully, or <c>false</c> otherwise.</returns>
+    public static bool ShutDown()
     {
-        /// <summary>
-        /// Shuts down the computer.
-        /// </summary>
-        /// <returns><c>true</c> if the computer was shut down successfully, or <c>false</c> otherwise.</returns>
-        public static bool ShutDown()
+        try
         {
-            try
+            ManagementClass os = new("Win32_OperatingSystem");
+            os.Get();
+            os.Scope.Options.EnablePrivileges = true;
+
+            ManagementBaseObject parameters = os.GetMethodParameters("Win32Shutdown");
+            parameters["Flags"] = "1"; // Shut down
+            parameters["Reserved"] = "0";
+
+            foreach (ManagementObject obj in os.GetInstances().Cast<ManagementObject>())
             {
-                ManagementClass os = new ManagementClass("Win32_OperatingSystem");
-                os.Get();
-                os.Scope.Options.EnablePrivileges = true;
-
-                ManagementBaseObject parameters = os.GetMethodParameters("Win32Shutdown");
-                parameters["Flags"] = "1"; // Shut down
-                parameters["Reserved"] = "0";
-
-                foreach (ManagementObject obj in os.GetInstances().Cast<ManagementObject>())
-                {
-                    obj.InvokeMethod("Win32Shutdown", parameters, null /* options */);
-                }
-
-                return true;
+                obj.InvokeMethod("Win32Shutdown", parameters, null /* options */);
             }
-            catch
-            {
-                return false;
-            }
+
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 }

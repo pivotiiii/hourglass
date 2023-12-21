@@ -4,160 +4,161 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hourglass.Windows
-{
-    using System.Globalization;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
+namespace Hourglass.Windows;
 
-    using Hourglass.Extensions;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+
+using Extensions;
+
+/// <summary>
+/// A <see cref="TextBox"/> that automatically adjusts the font size to ensure that the text is entirely visible.
+/// </summary>
+public sealed class SizeToFitTextBox : TextBox
+{
+    private FormattedText _formattedText;
 
     /// <summary>
-    /// A <see cref="TextBox"/> that automatically adjusts the font size to ensure that the text is entirely visible.
+    /// Identifies the minimum font size <see cref="DependencyProperty"/>.
     /// </summary>
-    public class SizeToFitTextBox : TextBox
+    public static readonly DependencyProperty MinFontSizeProperty = DependencyProperty.Register(
+        nameof(MinFontSize),
+        typeof(double),
+        typeof(SizeToFitTextBox),
+        new(double.NaN /* defaultValue */, MinFontSizePropertyChanged));
+
+    /// <summary>
+    /// Identifies the maximum font size <see cref="DependencyProperty"/>.
+    /// </summary>
+    public static readonly DependencyProperty MaxFontSizeProperty = DependencyProperty.Register(
+        nameof(MaxFontSize),
+        typeof(double),
+        typeof(SizeToFitTextBox),
+        new(double.NaN /* defaultValue */, MaxFontSizePropertyChanged));
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SizeToFitTextBox"/> class.
+    /// </summary>
+    public SizeToFitTextBox()
     {
-        private FormattedText formattedText;
+        Loaded += delegate { UpdateFontSize(); };
+        SizeChanged += delegate { UpdateFontSize(); };
+        TextChanged += delegate { UpdateFontSize(); };
+    }
 
-        /// <summary>
-        /// Identifies the minimum font size <see cref="DependencyProperty"/>.
-        /// </summary>
-        public static readonly DependencyProperty MinFontSizeProperty = DependencyProperty.Register(
-            nameof(MinFontSize),
-            typeof(double),
-            typeof(SizeToFitTextBox),
-            new PropertyMetadata(double.NaN /* defaultValue */, MinFontSizePropertyChanged));
+    /// <summary>
+    /// Gets or sets the minimum font size.
+    /// </summary>
+    public double MinFontSize
+    {
+        get => (double) GetValue(MinFontSizeProperty);
+        set => SetValue(MinFontSizeProperty, value);
+    }
 
-        /// <summary>
-        /// Identifies the maximum font size <see cref="DependencyProperty"/>.
-        /// </summary>
-        public static readonly DependencyProperty MaxFontSizeProperty = DependencyProperty.Register(
-            nameof(MaxFontSize),
-            typeof(double),
-            typeof(SizeToFitTextBox),
-            new PropertyMetadata(double.NaN /* defaultValue */, MaxFontSizePropertyChanged));
+    /// <summary>
+    /// Gets or sets the maximum font size.
+    /// </summary>
+    public double MaxFontSize
+    {
+        get => (double) GetValue(MaxFontSizeProperty);
+        set => SetValue(MaxFontSizeProperty, value);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SizeToFitTextBox"/> class.
-        /// </summary>
-        public SizeToFitTextBox()
+    /// <summary>
+    /// Invoked when the effective value of the <see cref="MinFontSizeProperty"/> changes.
+    /// </summary>
+    /// <param name="sender">The <see cref="DependencyObject"/> on which the <see cref="MinFontSizeProperty"/> has
+    /// changed value.</param>
+    /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this
+    /// property.</param>
+    private static void MinFontSizePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+    {
+        ((SizeToFitTextBox)sender).UpdateFontSize();
+    }
+
+    /// <summary>
+    /// Invoked when the effective value of the <see cref="MaxFontSizeProperty"/> changes.
+    /// </summary>
+    /// <param name="sender">The <see cref="DependencyObject"/> on which the <see cref="MaxFontSizeProperty"/> has
+    /// changed value.</param>
+    /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this
+    /// property.</param>
+    private static void MaxFontSizePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+    {
+        ((SizeToFitTextBox)sender).UpdateFontSize();
+    }
+
+    /// <summary>
+    /// Updates the <see cref="TextBox.FontSize"/> property to ensure that the text is entirely visible.
+    /// </summary>
+    private void UpdateFontSize()
+    {
+        if (!MinFontSize.IsFinite() || !MaxFontSize.IsFinite())
         {
-            this.Loaded += (s, e) => this.UpdateFontSize();
-            this.SizeChanged += (s, e) => this.UpdateFontSize();
-            this.TextChanged += (s, e) => this.UpdateFontSize();
+            return;
         }
 
-        /// <summary>
-        /// Gets or sets the minimum font size.
-        /// </summary>
-        public double MinFontSize
+        double desiredFontSize = MathExtensions.LimitToRange(
+            GetViewWidth() / GetTextWidth() * FontSize,
+            MinFontSize,
+            MaxFontSize);
+
+        if (desiredFontSize.IsFinite() && desiredFontSize > 0.0)
         {
-            get { return (double)this.GetValue(MinFontSizeProperty); }
-            set { this.SetValue(MinFontSizeProperty, value); }
+            FontSize = desiredFontSize;
+        }
+    }
+
+    /// <summary>
+    /// Returns the width of the text in the text box.
+    /// </summary>
+    /// <returns>The width of the text in the text box.</returns>
+    private double GetTextWidth()
+    {
+        if (_formattedText is null)
+        {
+            Typeface typeface = new(
+                FontFamily,
+                FontStyle,
+                FontWeight,
+                FontStretch);
+
+            _formattedText = new(
+                Text,
+                CultureInfo.CurrentCulture,
+                FlowDirection,
+                typeface,
+                FontSize,
+                Foreground,
+                GetPixelsPerDip());
+        }
+        else
+        {
+            _formattedText.PixelsPerDip = GetPixelsPerDip();
         }
 
-        /// <summary>
-        /// Gets or sets the maximum font size.
-        /// </summary>
-        public double MaxFontSize
+        return _formattedText.WidthIncludingTrailingWhitespace;
+
+        double GetPixelsPerDip()
         {
-            get { return (double)this.GetValue(MaxFontSizeProperty); }
-            set { this.SetValue(MaxFontSizeProperty, value); }
+            return VisualTreeHelper.GetDpi(this).PixelsPerDip;
         }
+    }
 
-        /// <summary>
-        /// Invoked when the effective value of the <see cref="MinFontSizeProperty"/> changes.
-        /// </summary>
-        /// <param name="sender">The <see cref="DependencyObject"/> on which the <see cref="MinFontSizeProperty"/> has
-        /// changed value.</param>
-        /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this
-        /// property.</param>
-        private static void MinFontSizePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            ((SizeToFitTextBox)sender).UpdateFontSize();
-        }
+    /// <summary>
+    /// Returns the width of the control that contains the text.
+    /// </summary>
+    /// <returns>The width of the control that contains the text.</returns>
+    private double GetViewWidth()
+    {
+        // This is the control closest to the text and gives the most accurate width
+        DependencyObject textBoxView = this.FindVisualChild(WindowExtensions.IsTextBoxView);
 
-        /// <summary>
-        /// Invoked when the effective value of the <see cref="MaxFontSizeProperty"/> changes.
-        /// </summary>
-        /// <param name="sender">The <see cref="DependencyObject"/> on which the <see cref="MaxFontSizeProperty"/> has
-        /// changed value.</param>
-        /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this
-        /// property.</param>
-        private static void MaxFontSizePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            ((SizeToFitTextBox)sender).UpdateFontSize();
-        }
+        // Since TextBoxView is internal, fall back to this if it is not found
+        FrameworkElement view = textBoxView as FrameworkElement ?? this;
 
-        /// <summary>
-        /// Updates the <see cref="TextBox.FontSize"/> property to ensure that the text is entirely visible.
-        /// </summary>
-        private void UpdateFontSize()
-        {
-            if (!this.MinFontSize.IsFinite() || !this.MaxFontSize.IsFinite())
-            {
-                return;
-            }
-
-            double desiredFontSize = MathExtensions.LimitToRange(
-                this.GetViewWidth() / this.GetTextWidth() * this.FontSize,
-                this.MinFontSize,
-                this.MaxFontSize);
-
-            if (desiredFontSize.IsFinite() && desiredFontSize > 0.0)
-            {
-                this.FontSize = desiredFontSize;
-            }
-        }
-
-        /// <summary>
-        /// Returns the width of the text in the text box.
-        /// </summary>
-        /// <returns>The width of the text in the text box.</returns>
-        private double GetTextWidth()
-        {
-            if (formattedText is null)
-            {
-                Typeface typeface = new Typeface(
-                    this.FontFamily,
-                    this.FontStyle,
-                    this.FontWeight,
-                    this.FontStretch);
-
-                this.formattedText = new FormattedText(
-                    this.Text,
-                    CultureInfo.CurrentCulture,
-                    this.FlowDirection,
-                    typeface,
-                    this.FontSize,
-                    this.Foreground,
-                    GetPixelsPerDip());
-            }
-            else
-            {
-                this.formattedText.PixelsPerDip = GetPixelsPerDip();
-            }
-
-            return formattedText.WidthIncludingTrailingWhitespace;
-
-            double GetPixelsPerDip() =>
-                VisualTreeHelper.GetDpi(this).PixelsPerDip;
-        }
-
-        /// <summary>
-        /// Returns the width of the control that contains the text.
-        /// </summary>
-        /// <returns>The width of the control that contains the text.</returns>
-        private double GetViewWidth()
-        {
-            // This is the control closest to the text and gives the most accurate width
-            DependencyObject textBoxView = this.FindVisualChild(WindowExtensions.IsTextBoxView);
-
-            // Since TextBoxView is internal, fall back to this if it is not found
-            FrameworkElement view = textBoxView as FrameworkElement ?? this;
-
-            return view.ActualWidth;
-        }
+        return view.ActualWidth;
     }
 }

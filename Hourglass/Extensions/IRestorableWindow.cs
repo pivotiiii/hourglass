@@ -4,30 +4,29 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Hourglass.Extensions
-{
-    using System.Windows;
+namespace Hourglass.Extensions;
 
-    using Hourglass.Windows;
+using System.Windows;
+
+using Windows;
+
+/// <summary>
+/// An interface for windows whose size, position, and state of windows can be saved and restored.
+/// </summary>
+public interface IRestorableWindow
+{
+    /// <summary>
+    /// Gets the <see cref="WindowSize"/> for the window persisted in the settings.
+    /// </summary>
+    WindowSize PersistedSize { get; }
 
     /// <summary>
-    /// An interface for windows whose size, position, and state of windows can be saved and restored.
+    /// Gets or sets the <see cref="Window.WindowState"/> before the window was minimized.
     /// </summary>
-    public interface IRestorableWindow
-    {
-        /// <summary>
-        /// Gets the <see cref="WindowSize"/> for the window persisted in the settings.
-        /// </summary>
-        WindowSize PersistedSize { get; }
+    WindowState RestoreWindowState { get; set; }
 
-        /// <summary>
-        /// Gets or sets the <see cref="Window.WindowState"/> before the window was minimized.
-        /// </summary>
-        WindowState RestoreWindowState { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the window is in full-screen mode.
-        /// </summary>
-        bool IsFullScreen { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets a value indicating whether the window is in full-screen mode.
+    /// </summary>
+    bool IsFullScreen { get; set; }
 }

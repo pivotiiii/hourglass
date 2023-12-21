@@ -1,28 +1,27 @@
 ﻿using System;
 
-namespace KPreisser.UI
+namespace KPreisser.UI;
+
+/// <summary>
+/// 
+/// </summary>
+public class TaskDialogHyperlinkClickedEventArgs : EventArgs
 {
     /// <summary>
     /// 
     /// </summary>
-    public class TaskDialogHyperlinkClickedEventArgs : EventArgs
+    /// <param name="hyperlink"></param>
+    internal TaskDialogHyperlinkClickedEventArgs(string hyperlink)
+        : base()
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="hyperlink"></param>
-        internal TaskDialogHyperlinkClickedEventArgs(string hyperlink)
-            : base()
-        {
-            Hyperlink = hyperlink;
-        }
+        Hyperlink = hyperlink;
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Hyperlink
-        {
-            get;
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Hyperlink
+    {
+        get;
     }
 }

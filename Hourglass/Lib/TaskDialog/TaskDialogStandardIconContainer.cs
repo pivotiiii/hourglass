@@ -1,16 +1,15 @@
-﻿namespace KPreisser.UI
+﻿namespace KPreisser.UI;
+
+internal class TaskDialogStandardIconContainer : TaskDialogIcon
 {
-    internal class TaskDialogStandardIconContainer : TaskDialogIcon
+    public TaskDialogStandardIconContainer(TaskDialogStandardIcon icon)
+        : base()
     {
-        public TaskDialogStandardIconContainer(TaskDialogStandardIcon icon)
-            : base()
-        {
-            Icon = icon;
-        }
+        Icon = icon;
+    }
         
-        public TaskDialogStandardIcon Icon
-        {
-            get;
-        }
+    public TaskDialogStandardIcon Icon
+    {
+        get;
     }
 }

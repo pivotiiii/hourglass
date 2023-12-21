@@ -1,39 +1,38 @@
 ﻿using System;
 using System.Drawing;
 
-namespace KPreisser.UI
+namespace KPreisser.UI;
+
+/// <summary>
+/// 
+/// </summary>
+public class TaskDialogIconHandle : TaskDialogIcon
 {
     /// <summary>
     /// 
     /// </summary>
-    public class TaskDialogIconHandle : TaskDialogIcon
+    /// <param name="iconHandle"></param>
+    public TaskDialogIconHandle(IntPtr iconHandle)
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="iconHandle"></param>
-        public TaskDialogIconHandle(IntPtr iconHandle)
-        {
-            IconHandle = iconHandle;
-        }
+        IconHandle = iconHandle;
+    }
 
 #if !NET_STANDARD
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="icon"></param>
-        public TaskDialogIconHandle(Icon icon)
-            : this(icon?.Handle ?? default)
-        {
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="icon"></param>
+    public TaskDialogIconHandle(Icon icon)
+        : this(icon?.Handle ?? default)
+    {
+    }
 #endif
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public IntPtr IconHandle
-        {
-            get;
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    public IntPtr IconHandle
+    {
+        get;
     }
 }

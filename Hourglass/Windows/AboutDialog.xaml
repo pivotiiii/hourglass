@@ -8,6 +8,8 @@
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
         SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display"
+        RenderOptions.ClearTypeHint="Enabled"
         Title="{x:Static properties:Resources.AboutDialogTitle}"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -16,6 +18,7 @@
     <Grid>
         <DockPanel LastChildFill="True">
             <TextBlock Background="Gray"
+                       TextOptions.TextFormattingMode="Ideal"
                        DockPanel.Dock="Top"
                        FontFamily="Segoe UI Light, Segoe UI"
                        FontSize="20"

@@ -57,12 +57,14 @@ public static class TimerWindowExtensions
             : CompareTimeSpan(x.Timer.TimeLeft,  y.Timer.TimeLeft);
 
         static int CompareTimeSpan(TimeSpan? x, TimeSpan? y) =>
+#pragma warning disable S3358
             x == y ? 0 : x > y ? 1 : -1;
+#pragma warning restore S3358
 
         static bool IsNotRunning(TimeSpan? x, TimeSpan? y) =>
             x is null ||
-            y is null ||
-            x == TimeSpan.Zero ||
-            y == TimeSpan.Zero;
+                   y is null ||
+                   x == TimeSpan.Zero ||
+                   y == TimeSpan.Zero;
     }
 }
