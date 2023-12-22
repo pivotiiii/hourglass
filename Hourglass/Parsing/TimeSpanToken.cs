@@ -153,7 +153,7 @@ public sealed class TimeSpanToken : TimerStartToken
                 Resources.ResourceManager.GetString("TimeSpanTokenUnitSeparator", provider),
                 parts);
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return GetType().ToString();
         }
@@ -265,7 +265,7 @@ public sealed class TimeSpanToken : TimerStartToken
                         return timeSpanToken;
                     }
                 }
-                catch
+                catch (Exception ex) when (ex.CanBeHandled())
                 {
                     // Try the next pattern
                 }

@@ -415,7 +415,7 @@ public static class WindowExtensions
     /// is decreased to fit in the work area.
     /// </summary>
     /// <param name="window">A window.</param>
-    private static void CenterOnScreen(this Window window)
+    public static void CenterOnScreen(this Window window)
     {
         Rect windowRect = window.GetBoundsForNormalState();
         Rect centeredRect = windowRect.CenterOnScreen();

@@ -169,7 +169,7 @@ public sealed class NormalDateToken : DateToken
             // Unsupported
             return GetType().ToString();
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return GetType().ToString();
         }

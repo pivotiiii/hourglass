@@ -6,6 +6,7 @@
 
 namespace Hourglass.Extensions;
 
+using System;
 using System.Linq;
 using System.Management;
 
@@ -37,7 +38,7 @@ public static class WindowsExtensions
 
             return true;
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return false;
         }

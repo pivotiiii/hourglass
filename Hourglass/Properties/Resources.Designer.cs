@@ -467,6 +467,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset _bounds.
+        /// </summary>
+        public static string ContextMenuResetMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuResetMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rest_ore.
         /// </summary>
         public static string ContextMenuRestoreMenuItem {
@@ -629,7 +638,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Window title.
+        ///   Looks up a localized string similar to W_indow title.
         /// </summary>
         public static string ContextMenuWindowTitleMenuItem {
             get {

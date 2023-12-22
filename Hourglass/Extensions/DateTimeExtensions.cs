@@ -177,7 +177,7 @@ public static class DateTimeExtensions
 
             return date != DateTime.MinValue && date != DateTime.MaxValue;
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return false;
         }
@@ -221,7 +221,7 @@ public static class DateTimeExtensions
             dateTime = new DateTime(year, month, day);
             return true;
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             dateTime = DateTime.MinValue;
             return false;

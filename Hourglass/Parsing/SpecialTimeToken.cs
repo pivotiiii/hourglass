@@ -105,7 +105,7 @@ public sealed class SpecialTimeToken : TimeToken
             SpecialTimeDefinition specialTimeDefinition = GetSpecialTimeDefinition();
             return specialTimeDefinition.GetName(provider);
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return GetType().ToString();
         }

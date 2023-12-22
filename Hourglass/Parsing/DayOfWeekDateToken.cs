@@ -118,7 +118,7 @@ public sealed class DayOfWeekDateToken : DateToken
                 Resources.ResourceManager.GetString(formatStringName, provider),
                 DayOfWeek.ToLocalizedString(provider));
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return GetType().ToString();
         }

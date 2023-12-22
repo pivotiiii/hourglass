@@ -1324,6 +1324,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     {
         if (!IsLoaded)
         {
+            Application.Current?.Dispatcher.BeginInvoke(UpdateWindowChrome);
             return;
         }
 
@@ -1637,7 +1638,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             {
                 updateUri.Navigate();
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex.CanBeHandled())
             {
                 string message = string.Format(
                     Properties.Resources.TimerWindowCouldNotLaunchWebBrowserErrorMessage,

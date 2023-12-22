@@ -1246,7 +1246,7 @@ $</value>
     <comment>The text for the timer title menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuWindowTitleMenuItem" xml:space="preserve">
-    <value>_Window title</value>
+    <value>Win_dow title</value>
     <comment>The text for the window title menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="TimerWindowCouldNotLaunchWebBrowserErrorMessage" xml:space="preserve">
@@ -1288,6 +1288,10 @@ $</value>
   <data name="ContextMenuMaximizeMenuItem" xml:space="preserve">
     <value>Ma_ximize</value>
     <comment>The text for the maximize menu item, where the character following the optional underscore (_) is the access key</comment>
+  </data>
+  <data name="ContextMenuResetMenuItem" xml:space="preserve">
+    <value>Reset _bounds</value>
+    <comment>The text for the reset bounds menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuMinimizeMenuItem" xml:space="preserve">
     <value>_Minimize</value>

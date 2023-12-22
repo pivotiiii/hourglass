@@ -20,6 +20,8 @@ namespace Hourglass.Properties
     using System.Xml;
     using System.Xml.Serialization;
 
+    using Extensions;
+
     /// <summary>
     /// A <see cref="SettingsProvider"/> that stores settings in an XML document in the same directory as the assembly.
     /// </summary>
@@ -187,7 +189,7 @@ namespace Hourglass.Properties
                 document.Load(path);
                 return document;
             }
-            catch
+            catch (Exception ex) when (ex.CanBeHandled())
             {
                 return null;
             }

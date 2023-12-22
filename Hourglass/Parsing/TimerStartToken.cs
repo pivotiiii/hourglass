@@ -87,7 +87,7 @@ public abstract class TimerStartToken
             endTime = GetEndTime(startTime);
             return true;
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             endTime = DateTime.MinValue;
             return false;
@@ -249,7 +249,7 @@ public abstract class TimerStartToken
                 timerStartToken = Parse(str, provider);
                 return true;
             }
-            catch
+            catch (Exception ex) when (ex.CanBeHandled())
             {
                 timerStartToken = null;
                 return false;

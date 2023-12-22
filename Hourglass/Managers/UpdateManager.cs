@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
+using Extensions;
 using Properties;
 using Serialization;
 
@@ -151,7 +152,7 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
             XmlSerializer serializer = new(typeof(UpdateInfo));
             return (UpdateInfo)serializer.Deserialize(responseStream);
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return null;
         }
@@ -169,7 +170,7 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
             LatestVersion = new(updateInfo.LatestVersion);
             UpdateUri = new(updateInfo.UpdateUrl);
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return false;
         }

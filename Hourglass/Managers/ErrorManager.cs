@@ -109,7 +109,7 @@ public sealed class ErrorManager : Manager
             File.WriteAllText(dumpPath, errorMessage);
             return true;
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             dumpPath = null;
             return false;
@@ -145,7 +145,7 @@ public sealed class ErrorManager : Manager
 
             return true;
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return false;
         }

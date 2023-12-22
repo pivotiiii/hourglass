@@ -103,7 +103,7 @@ public sealed class RelativeDateToken : DateToken
             RelativeDateDefinition relativeDateDefinition = GetRelativeDateDefinition();
             return relativeDateDefinition.GetName(provider);
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return GetType().ToString();
         }

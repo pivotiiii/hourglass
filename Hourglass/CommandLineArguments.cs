@@ -1003,7 +1003,7 @@ public sealed class CommandLineArguments
             string adjustedValue = Regex.Replace(value, @"\bauto\b", "Infinity");
             return Rect.Parse(adjustedValue);
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             string message = string.Format(
                 Resources.ResourceManager.GetEffectiveProvider(),

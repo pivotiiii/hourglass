@@ -122,7 +122,7 @@ public sealed class DateTimeToken : TimerStartToken
             // Empty
             return string.Empty;
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return GetType().ToString();
         }
@@ -174,7 +174,7 @@ public sealed class DateTimeToken : TimerStartToken
                         }
                     }
                 }
-                catch
+                catch (Exception ex) when (ex.CanBeHandled())
                 {
                     // Try the next pattern set
                 }

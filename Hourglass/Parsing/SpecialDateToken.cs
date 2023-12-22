@@ -118,7 +118,7 @@ public sealed class SpecialDateToken : DateToken
             SpecialDateDefinition specialDateDefinition = GetSpecialDateDefinition();
             return specialDateDefinition.GetName(provider);
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return GetType().ToString();
         }

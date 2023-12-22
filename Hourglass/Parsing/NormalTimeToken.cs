@@ -206,7 +206,7 @@ public sealed class NormalTimeToken : TimeToken
 
             return stringBuilder.ToString();
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return GetType().ToString();
         }

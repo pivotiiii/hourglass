@@ -191,11 +191,6 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     /// </summary>
     private MenuItem _maximizeMenuItem;
 
-    /// <summary>
-    /// Separates the "Restore", "Minimize", and "Maximize" menu items from the "Close" menu item.
-    /// </summary>
-    private Separator _windowStateItemsSeparator;
-
     #endregion
 
     /// <summary>
@@ -860,8 +855,15 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         _maximizeMenuItem.Click += MaximizeMenuItemClick;
         Items.Add(_maximizeMenuItem);
 
-        _windowStateItemsSeparator = new();
-        Items.Add(_windowStateItemsSeparator);
+        // Reset
+        MenuItem resetMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuResetMenuItem
+        };
+        resetMenuItem.Click += ResetMenuItemClick;
+        Items.Add(resetMenuItem);
+
+        Items.Add(new Separator());
 
         // Close
         MenuItem closeMenuItem = new()
@@ -871,7 +873,6 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         closeMenuItem.Click += CloseMenuItemClick;
         Items.Add(closeMenuItem);
     }
-
 
     /// <summary>
     /// Invoked when the "New timer" <see cref="MenuItem"/> is clicked.
@@ -1492,7 +1493,6 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
             _restoreMenuItem.Visibility = Visibility.Visible;
             _minimizeMenuItem.Visibility = Visibility.Visible;
             _maximizeMenuItem.Visibility = Visibility.Visible;
-            _windowStateItemsSeparator.Visibility = Visibility.Visible;
         }
         else
         {
@@ -1500,7 +1500,6 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
             _restoreMenuItem.Visibility = Visibility.Collapsed;
             _minimizeMenuItem.Visibility = Visibility.Collapsed;
             _maximizeMenuItem.Visibility = Visibility.Collapsed;
-            _windowStateItemsSeparator.Visibility = Visibility.Collapsed;
         }
     }
 
@@ -1531,16 +1530,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     /// <param name="e">The event data.</param>
     private void RestoreMenuItemClick(object sender, RoutedEventArgs e)
     {
-        if (_timerWindow.IsFullScreen)
-        {
-            // Must set the menu item value here, since it will sync to the TimerWindow on menu close.
-            _fullScreenMenuItem.IsChecked = false;
-            _timerWindow.IsFullScreen = false;
-        }
-        else
-        {
-            _timerWindow.WindowState = WindowState.Normal;
-        }
+        ExitFullScreen();
     }
 
     /// <summary>
@@ -1551,6 +1541,16 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     private void MinimizeMenuItemClick(object sender, RoutedEventArgs e)
     {
         _timerWindow.WindowState = WindowState.Minimized;
+    }
+
+    private void ResetMenuItemClick(object sender, RoutedEventArgs e)
+    {
+        ExitFullScreen();
+
+        _timerWindow.Width = InterfaceScaler.BaseWindowWidth;
+        _timerWindow.Height = InterfaceScaler.BaseWindowHeight;
+
+        _timerWindow.CenterOnScreen();
     }
 
     /// <summary>
@@ -1573,5 +1573,17 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     private void CloseMenuItemClick(object sender, RoutedEventArgs e)
     {
         _timerWindow.Close();
+    }
+
+    private void ExitFullScreen()
+    {
+        if (!_timerWindow.IsFullScreen)
+        {
+            _timerWindow.WindowState = WindowState.Normal;
+        }
+
+        // Must set the menu item value here, since it will sync to the TimerWindow on menu close.
+        _fullScreenMenuItem.IsChecked = false;
+        _timerWindow.IsFullScreen = false;
     }
 }

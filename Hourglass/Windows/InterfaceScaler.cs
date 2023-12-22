@@ -212,7 +212,7 @@ public sealed class InterfaceScaler
         double baseControlsGridMargin = EnvironmentExtensions.IsWindows10OrNewer
             ? BaseControlsGridMarginForWindows10AndNewer
             : BaseControlsGridMarginForWindows81AndOlder;
-        _innerGrid.Margin = new((reducedScaleFactor * baseControlsGridMargin + 2 * _innerGrid.GetMinTrackHeight()) / 4);
+        _innerGrid.Margin = new(Math.Max(reducedScaleFactor * baseControlsGridMargin, (_innerGrid.GetMinTrackHeight() + 1) / 2));
 
         _controlsPanel.Margin = new(
             left: reducedScaleFactor * BaseControlsPanelMargin,

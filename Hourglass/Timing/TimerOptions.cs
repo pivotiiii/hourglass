@@ -604,6 +604,8 @@ public sealed class TimerOptions : INotifyPropertyChanged
         _lockInterface = options._lockInterface;
 
         OnPropertyChanged(
+            nameof(WindowTitleMode),
+            nameof(WindowSize),
             nameof(Title),
             nameof(AlwaysOnTop),
             nameof(PromptOnExit),
@@ -618,8 +620,6 @@ public sealed class TimerOptions : INotifyPropertyChanged
             nameof(Theme),
             nameof(Sound),
             nameof(LoopSound),
-            nameof(WindowTitleMode),
-            nameof(WindowSize),
             nameof(LockInterface));
     }
 
@@ -653,6 +653,8 @@ public sealed class TimerOptions : INotifyPropertyChanged
         _lockInterface = info.LockInterface;
 
         OnPropertyChanged(
+            nameof(WindowTitleMode),
+            nameof(WindowSize),
             nameof(Title),
             nameof(AlwaysOnTop),
             nameof(PromptOnExit),
@@ -667,8 +669,6 @@ public sealed class TimerOptions : INotifyPropertyChanged
             nameof(Theme),
             nameof(Sound),
             nameof(LoopSound),
-            nameof(WindowTitleMode),
-            nameof(WindowSize),
             nameof(LockInterface));
     }
 

@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+using Extensions;
 using Properties;
 using Timing;
 
@@ -174,7 +175,7 @@ public sealed class SoundManager : Manager
             list.Sort(static (a, b) => string.Compare(a.Name, b.Name, CultureInfo.CurrentCulture, CompareOptions.StringSort));
             return list;
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             // Not worth raising an exception
             return Array.Empty<Sound>();
@@ -204,7 +205,7 @@ public sealed class SoundManager : Manager
 
             return list;
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             // Not worth raising an exception
             return Array.Empty<Sound>();

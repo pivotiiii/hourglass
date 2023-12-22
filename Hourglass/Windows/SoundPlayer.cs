@@ -10,6 +10,7 @@ using System;
 using System.Windows.Media;
 using System.Windows.Threading;
 
+using Extensions;
 using Timing;
 
 /// <summary>
@@ -149,7 +150,7 @@ public class SoundPlayer : IDisposable
                 _mediaPlayer.Play();
             }
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return false;
         }
@@ -184,7 +185,7 @@ public class SoundPlayer : IDisposable
             _mediaPlayer.Stop();
             _mediaPlayer.Close();
         }
-        catch
+        catch (Exception ex) when (ex.CanBeHandled())
         {
             return false;
         }
