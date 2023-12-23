@@ -331,7 +331,7 @@ public sealed class Theme : INotifyPropertyChanged
             }
 
             _name = value;
-            OnPropertyChanged(nameof(Name));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -351,8 +351,8 @@ public sealed class Theme : INotifyPropertyChanged
 
             _backgroundColor = value;
             _backgroundBrush = null;
-            OnPropertyChanged(nameof(BackgroundColor));
-            OnPropertyChanged(nameof(BackgroundBrush));
+            PropertyChanged.Notify(this);
+            PropertyChanged.Notify(this, nameof(BackgroundBrush));
         }
     }
 
@@ -377,8 +377,8 @@ public sealed class Theme : INotifyPropertyChanged
 
             _progressBarColor = value;
             _progressBarBrush = null;
-            OnPropertyChanged(nameof(ProgressBarColor));
-            OnPropertyChanged(nameof(ProgressBarBrush));
+            PropertyChanged.Notify(this);
+            PropertyChanged.Notify(this, nameof(ProgressBarBrush));
         }
     }
 
@@ -403,8 +403,8 @@ public sealed class Theme : INotifyPropertyChanged
 
             _progressBackgroundColor = value;
             _progressBackgroundBrush = null;
-            OnPropertyChanged(nameof(ProgressBackgroundColor));
-            OnPropertyChanged(nameof(ProgressBackgroundBrush));
+            PropertyChanged.Notify(this);
+            PropertyChanged.Notify(this, nameof(ProgressBackgroundBrush));
         }
     }
 
@@ -429,8 +429,8 @@ public sealed class Theme : INotifyPropertyChanged
 
             _expirationFlashColor = value;
             _expirationFlashBrush = null;
-            OnPropertyChanged(nameof(ExpirationFlashColor));
-            OnPropertyChanged(nameof(ExpirationFlashBrush));
+            PropertyChanged.Notify(this);
+            PropertyChanged.Notify(this, nameof(ExpirationFlashBrush));
         }
     }
 
@@ -455,8 +455,8 @@ public sealed class Theme : INotifyPropertyChanged
 
             _primaryTextColor = value;
             _primaryTextBrush = null;
-            OnPropertyChanged(nameof(PrimaryTextColor));
-            OnPropertyChanged(nameof(PrimaryTextBrush));
+            PropertyChanged.Notify(this);
+            PropertyChanged.Notify(this, nameof(PrimaryTextBrush));
         }
     }
 
@@ -481,8 +481,8 @@ public sealed class Theme : INotifyPropertyChanged
 
             _primaryHintColor = value;
             _primaryHintBrush = null;
-            OnPropertyChanged(nameof(PrimaryHintColor));
-            OnPropertyChanged(nameof(PrimaryHintBrush));
+            PropertyChanged.Notify(this);
+            PropertyChanged.Notify(this, nameof(PrimaryHintBrush));
         }
     }
 
@@ -507,8 +507,8 @@ public sealed class Theme : INotifyPropertyChanged
 
             _secondaryTextColor = value;
             _secondaryTextBrush = null;
-            OnPropertyChanged(nameof(SecondaryTextColor));
-            OnPropertyChanged(nameof(SecondaryTextBrush));
+            PropertyChanged.Notify(this);
+            PropertyChanged.Notify(this, nameof(SecondaryTextBrush));
         }
     }
 
@@ -533,8 +533,8 @@ public sealed class Theme : INotifyPropertyChanged
 
             _secondaryHintColor = value;
             _secondaryHintBrush = null;
-            OnPropertyChanged(nameof(SecondaryHintColor));
-            OnPropertyChanged(nameof(SecondaryHintBrush));
+            PropertyChanged.Notify(this);
+            PropertyChanged.Notify(this, nameof(SecondaryHintBrush));
         }
     }
 
@@ -559,8 +559,8 @@ public sealed class Theme : INotifyPropertyChanged
 
             _buttonColor = value;
             _buttonBrush = null;
-            OnPropertyChanged(nameof(ButtonColor));
-            OnPropertyChanged(nameof(ButtonBrush));
+            PropertyChanged.Notify(this);
+            PropertyChanged.Notify(this, nameof(ButtonBrush));
         }
     }
 
@@ -585,8 +585,8 @@ public sealed class Theme : INotifyPropertyChanged
 
             _buttonHoverColor = value;
             _buttonHoverBrush = null;
-            OnPropertyChanged(nameof(ButtonHoverColor));
-            OnPropertyChanged(nameof(ButtonHoverBrush));
+            PropertyChanged.Notify(this);
+            PropertyChanged.Notify(this, nameof(ButtonHoverBrush));
         }
     }
 
@@ -715,21 +715,4 @@ public sealed class Theme : INotifyPropertyChanged
     }
 
     #endregion
-
-    /// <summary>
-    /// Raises the <see cref="PropertyChanged"/> event.
-    /// </summary>
-    /// <param name="propertyNames">One or more property names.</param>
-    private void OnPropertyChanged(params string[] propertyNames)
-    {
-        PropertyChangedEventHandler eventHandler = PropertyChanged;
-
-        if (eventHandler is not null)
-        {
-            foreach (string propertyName in propertyNames)
-            {
-                eventHandler(this, new(propertyName));
-            }
-        }
-    }
 }

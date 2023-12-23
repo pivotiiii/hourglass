@@ -194,7 +194,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
             }
 
             _dispatcherTimer.Interval = value;
-            OnPropertyChanged(nameof(Interval));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -225,7 +225,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
         TimeExpired = TimeSpan.Zero;
         TotalTime = TimeLeft;
 
-        OnPropertyChanged(
+        PropertyChanged.Notify(this,
             nameof(State),
             nameof(StartTime),
             nameof(EndTime),
@@ -265,7 +265,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
 
         _dispatcherTimer.Stop();
 
-        OnPropertyChanged(
+        PropertyChanged.Notify(this,
             nameof(State),
             nameof(StartTime),
             nameof(EndTime),
@@ -295,7 +295,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
         EndTime = DateTime.Now + TimeLeft;
         StartTime = EndTime - TotalTime;
 
-        OnPropertyChanged(
+        PropertyChanged.Notify(this,
             nameof(State),
             nameof(StartTime),
             nameof(EndTime));
@@ -331,7 +331,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
 
         _dispatcherTimer.Stop();
 
-        OnPropertyChanged(
+        PropertyChanged.Notify(this,
             nameof(State),
             nameof(StartTime),
             nameof(EndTime),
@@ -367,12 +367,12 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
         {
             State = TimerState.Expired;
 
-            OnPropertyChanged(nameof(State));
+            PropertyChanged.Notify(this, nameof(State));
             OnExpired();
         }
 
         // Raise other events
-        OnPropertyChanged(
+        PropertyChanged.Notify(this,
             nameof(TimeElapsed),
             nameof(TimeLeft),
             nameof(TimeExpired));
@@ -459,23 +459,6 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Raises the <see cref="PropertyChanged"/> event.
-    /// </summary>
-    /// <param name="propertyNames">One or more property names.</param>
-    protected virtual void OnPropertyChanged(params string[] propertyNames)
-    {
-        PropertyChangedEventHandler eventHandler = PropertyChanged;
-
-        if (eventHandler is not null)
-        {
-            foreach (string propertyName in propertyNames)
-            {
-                eventHandler(this, new(propertyName));
-            }
-        }
-    }
-
-    /// <summary>
     /// Disposes the timer.
     /// </summary>
     /// <param name="disposing">A value indicating whether this method was invoked by an explicit call to <see
@@ -504,6 +487,11 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
         {
             throw new ObjectDisposedException(GetType().FullName);
         }
+    }
+
+    protected void OnPropertyChanged(string firstPropertyName, params string[] propertyNames)
+    {
+        PropertyChanged.Notify(this, firstPropertyName, propertyNames);
     }
 
     #endregion

@@ -733,15 +733,15 @@ $</value>
     <comment>The separator between the units of a time span (e.g., " " =&gt; "5 minutes 30 seconds", " : " =&gt; "5 minutes : 30 seconds")</comment>
   </data>
   <data name="SoundManagerLoudBeep" xml:space="preserve">
-    <value>Loud beep</value>
+    <value>Lo_ud beep</value>
     <comment>The string for the loud beep sound</comment>
   </data>
   <data name="SoundManagerNormalBeep" xml:space="preserve">
-    <value>Normal beep</value>
+    <value>No_rmal beep</value>
     <comment>The string for the normal beep sound</comment>
   </data>
   <data name="SoundManagerQuietBeep" xml:space="preserve">
-    <value>Quiet beep</value>
+    <value>_Quiet beep</value>
     <comment>The string for the quiet beep sound</comment>
   </data>
   <data name="ErrorManagerErrorHasBeenWritten" xml:space="preserve">
@@ -809,7 +809,7 @@ $</value>
     <comment>The text for the loop timer menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuNewTimerMenuItem" xml:space="preserve">
-    <value>_New timer</value>
+    <value>New time_r</value>
     <comment>The text for the new timer menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuNoRecentInputsMenuItem" xml:space="preserve">
@@ -829,7 +829,7 @@ $</value>
     <comment>The text for the pop up when expired menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuRecentInputsMenuItem" xml:space="preserve">
-    <value>_Recent inputs</value>
+    <value>Recent _inputs</value>
     <comment>The text for the recent inputs menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuSavedTimersMenuItem" xml:space="preserve">
@@ -1294,11 +1294,11 @@ $</value>
     <comment>The text for the reset bounds menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuMinimizeMenuItem" xml:space="preserve">
-    <value>_Minimize</value>
+    <value>Mi_nimize</value>
     <comment>The text for the minimize menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuRestoreMenuItem" xml:space="preserve">
-    <value>Rest_ore</value>
+    <value>_Restore</value>
     <comment>The text for the restore menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuPrefer24HourTimeMenuItem" xml:space="preserve">

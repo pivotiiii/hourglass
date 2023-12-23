@@ -248,7 +248,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             }
 
             _mode = value;
-            OnPropertyChanged(nameof(Mode));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -274,9 +274,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             UnbindTimer();
             _timer = value;
             BindTimer();
-            OnPropertyChanged(
-                nameof(Timer),
-                nameof(Options));
+            PropertyChanged.Notify(this);
+            PropertyChanged.Notify(this, nameof(Options));
         }
     }
 
@@ -300,7 +299,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             }
 
             _lastTimerStart = value;
-            OnPropertyChanged(nameof(LastTimerStart));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -339,7 +338,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 ResizeMode = ResizeMode.CanResize;
             }
 
-            OnPropertyChanged(nameof(IsFullScreen));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -358,7 +357,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             }
 
             _restoreWindowState = value;
-            OnPropertyChanged(nameof(RestoreWindowState));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -518,23 +517,6 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     }
 
     #endregion
-
-    /// <summary>
-    /// Raises the <see cref="PropertyChanged"/> event.
-    /// </summary>
-    /// <param name="propertyNames">One or more property names.</param>
-    private void OnPropertyChanged(params string[] propertyNames)
-    {
-        PropertyChangedEventHandler eventHandler = PropertyChanged;
-
-        if (eventHandler is not null)
-        {
-            foreach (string propertyName in propertyNames)
-            {
-                eventHandler(this, new(propertyName));
-            }
-        }
-    }
 
     #region Private Methods (Modes)
 
@@ -1017,7 +999,6 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 UpdateBoundTheme();
                 UpdateKeepAwake();
                 UpdateWindowTitle();
-                UpdateWindowChrome();
                 return;
 
             case TimerWindowMode.Status:
@@ -1091,7 +1072,6 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 UpdateBoundTheme();
                 UpdateKeepAwake();
                 UpdateWindowTitle();
-                UpdateWindowChrome();
                 return;
         }
     }
@@ -1317,38 +1297,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         }
     }
 
-    /// <summary>
-    /// Updates the window chrome.
-    /// </summary>
-    private void UpdateWindowChrome()
+    public override void OnApplyTemplate()
     {
-        if (!IsLoaded)
-        {
-            Application.Current?.Dispatcher.BeginInvoke(UpdateWindowChrome);
-            return;
-        }
-
-        if (Options.WindowTitleMode == WindowTitleMode.None)
-        {
-            if (WindowChrome.GetWindowChrome(this)?.CaptionHeight != 0 || WindowChrome.GetWindowChrome(this)?.UseAeroCaptionButtons != false)
-            {
-                WindowChrome.SetWindowChrome(
-                    this,
-                    new()
-                    {
-                        CaptionHeight = 0,
-                        UseAeroCaptionButtons = false
-                    });
-            }
-        }
-        else
-        {
-            if (WindowChrome.GetWindowChrome(this) is not null)
-            {
-                WindowChrome.SetWindowChrome(this, null);
-            }
-        }
-
         this.SetImmersiveDarkMode(Options.Theme.Type == ThemeType.BuiltInDark);
     }
 

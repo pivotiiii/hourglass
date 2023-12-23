@@ -831,6 +831,14 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
 
         Items.Add(new Separator());
 
+        // Reset
+        MenuItem resetMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuResetMenuItem
+        };
+        resetMenuItem.Click += ResetMenuItemClick;
+        Items.Add(resetMenuItem);
+
         // Restore
         _restoreMenuItem = new()
         {
@@ -854,14 +862,6 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         };
         _maximizeMenuItem.Click += MaximizeMenuItemClick;
         Items.Add(_maximizeMenuItem);
-
-        // Reset
-        MenuItem resetMenuItem = new()
-        {
-            Header = Properties.Resources.ContextMenuResetMenuItem
-        };
-        resetMenuItem.Click += ResetMenuItemClick;
-        Items.Add(resetMenuItem);
 
         Items.Add(new Separator());
 
@@ -1486,21 +1486,6 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         _restoreMenuItem.IsEnabled = _timerWindow.WindowState != WindowState.Normal;
         _minimizeMenuItem.IsEnabled = _timerWindow.WindowState != WindowState.Minimized;
         _maximizeMenuItem.IsEnabled = _timerWindow.WindowState != WindowState.Maximized;
-
-        if (_timerWindow.IsFullScreen || _timerWindow.Options.WindowTitleMode == WindowTitleMode.None)
-        {
-            // "Restore", "Minimize", and "Maximize" are not on the window, so we provide our own.
-            _restoreMenuItem.Visibility = Visibility.Visible;
-            _minimizeMenuItem.Visibility = Visibility.Visible;
-            _maximizeMenuItem.Visibility = Visibility.Visible;
-        }
-        else
-        {
-            // "Restore", "Minimize", and "Maximize" are on the window, so no need for them here.
-            _restoreMenuItem.Visibility = Visibility.Collapsed;
-            _minimizeMenuItem.Visibility = Visibility.Collapsed;
-            _maximizeMenuItem.Visibility = Visibility.Collapsed;
-        }
     }
 
     private void FAQMenuItemClick(object sender, RoutedEventArgs e)

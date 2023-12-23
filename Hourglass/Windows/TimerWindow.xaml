@@ -8,6 +8,19 @@
         Height="{x:Static local:InterfaceScaler.BaseWindowHeight}"
         Loaded="WindowLoaded" StateChanged="WindowStateChanged" Closing="WindowClosing" Closed="WindowClosed"
         MouseDown="WindowMouseDown" MouseDoubleClick="WindowMouseDoubleClick">
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Options.WindowTitleMode, RelativeSource={RelativeSource Self}}" Value="None">
+                    <Setter Property="WindowChrome.WindowChrome">
+                        <Setter.Value>
+                            <WindowChrome CaptionHeight="0" UseAeroCaptionButtons="False"/>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
     <Window.CommandBindings>
         <CommandBinding Command="local:TimerWindow.StartCommand" Executed="StartCommandExecuted"/>
         <CommandBinding Command="local:TimerWindow.PauseCommand" Executed="PauseCommandExecuted"/>

@@ -10,6 +10,7 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 
+using Extensions;
 using Serialization;
 using Windows;
 
@@ -234,7 +235,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _title = value;
-            OnPropertyChanged(nameof(Title));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -253,7 +254,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _alwaysOnTop = value;
-            OnPropertyChanged(nameof(AlwaysOnTop));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -273,7 +274,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _promptOnExit = value;
-            OnPropertyChanged(nameof(PromptOnExit));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -292,7 +293,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _showProgressInTaskbar = value;
-            OnPropertyChanged(nameof(ShowProgressInTaskbar));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -311,7 +312,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _doNotKeepComputerAwake = value;
-            OnPropertyChanged(nameof(DoNotKeepComputerAwake));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -330,7 +331,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _reverseProgressBar = value;
-            OnPropertyChanged(nameof(ReverseProgressBar));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -349,7 +350,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _showTimeElapsed = value;
-            OnPropertyChanged(nameof(ShowTimeElapsed));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -368,7 +369,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _loopTimer = value;
-            OnPropertyChanged(nameof(LoopTimer));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -388,7 +389,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _popUpWhenExpired = value;
-            OnPropertyChanged(nameof(PopUpWhenExpired));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -407,7 +408,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _closeWhenExpired = value;
-            OnPropertyChanged(nameof(CloseWhenExpired));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -426,7 +427,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _shutDownWhenExpired = value;
-            OnPropertyChanged(nameof(ShutDownWhenExpired));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -445,7 +446,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _theme = value;
-            OnPropertyChanged(nameof(Theme));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -464,7 +465,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _sound = value;
-            OnPropertyChanged(nameof(Sound));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -484,7 +485,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _loopSound = value;
-            OnPropertyChanged(nameof(LoopSound));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -503,7 +504,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _windowTitleMode = value;
-            OnPropertyChanged(nameof(WindowTitleMode));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -522,7 +523,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _windowSize = value;
-            OnPropertyChanged(nameof(WindowSize));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -542,7 +543,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _lockInterface = value;
-            OnPropertyChanged(nameof(LockInterface));
+            PropertyChanged.Notify(this);
         }
     }
 
@@ -603,7 +604,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
         _windowSize = WindowSize.FromWindowSize(options.WindowSize);
         _lockInterface = options._lockInterface;
 
-        OnPropertyChanged(
+        PropertyChanged.Notify(this,
             nameof(WindowTitleMode),
             nameof(WindowSize),
             nameof(Title),
@@ -652,7 +653,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
         _windowSize = WindowSize.FromWindowSizeInfo(info.WindowSize);
         _lockInterface = info.LockInterface;
 
-        OnPropertyChanged(
+        PropertyChanged.Notify(this,
             nameof(WindowTitleMode),
             nameof(WindowSize),
             nameof(Title),
@@ -701,21 +702,4 @@ public sealed class TimerOptions : INotifyPropertyChanged
     }
 
     #endregion
-
-    /// <summary>
-    /// Raises the <see cref="PropertyChanged"/> event.
-    /// </summary>
-    /// <param name="propertyNames">One or more property names.</param>
-    private void OnPropertyChanged(params string[] propertyNames)
-    {
-        PropertyChangedEventHandler eventHandler = PropertyChanged;
-
-        if (eventHandler is not null)
-        {
-            foreach (string propertyName in propertyNames)
-            {
-                eventHandler(this, new(propertyName));
-            }
-        }
-    }
 }

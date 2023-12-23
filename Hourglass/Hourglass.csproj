@@ -135,6 +135,7 @@
     <Compile Include="Extensions\ResourceManagerExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\TimerWindowExtensions.cs" />
+    <Compile Include="Extensions\NotifyPropertyChangedExtensions.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />
     <Compile Include="Extensions\WindowsExtensions.cs" />

@@ -109,23 +109,6 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Raises the <see cref="PropertyChanged"/> event.
-    /// </summary>
-    /// <param name="propertyNames">One or more property names.</param>
-    private void OnPropertyChanged(params string[] propertyNames)
-    {
-        PropertyChangedEventHandler eventHandler = PropertyChanged;
-
-        if (eventHandler is not null)
-        {
-            foreach (string propertyName in propertyNames)
-            {
-                eventHandler(this, new(propertyName));
-            }
-        }
-    }
-
-    /// <summary>
     /// Fetches the latest <see cref="UpdateInfo"/> from the <see cref="UpdateCheckUrl"/>.
     /// </summary>
     /// <returns>An <see cref="UpdateInfo"/>.</returns>
@@ -175,7 +158,7 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
             return false;
         }
 
-        OnPropertyChanged(
+        PropertyChanged.Notify(this,
             nameof(HasUpdates),
             nameof(LatestVersion),
             nameof(UpdateUri));
