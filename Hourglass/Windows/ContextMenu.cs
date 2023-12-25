@@ -506,6 +506,14 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
 
         Items.Add(new Separator());
 
+        // Timer commands.
+        foreach(MenuItem timerCommandMenuItem in _timerWindow.Commands)
+        {
+            Items.Add(timerCommandMenuItem);
+        }
+
+        Items.Add(new Separator());
+
         // Always on top
         _alwaysOnTopMenuItem = new()
         {

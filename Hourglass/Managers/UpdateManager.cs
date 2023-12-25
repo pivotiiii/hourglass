@@ -10,6 +10,7 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -105,32 +106,30 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
 
-        Task.Factory.StartNew(() => SetUpdateInfo(FetchUpdateInfo()));
+        Task.Run(async () => SetUpdateInfo(await FetchUpdateInfo()));
     }
 
     /// <summary>
     /// Fetches the latest <see cref="UpdateInfo"/> from the <see cref="UpdateCheckUrl"/>.
     /// </summary>
     /// <returns>An <see cref="UpdateInfo"/>.</returns>
-    private UpdateInfo FetchUpdateInfo()
+    private async Task<UpdateInfo> FetchUpdateInfo()
     {
         try
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(UpdateCheckUrl);
-            request.UserAgent = string.Format(
-                "Mozilla/5.0 ({0}) {1}/{2} (UUID: {3})",
-                Environment.OSVersion.VersionString,
-                AppName,
-                CurrentVersion,
-                UniqueId);
+            using HttpClient httpClient = new();
 
-            using HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-            Stream responseStream = response.GetResponseStream();
-            if (responseStream is null)
+            httpClient.DefaultRequestHeaders.CacheControl = new()
             {
-                return null;
-            }
+                NoStore = true,
+                NoCache = true
+            };
+
+            httpClient.DefaultRequestHeaders.Add(
+                "User-Agent",
+                $"Mozilla/5.0 ({Environment.OSVersion.VersionString}) {AppName}/{CurrentVersion} (UUID: {UniqueId})");
+
+            using Stream responseStream = await httpClient.GetStreamAsync(UpdateCheckUrl);
 
             XmlSerializer serializer = new(typeof(UpdateInfo));
             return (UpdateInfo)serializer.Deserialize(responseStream);
@@ -162,6 +161,7 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
             nameof(HasUpdates),
             nameof(LatestVersion),
             nameof(UpdateUri));
+
         return true;
     }
 }

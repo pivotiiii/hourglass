@@ -7,9 +7,12 @@
 namespace Hourglass.Windows;
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -34,6 +37,38 @@ public enum TimerWindowMode
     /// Indicates that the <see cref="TimerWindow"/> is displaying the status of a timer.
     /// </summary>
     Status
+}
+
+public sealed class TimerCommand
+{
+    private readonly Button _button;
+    private readonly MenuItem _menuItem;
+
+    public TimerCommand(Button button)
+    {
+        _button = button;
+
+        _menuItem = new()
+        {
+            Header = (string)button.Content,
+        };
+
+        _menuItem.Click += delegate
+        {
+            (new ButtonAutomationPeer(_button).GetPattern(PatternInterface.Invoke) as IInvokeProvider)?.Invoke();
+        };
+
+        Update();
+    }
+
+    public void Update()
+    {
+        _menuItem.IsEnabled = _button.IsEnabled;
+        _menuItem.Visibility = _button.Visibility;
+    }
+
+    public static implicit operator MenuItem (TimerCommand timerCommand) =>
+        timerCommand._menuItem;
 }
 
 /// <summary>
@@ -174,6 +209,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     private WindowState _restoreWindowState = WindowState.Normal;
 
     #endregion
+
+    public IEnumerable<TimerCommand> Commands { get; private set; }
 
     #region Constructors
 
@@ -645,6 +682,18 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         CloseButton.Content = Properties.Resources.TimerWindowCloseButtonContent;
         CancelButton.Content = Properties.Resources.TimerWindowCancelButtonContent;
         UpdateButton.Content = Properties.Resources.TimerWindowUpdateButtonContent;
+
+        Commands = new TimerCommand[]
+        {
+            new(StartButton),
+            new(PauseButton),
+            new(ResumeButton),
+            new(StopButton),
+            new(RestartButton),
+            new(CloseButton),
+            new(CancelButton),
+            new(UpdateButton)
+        };
     }
 
     #region Private Methods (Animations and Sounds)
@@ -909,7 +958,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// </summary>
     private void InitializeUpdateButton()
     {
-        UpdateManager.Instance.PropertyChanged += UpdateManagerPropertyChanged;
+        PropertyChangedEventManager.AddHandler(UpdateManager.Instance, UpdateManagerPropertyChanged, string.Empty);
         UpdateButton.IsEnabled = UpdateManager.Instance.HasUpdates && (Mode == TimerWindowMode.Input || !Options.LockInterface);
     }
 
@@ -940,11 +989,11 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         Timer.Stopped += TimerStopped;
         Timer.Expired += TimerExpired;
         Timer.Tick += TimerTick;
-        Timer.PropertyChanged += TimerPropertyChanged;
-        Options.PropertyChanged += TimerOptionsPropertyChanged;
+        PropertyChangedEventManager.AddHandler(Timer, TimerPropertyChanged, string.Empty);
+        PropertyChangedEventManager.AddHandler(Options, TimerOptionsPropertyChanged, string.Empty);
 
         _theme = Options.Theme;
-        _theme.PropertyChanged += ThemePropertyChanged;
+        PropertyChangedEventManager.AddHandler(_theme, ThemePropertyChanged, string.Empty);
 
         UpdateBoundControls();
     }
@@ -994,12 +1043,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 Watermark.SetHint(TitleTextBox, Properties.Resources.TimerWindowTitleTextHint);
                 Watermark.SetHint(TimerTextBox, Properties.Resources.TimerWindowTimerTextHint);
 
-                Topmost = Options.AlwaysOnTop;
-
-                UpdateBoundTheme();
-                UpdateKeepAwake();
-                UpdateWindowTitle();
-                return;
+                break;
 
             case TimerWindowMode.Status:
                 if (Timer.State == TimerState.Expired && !string.IsNullOrWhiteSpace(Timer.Options.Title) && !TitleTextBox.IsFocused)
@@ -1067,13 +1111,19 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                     Watermark.SetHint(TimerTextBox, Properties.Resources.TimerWindowTimerTextHint);
                 }
 
-                Topmost = Options.AlwaysOnTop;
-
-                UpdateBoundTheme();
-                UpdateKeepAwake();
-                UpdateWindowTitle();
-                return;
+                break;
         }
+
+        foreach (TimerCommand timerCommand in Commands)
+        {
+            timerCommand.Update();
+        }
+
+        Topmost = Options.AlwaysOnTop;
+
+        UpdateBoundTheme();
+        UpdateKeepAwake();
+        UpdateWindowTitle();
     }
 
     /// <summary>
@@ -1313,8 +1363,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         Timer.Stopped -= TimerStopped;
         Timer.Expired -= TimerExpired;
         Timer.Tick -= TimerTick;
-        Timer.PropertyChanged -= TimerPropertyChanged;
-        Options.PropertyChanged -= TimerOptionsPropertyChanged;
+        PropertyChangedEventManager.RemoveHandler(Timer, TimerPropertyChanged, string.Empty);
+        PropertyChangedEventManager.RemoveHandler(Options, TimerOptionsPropertyChanged, string.Empty);
 
         Timer.Interval = TimerBase.DefaultInterval;
         Options.WindowSize = WindowSize.FromWindow(this /* window */);
@@ -1408,9 +1458,9 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     {
         if (e.PropertyName == nameof(Theme))
         {
-            _theme.PropertyChanged -= ThemePropertyChanged;
+            PropertyChangedEventManager.RemoveHandler(_theme, ThemePropertyChanged, string.Empty);
             _theme = Options.Theme;
-            _theme.PropertyChanged += ThemePropertyChanged;
+            PropertyChangedEventManager.AddHandler(_theme, ThemePropertyChanged, string.Empty);
         }
 
         UpdateBoundControls();
@@ -1911,7 +1961,9 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
             Settings.Default.WindowSize = WindowSize.FromWindow(this /* window */);
 
-            UpdateManager.Instance.PropertyChanged -= UpdateManagerPropertyChanged;
+            PropertyChangedEventManager.RemoveHandler(_theme, ThemePropertyChanged, string.Empty);
+            PropertyChangedEventManager.RemoveHandler(UpdateManager.Instance, UpdateManagerPropertyChanged, string.Empty);
+
             KeepAwakeManager.Instance.StopKeepAwakeFor(this);
             AppManager.Instance.Persist();
 

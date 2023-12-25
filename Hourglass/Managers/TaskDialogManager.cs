@@ -6,7 +6,7 @@ namespace Hourglass.Managers;
 public sealed class TaskDialogManager : Manager
 #pragma warning restore S3881
 {
-    public static readonly TaskDialogManager Instance = new ();
+    public static readonly TaskDialogManager Instance = new();
 
     private TaskDialogManager()
     {

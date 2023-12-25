@@ -56,6 +56,7 @@ Run `hourglass -h` to display the **Hourglass** command-line reference or select
 - The **Window title** submenu is available directly from the timer window context menu.
 - The **Reset bounds** submenu sets the timer window default position and size.
 - The **Restore**, **Minimize** and **Maximize** timer window commands are always present in the timer window context menu.
+- All the timer window commands are available in the timer window context menu.
 
 ### Mics
 
