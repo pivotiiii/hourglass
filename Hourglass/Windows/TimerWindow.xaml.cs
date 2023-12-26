@@ -44,14 +44,19 @@ public sealed class TimerCommand
     private readonly Button _button;
     private readonly MenuItem _menuItem;
 
-    public TimerCommand(Button button)
+    public TimerCommand(Button button, KeyGesture keyGesture = null)
     {
         _button = button;
 
         _menuItem = new()
         {
-            Header = (string)button.Content,
+            Header = (string)button.Content
         };
+
+        if (keyGesture is not null)
+        {
+            _menuItem.InputGestureText = keyGesture.ToInputGestureText();
+        }
 
         _menuItem.Click += delegate
         {
@@ -77,6 +82,8 @@ public sealed class TimerCommand
 public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWindow
 {
     #region Commands
+
+    public static readonly RoutedCommand NewTimerCommand = new();
 
     /// <summary>
     /// Starts a new timer.
@@ -133,9 +140,21 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// </summary>
     public static readonly RoutedCommand FullScreenCommand = new();
 
+    public static readonly KeyGesture NewTimerKeyGesture   = new(Key.N, ModifierKeys.Control);
+    public static readonly KeyGesture PauseKeyGesture      = new(Key.P, ModifierKeys.Control);
+    public static readonly KeyGesture ResumeKeyGesture     = PauseKeyGesture;
+    public static readonly KeyGesture StartKeyGesture      = new(Key.Enter, ModifierKeys.None);
+    public static readonly KeyGesture StopKeyGesture       = new(Key.S, ModifierKeys.Control);
+    public static readonly KeyGesture RestartKeyGesture    = new(Key.R, ModifierKeys.Control);
+    public static readonly KeyGesture FullScreenKeyGesture = new(Key.Enter, ModifierKeys.Alt);
+
     #endregion
 
     #region Private Members
+
+    private static int _id;
+
+    public readonly int ID = System.Threading.Interlocked.Increment(ref _id);
 
     /// <summary>
     /// The <see cref="InterfaceScaler"/> for the window.
@@ -529,6 +548,13 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         }
     }
 
+    public void New()
+    {
+        TimerWindow window = new();
+        window.RestoreFromWindow(this);
+        window.Show();
+    }
+
     /// <summary>
     /// Returns a string that represents the current object.
     /// </summary>
@@ -685,11 +711,11 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
         Commands = new TimerCommand[]
         {
-            new(StartButton),
-            new(PauseButton),
-            new(ResumeButton),
-            new(StopButton),
-            new(RestartButton),
+            new(StartButton,   StartKeyGesture),
+            new(PauseButton,   PauseKeyGesture),
+            new(ResumeButton,  ResumeKeyGesture),
+            new(StopButton,    StopKeyGesture),
+            new(RestartButton, RestartKeyGesture),
             new(CloseButton),
             new(CancelButton),
             new(UpdateButton)
@@ -1479,6 +1505,11 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     #endregion
 
     #region Private Methods (Commands)
+
+    private void NewTimerCommandExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        New();
+    }
 
     /// <summary>
     /// Invoked when the <see cref="StartCommand"/> is executed.

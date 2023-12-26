@@ -47,16 +47,18 @@ Run `hourglass -h` to display the **Hourglass** command-line reference or select
 
 ### Timer Windows
 
-- The `Esc` key minimizes the timer window.
-- The `F11` key makes the timer window full screen and back.
+- The `Esc` shortcut minimizes the timer window.
+- The `F11` shortcut makes the timer window full screen and back.
+- The `Ctrl+N` shortcut creates a new timer window.
 - The mouse double-click on progress border makes the timer window full screen and back.
-- The minimum timer window size is limited by the system settings only.
-- All the timer windows are arranged by the time left where the nearest remaining running timers are followed by the expired ones if any.
+- The minimum timer window size is limited by the Windows.
+- All the timer windows are arranged by the time left. The order of timer windows is new, expired, paused, running.
 - When the timer window is minimized or closed the next visible non-minimized timer window is activated.
 - The **Window title** submenu is available directly from the timer window context menu.
 - The **Reset bounds** submenu sets the timer window default position and size.
 - The **Restore**, **Minimize** and **Maximize** timer window commands are always present in the timer window context menu.
 - All the timer window commands are available in the timer window context menu.
+- Shortcuts are displayed in the timer window context menu.
 
 ### Mics
 

@@ -499,7 +499,8 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         // New timer
         MenuItem newTimerMenuItem = new()
         {
-            Header = Properties.Resources.ContextMenuNewTimerMenuItem
+            Header = Properties.Resources.ContextMenuNewTimerMenuItem,
+            InputGestureText = TimerWindow.NewTimerKeyGesture.ToInputGestureText()
         };
         newTimerMenuItem.Click += NewTimerMenuItemClick;
         Items.Add(newTimerMenuItem);
@@ -527,7 +528,8 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         _fullScreenMenuItem = new()
         {
             Header = Properties.Resources.ContextMenuFullScreenMenuItem,
-            IsCheckable = true
+            IsCheckable = true,
+            InputGestureText = TimerWindow.FullScreenKeyGesture.ToInputGestureText()
         };
         _fullScreenMenuItem.Click += CheckableMenuItemClick;
         Items.Add(_fullScreenMenuItem);
@@ -889,9 +891,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     /// <param name="e">The event data.</param>
     private void NewTimerMenuItemClick(object sender, RoutedEventArgs e)
     {
-        TimerWindow window = new();
-        window.RestoreFromWindow(_timerWindow);
-        window.Show();
+        _timerWindow.New();
     }
 
     #region Private Methods (Recent Inputs)

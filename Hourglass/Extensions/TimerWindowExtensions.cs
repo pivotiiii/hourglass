@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
+using Hourglass.Timing;
 using Hourglass.Windows;
 
 namespace Hourglass.Extensions;
@@ -52,19 +53,45 @@ public static class TimerWindowExtensions
 
     private static int CompareTime(TimerWindow x, TimerWindow y)
     {
-        return IsNotRunning(  x.Timer.TimeLeft,  y.Timer.TimeLeft)
-            ? CompareTimeSpan(x.Timer.TotalTime, y.Timer.TotalTime)
-            : CompareTimeSpan(x.Timer.TimeLeft,  y.Timer.TimeLeft);
+        var rankCompare = ToRank(x.Timer.State).CompareTo(ToRank(y.Timer.State));
+        if (rankCompare != 0)
+        {
+            return rankCompare;
+        }
 
-        static int CompareTimeSpan(TimeSpan? x, TimeSpan? y) =>
-#pragma warning disable S3358
-            x == y ? 0 : x > y ? 1 : -1;
-#pragma warning restore S3358
+        return IsNotRunning(x.Timer.TimeLeft, y.Timer.TimeLeft)
+            ? CompareTimeSpan(x.Timer.TotalTime, y.Timer.TotalTime)
+            : CompareTimeSpan(x.Timer.TimeLeft, y.Timer.TimeLeft);
+
+        int CompareTimeSpan(TimeSpan? xTimeSpan, TimeSpan? yTimeSpan) =>
+            CompareTimeSpanValue(ToTimeSpanValue(xTimeSpan), ToTimeSpanValue(yTimeSpan));
+
+        int CompareTimeSpanValue(TimeSpan xTimeSpan, TimeSpan yTimeSpan)
+        {
+            var timeSpanCompare = xTimeSpan.CompareTo(yTimeSpan);
+
+            return timeSpanCompare == 0
+                ? y.ID.CompareTo(x.ID)
+                : timeSpanCompare;
+        }
 
         static bool IsNotRunning(TimeSpan? x, TimeSpan? y) =>
             x is null ||
-                   y is null ||
-                   x == TimeSpan.Zero ||
-                   y == TimeSpan.Zero;
+            y is null ||
+            x == TimeSpan.Zero ||
+            y == TimeSpan.Zero;
+
+        static int ToRank(TimerState timerState) =>
+            timerState switch
+            {
+                TimerState.Stopped => 0,
+                TimerState.Expired => 1,
+                TimerState.Paused  => 2,
+                TimerState.Running => 3,
+                _ => int.MaxValue
+            };
+
+        static TimeSpan ToTimeSpanValue(TimeSpan? timeSpan) =>
+            TimeSpan.FromSeconds(Math.Round((timeSpan ?? TimeSpan.Zero).TotalSeconds));
     }
 }

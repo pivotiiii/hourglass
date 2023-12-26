@@ -22,6 +22,7 @@
         </Style>
     </Window.Style>
     <Window.CommandBindings>
+        <CommandBinding Command="local:TimerWindow.NewTimerCommand" Executed="NewTimerCommandExecuted"/>
         <CommandBinding Command="local:TimerWindow.StartCommand" Executed="StartCommandExecuted"/>
         <CommandBinding Command="local:TimerWindow.PauseCommand" Executed="PauseCommandExecuted"/>
         <CommandBinding Command="local:TimerWindow.ResumeCommand" Executed="ResumeCommandExecuted"/>
@@ -35,12 +36,14 @@
         <CommandBinding Command="local:TimerWindow.FullScreenCommand" Executed="FullScreenCommandExecuted"/>
     </Window.CommandBindings>
     <Window.InputBindings>
-        <KeyBinding Command="local:TimerWindow.PauseResumeCommand" Gesture="Space"/>
-        <KeyBinding Command="local:TimerWindow.PauseResumeCommand" Gesture="Ctrl+P"/>
-        <KeyBinding Command="local:TimerWindow.StopCommand" Gesture="Ctrl+S"/>
-        <KeyBinding Command="local:TimerWindow.RestartCommand" Gesture="Ctrl+R"/>
+        <KeyBinding Command="local:TimerWindow.NewTimerCommand" Gesture="{x:Static local:TimerWindow.NewTimerKeyGesture}"/>
+        <KeyBinding Command="local:TimerWindow.PauseResumeCommand" Gesture="{x:Static local:TimerWindow.ResumeKeyGesture}"/>
+        <KeyBinding Command="local:TimerWindow.PauseResumeCommand" Gesture="{x:Static local:TimerWindow.PauseKeyGesture}"/>
+        <KeyBinding Command="local:TimerWindow.StartCommand" Gesture="{x:Static local:TimerWindow.StartKeyGesture}"/>
+        <KeyBinding Command="local:TimerWindow.StopCommand" Gesture="{x:Static local:TimerWindow.StopKeyGesture}"/>
+        <KeyBinding Command="local:TimerWindow.RestartCommand" Gesture="{x:Static local:TimerWindow.RestartKeyGesture}"/>
         <KeyBinding Command="local:TimerWindow.EscapeCommand" Gesture="Esc"/>
-        <KeyBinding Command="local:TimerWindow.FullScreenCommand" Gesture="Alt+Enter"/>
+        <KeyBinding Command="local:TimerWindow.FullScreenCommand" Gesture="{x:Static local:TimerWindow.FullScreenKeyGesture}"/>
         <KeyBinding Command="local:TimerWindow.FullScreenCommand" Gesture="F11"/>
     </Window.InputBindings>
     <Window.Resources>

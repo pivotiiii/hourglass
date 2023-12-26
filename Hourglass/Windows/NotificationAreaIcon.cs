@@ -427,12 +427,20 @@ public class NotificationAreaIcon : IDisposable
             return;
         }
 
-        if (Application.Current.Windows.OfType<TimerWindow>()
-            .Any(static window => window.Options.PromptOnExit &&
-                                  window.Timer.State != TimerState.Stopped &&
-                                  window.Timer.State != TimerState.Expired))
+        TimerWindow firstTimerWindow =
+            Application.Current.Windows
+                .OfType<TimerWindow>()
+                .Arrange()
+                .FirstOrDefault(static window =>
+                    window.Options.PromptOnExit &&
+                    window.Timer.State != TimerState.Stopped &&
+                    window.Timer.State != TimerState.Expired);
+
+        if (firstTimerWindow is not null)
         {
-            MessageBoxResult result = ((Window)null).ShowTaskDialog(
+            firstTimerWindow.BringToFrontAndActivate();
+
+            MessageBoxResult result = firstTimerWindow.ShowTaskDialog(
                 Resources.ExitMenuTaskDialogInstruction,
                 Resources.StopAndExitMenuTaskDialogCommand);
 
