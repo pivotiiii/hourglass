@@ -1482,11 +1482,17 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <param name="e">The event data.</param>
     private void TimerOptionsPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(Theme))
+        switch (e.PropertyName)
         {
-            PropertyChangedEventManager.RemoveHandler(_theme, ThemePropertyChanged, string.Empty);
-            _theme = Options.Theme;
-            PropertyChangedEventManager.AddHandler(_theme, ThemePropertyChanged, string.Empty);
+            case nameof(WindowTitleMode) when Options.WindowTitleMode != WindowTitleMode.None:
+                Width  = Math.Max(Width,  this.GetMinTrackWidth());
+                Height = Math.Max(Height, this.GetMinTrackHeight());
+                break;
+            case nameof(Theme):
+                PropertyChangedEventManager.RemoveHandler(_theme, ThemePropertyChanged, string.Empty);
+                _theme = Options.Theme;
+                PropertyChangedEventManager.AddHandler(_theme, ThemePropertyChanged, string.Empty);
+                break;
         }
 
         UpdateBoundControls();
@@ -1961,6 +1967,13 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         {
             this.BringNextToFrontAndActivate();
         }
+    }
+
+    private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        ProgressBar.Orientation = Height > Width
+            ? Orientation.Vertical
+            : Orientation.Horizontal;
     }
 
     /// <summary>

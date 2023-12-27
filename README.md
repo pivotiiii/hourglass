@@ -59,6 +59,7 @@ Run `hourglass -h` to display the **Hourglass** command-line reference or select
 - The **Restore**, **Minimize** and **Maximize** timer window commands are always present in the timer window context menu.
 - All the timer window commands are available in the timer window context menu.
 - Shortcuts are displayed in the timer window context menu.
+- The progress bar changes direction to vertical when the height is more than the width and vice versa.
 
 ### Mics
 

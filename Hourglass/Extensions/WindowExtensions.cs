@@ -648,17 +648,19 @@ public static class WindowExtensions
         taskDialog = null;
     }
 
-    public static double GetMinTrackHeight(this Visual visual)
-    {
-        const int SM_CYMINTRACK = 35;
+    public static double GetMinTrackWidth(this Visual visual) =>
+        Math.Round(
+                   GetSystemMetrics(34 /* SM_CXMINTRACK */) /
+                   (PresentationSource.FromVisual(visual)?.CompositionTarget?.TransformToDevice.M11 ?? 1));
 
-        return GetSystemMetrics(SM_CYMINTRACK) /
-               (PresentationSource.FromVisual(visual)?.CompositionTarget?.TransformToDevice.M22 ?? 1);
-
-        [DllImport("user32.dll")]
-        static extern int GetSystemMetrics(int nIndex);
-    }
+    public static double GetMinTrackHeight(this Visual visual) =>
+        Math.Round(1+
+                   GetSystemMetrics(35 /* SM_CYMINTRACK */) /
+                   (PresentationSource.FromVisual(visual)?.CompositionTarget?.TransformToDevice.M22 ?? 1));
 
     public static bool IsTextBoxView(this object o) =>
         StringComparer.Ordinal.Equals(o.GetType().FullName, "System.Windows.Controls.TextBoxView");
+
+    [DllImport("user32.dll")]
+    private static extern int GetSystemMetrics(int nIndex);
 }

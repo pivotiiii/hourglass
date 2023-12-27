@@ -6,12 +6,18 @@
         RenderOptions.ClearTypeHint="Enabled"
         Width="{x:Static local:InterfaceScaler.BaseWindowWidth}"
         Height="{x:Static local:InterfaceScaler.BaseWindowHeight}"
-        Loaded="WindowLoaded" StateChanged="WindowStateChanged" Closing="WindowClosing" Closed="WindowClosed"
-        MouseDown="WindowMouseDown" MouseDoubleClick="WindowMouseDoubleClick">
+        Loaded="WindowLoaded"
+        SizeChanged="WindowSizeChanged"
+        StateChanged="WindowStateChanged"
+        Closing="WindowClosing"
+        Closed="WindowClosed"
+        MouseDown="WindowMouseDown"
+        MouseDoubleClick="WindowMouseDoubleClick">
     <Window.Style>
         <Style TargetType="{x:Type Window}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Options.WindowTitleMode, RelativeSource={RelativeSource Self}}" Value="None">
+                    <Setter Property="WindowStyle" Value="None"/>
                     <Setter Property="WindowChrome.WindowChrome">
                         <Setter.Value>
                             <WindowChrome CaptionHeight="0" UseAeroCaptionButtons="False"/>
@@ -52,10 +58,22 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ProgressBar}">
-                        <Grid>
+                        <Grid x:Name="Root">
                             <Border Name="PART_Track" Background="{TemplateBinding Background}"/>
                             <Border Name="PART_Indicator" Background="{TemplateBinding Foreground}" HorizontalAlignment="Left"/>
                         </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <!-- http://stackoverflow.com/a/6849237/7532 -->
+                                <Setter TargetName="Root" Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="270"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="Root" Property="Width"  Value="{Binding Height, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                <Setter TargetName="Root" Property="Height" Value="{Binding Width,  RelativeSource={RelativeSource TemplatedParent}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
