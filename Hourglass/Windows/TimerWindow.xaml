@@ -6,13 +6,17 @@
         RenderOptions.ClearTypeHint="Enabled"
         Width="{x:Static local:InterfaceScaler.BaseWindowWidth}"
         Height="{x:Static local:InterfaceScaler.BaseWindowHeight}"
+        SourceInitialized="OnSourceInitialized"
         Loaded="WindowLoaded"
         SizeChanged="WindowSizeChanged"
         StateChanged="WindowStateChanged"
         Closing="WindowClosing"
         Closed="WindowClosed"
         MouseDown="WindowMouseDown"
-        MouseDoubleClick="WindowMouseDoubleClick">
+        MouseDoubleClick="WindowMouseDoubleClick"
+        ToolTip="{Binding TimeToolTip, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+        ToolTipService.IsEnabled="{Binding ShowTimeToolTip, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+        ToolTipService.InitialShowDelay="0">
     <Window.Style>
         <Style TargetType="{x:Type Window}">
             <Style.Triggers>
@@ -23,6 +27,9 @@
                             <WindowChrome CaptionHeight="0" UseAeroCaptionButtons="False"/>
                         </Setter.Value>
                     </Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsFullScreen, RelativeSource={RelativeSource Self}}" Value="True">
+                    <Setter Property="WindowStyle" Value="None"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -49,8 +56,8 @@
         <KeyBinding Command="local:TimerWindow.StopCommand" Gesture="{x:Static local:TimerWindow.StopKeyGesture}"/>
         <KeyBinding Command="local:TimerWindow.RestartCommand" Gesture="{x:Static local:TimerWindow.RestartKeyGesture}"/>
         <KeyBinding Command="local:TimerWindow.EscapeCommand" Gesture="Esc"/>
+        <KeyBinding Command="local:TimerWindow.FullScreenCommand" Gesture="Alt+Enter"/>
         <KeyBinding Command="local:TimerWindow.FullScreenCommand" Gesture="{x:Static local:TimerWindow.FullScreenKeyGesture}"/>
-        <KeyBinding Command="local:TimerWindow.FullScreenCommand" Gesture="F11"/>
     </Window.InputBindings>
     <Window.Resources>
         <local:RegexMatchConverter x:Key="RegexMatchConverter"/>
@@ -249,7 +256,8 @@
         <Border x:Name="OuterNotificationBorder" IsHitTestVisible="False" Opacity="0"/>
         <Grid x:Name="InnerGrid" Margin="10">
             <StackPanel x:Name="ControlsPanel" Margin="20 0" VerticalAlignment="Center">
-                <local:SizeToFitTextBox x:Name="TitleTextBox"
+                <AdornerDecorator>
+                    <local:SizeToFitTextBox x:Name="TitleTextBox"
                                         Background="{x:Null}"
                                         BorderBrush="{x:Null}"
                                         FontFamily="Segoe UI"
@@ -261,6 +269,7 @@
                                         Style="{StaticResource TitleTextBoxStyle}"
                                         TextAlignment="Center"
                                         TextChanged="TitleTextBoxTextChanged"/>
+                </AdornerDecorator>
                 <local:SizeToFitTextBox x:Name="TimerTextBox"
                                         Background="{x:Null}"
                                         BorderBrush="{x:Null}"

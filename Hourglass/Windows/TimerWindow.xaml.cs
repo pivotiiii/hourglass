@@ -10,13 +10,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Shell;
+using System.Windows;
 
 using Extensions;
 using Managers;
@@ -146,7 +146,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     public static readonly KeyGesture StartKeyGesture      = new(Key.Enter, ModifierKeys.None);
     public static readonly KeyGesture StopKeyGesture       = new(Key.S, ModifierKeys.Control);
     public static readonly KeyGesture RestartKeyGesture    = new(Key.R, ModifierKeys.Control);
-    public static readonly KeyGesture FullScreenKeyGesture = new(Key.Enter, ModifierKeys.Alt);
+    public static readonly KeyGesture FullScreenKeyGesture = new(Key.F11, ModifierKeys.None);
 
     #endregion
 
@@ -380,21 +380,25 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
             _isFullScreen = value;
 
+            PropertyChanged.Notify(this);
+
             if (_isFullScreen)
             {
-                WindowStyle = WindowStyle.None;
                 WindowState = WindowState.Normal; // Needed to put the window on top of the taskbar
                 WindowState = WindowState.Maximized;
                 ResizeMode = ResizeMode.NoResize;
             }
             else
             {
-                WindowStyle = WindowStyle.SingleBorderWindow;
-                WindowState = _restoreWindowState;
+                WindowState restoreWindowState = _restoreWindowState;
+                if (restoreWindowState != WindowState.Normal)
+                {
+                    WindowState = WindowState.Normal;
+                }
+
+                WindowState = restoreWindowState;
                 ResizeMode = ResizeMode.CanResize;
             }
-
-            PropertyChanged.Notify(this);
         }
     }
 
@@ -422,6 +426,44 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     public bool DoNotActivateNextWindow { get; set; }
 
     public bool ForceClose { get; set; }
+
+    private bool _showTimeToolTip;
+
+    public bool ShowTimeToolTip
+    {
+        get => _showTimeToolTip;
+        set
+        {
+            if (_showTimeToolTip == value)
+            {
+                return;
+            }
+
+            _showTimeToolTip = value;
+
+            UpdateTimeToolTip();
+
+            PropertyChanged.Notify(this);
+        }
+    }
+
+    private string _timeToolTip;
+
+    public string TimeToolTip
+    {
+        get => _timeToolTip;
+        set
+        {
+            if (_timeToolTip == value)
+            {
+                return;
+            }
+
+            _timeToolTip = value;
+
+            PropertyChanged.Notify(this);
+        }
+    }
 
     #endregion
 
@@ -1057,7 +1099,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 ResumeButton.IsEnabled = false;
                 StopButton.IsEnabled = false;
                 RestartButton.IsEnabled = false;
-                CloseButton.IsEnabled = false;
+                CloseButton.IsEnabled = true;
                 CancelButton.IsEnabled = Timer.State != TimerState.Stopped && Timer.State != TimerState.Expired;
                 UpdateButton.IsEnabled = UpdateManager.Instance.HasUpdates;
 
@@ -1104,7 +1146,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                     ResumeButton.IsEnabled = false;
                     StopButton.IsEnabled = false;
                     RestartButton.IsEnabled = false;
-                    CloseButton.IsEnabled = Timer.State == TimerState.Stopped || Timer.State == TimerState.Expired;
+                    CloseButton.IsEnabled = Timer.State is TimerState.Stopped or TimerState.Expired;
                     CancelButton.IsEnabled = false;
                     UpdateButton.IsEnabled = false;
 
@@ -1124,7 +1166,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                     ResumeButton.IsEnabled = Timer.State == TimerState.Paused;
                     StopButton.IsEnabled = Timer.State != TimerState.Stopped && Timer.State != TimerState.Expired;
                     RestartButton.IsEnabled = Timer.SupportsRestart;
-                    CloseButton.IsEnabled = Timer.State == TimerState.Stopped || Timer.State == TimerState.Expired;
+                    CloseButton.IsEnabled = Timer.State is TimerState.Stopped or TimerState.Expired;
                     CancelButton.IsEnabled = false;
                     UpdateButton.IsEnabled = UpdateManager.Instance.HasUpdates;
 
@@ -1303,26 +1345,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 break;
 
             case WindowTitleMode.TimeElapsedPlusTimerTitle:
-                if (Timer.State != TimerState.Stopped && !string.IsNullOrWhiteSpace(Options.Title))
-                {
-                    Title = string.Join(
-                        Properties.Resources.TimerWindowTitleSeparator,
-                        Timer.TimeElapsedAsString,
-                        Options.Title);
-                }
-                else if (Timer.State != TimerState.Stopped)
-                {
-                    Title = Timer.TimeElapsedAsString;
-                }
-                else if (!string.IsNullOrWhiteSpace(Options.Title))
-                {
-                    Title = Options.Title;
-                }
-                else
-                {
-                    Title = Properties.Resources.TimerWindowTitle;
-                }
-
+                Title = GetTimeElapsedPlusTimerTitle();
                 break;
 
             case WindowTitleMode.TimerTitlePlusTimeLeft:
@@ -1371,6 +1394,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
                 break;
         }
+
+        UpdateShowTimeToolTip();
     }
 
     public override void OnApplyTemplate()
@@ -1395,7 +1420,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         Timer.Interval = TimerBase.DefaultInterval;
         Options.WindowSize = WindowSize.FromWindow(this /* window */);
 
-        if (Timer.State == TimerState.Stopped || Timer.State == TimerState.Expired)
+        if (Timer.State is TimerState.Stopped or TimerState.Expired)
         {
             TimerManager.Instance.Remove(Timer);
         }
@@ -1412,7 +1437,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <param name="e">The event data.</param>
     private void TimerStarted(object sender, EventArgs e)
     {
-        // Do nothing
+        UpdateTimeToolTip();
     }
 
     /// <summary>
@@ -1422,7 +1447,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <param name="e">The event data.</param>
     private void TimerPaused(object sender, EventArgs e)
     {
-        // Do nothing
+        UpdateTimeToolTip();
     }
 
     /// <summary>
@@ -1432,7 +1457,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <param name="e">The event data.</param>
     private void TimerResumed(object sender, EventArgs e)
     {
-        // Do nothing
+        UpdateTimeToolTip();
     }
 
     /// <summary>
@@ -1442,7 +1467,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <param name="e">The event data.</param>
     private void TimerStopped(object sender, EventArgs e)
     {
-        // Do nothing
+        UpdateTimeToolTip();
     }
 
     /// <summary>
@@ -1453,6 +1478,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     private void TimerExpired(object sender, EventArgs e)
     {
         BeginExpirationAnimationAndSound();
+        UpdateTimeToolTip();
     }
 
     /// <summary>
@@ -1462,7 +1488,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <param name="e">The event data.</param>
     private void TimerTick(object sender, EventArgs e)
     {
-        // Do nothing
+        UpdateTimeToolTip();
     }
 
     /// <summary>
@@ -1484,11 +1510,11 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     {
         switch (e.PropertyName)
         {
-            case nameof(WindowTitleMode) when Options.WindowTitleMode != WindowTitleMode.None:
+            case nameof(Options.WindowTitleMode) when Options.WindowTitleMode != WindowTitleMode.None:
                 Width  = Math.Max(Width,  this.GetMinTrackWidth());
                 Height = Math.Max(Height, this.GetMinTrackHeight());
                 break;
-            case nameof(Theme):
+            case nameof(Options.Theme):
                 PropertyChangedEventManager.RemoveHandler(_theme, ThemePropertyChanged, string.Empty);
                 _theme = Options.Theme;
                 PropertyChangedEventManager.AddHandler(_theme, ThemePropertyChanged, string.Empty);
@@ -1506,6 +1532,39 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     private void ThemePropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         UpdateBoundControls();
+    }
+
+    private void UpdateTimeToolTip()
+    {
+        if (!ShowTimeToolTip)
+        {
+            return;
+        }
+
+        string toolTip = GetTimeElapsedPlusTimerTitle();
+        TimeToolTip = Timer.State switch
+        {
+            TimerState.Stopped => string.Format(Properties.Resources.TimerStoppedToolTipFormatString, toolTip),
+            TimerState.Paused =>  string.Format(Properties.Resources.TimerPausedToolTipFormatString,  toolTip),
+            _ => toolTip
+        };
+    }
+
+    private string GetTimeElapsedPlusTimerTitle()
+    {
+        if (Timer.State != TimerState.Stopped)
+        {
+            return string.IsNullOrWhiteSpace(Options.Title)
+                ? Timer.TimeLeftAsString
+                : string.Join(
+                    Properties.Resources.TimerWindowTitleSeparator,
+                    Timer.TimeLeftAsString,
+                    Options.Title);
+        }
+
+        return string.IsNullOrWhiteSpace(Options.Title)
+            ? Properties.Resources.TimerWindowTitle
+            : Options.Title;
     }
 
     #endregion
@@ -1611,6 +1670,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
         SwitchToInputMode();
         StopButton.Unfocus();
+
+        UpdateTimeToolTip();
     }
 
     /// <summary>
@@ -1783,7 +1844,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         {
             e.Handled = true;
         }
-        else if (Mode != TimerWindowMode.Input && (Timer.State == TimerState.Stopped || Timer.State == TimerState.Expired))
+        else if (Mode != TimerWindowMode.Input && Timer.State is TimerState.Stopped or TimerState.Expired)
         {
             SwitchToInputMode(TitleTextBox /* textBoxToFocus */);
             e.Handled = true;
@@ -1807,7 +1868,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         {
             e.Handled = true;
         }
-        else if (Mode != TimerWindowMode.Input && (Timer.State == TimerState.Stopped || Timer.State == TimerState.Expired))
+        else if (Mode != TimerWindowMode.Input && Timer.State is TimerState.Stopped or TimerState.Expired)
         {
             SwitchToInputMode(TitleTextBox /* textBoxToFocus */);
             e.Handled = true;
@@ -1907,6 +1968,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         {
             MinimizeToNotificationArea();
         }
+
+        UpdateTimeToolTip();
     }
 
     /// <summary>
@@ -1969,8 +2032,20 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         }
     }
 
+    private void UpdateShowTimeToolTip()
+    {
+        double minTrackHeight = this.GetMinTrackHeight();
+
+        FrameworkElement content = (FrameworkElement)Content;
+
+        ShowTimeToolTip = content.ActualHeight <= minTrackHeight * 1.2 || content.ActualWidth <= minTrackHeight * 3.1;
+        UpdateTimeToolTip();
+    }
+
     private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
     {
+        UpdateShowTimeToolTip();
+
         ProgressBar.Orientation = Height > Width
             ? Orientation.Vertical
             : Orientation.Horizontal;
@@ -2043,6 +2118,11 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     private void WindowClosed(object sender, EventArgs e)
     {
         this.BringNextToFrontAndActivate();
+    }
+
+    private void OnSourceInitialized(object sender, EventArgs e)
+    {
+        this.AddWindowProcHook();
     }
 
     #endregion

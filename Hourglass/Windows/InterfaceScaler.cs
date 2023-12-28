@@ -223,9 +223,9 @@ public sealed class InterfaceScaler
         _timerTextBox.MaxFontSize = baseScaleFactor * BasePrimaryTextControlFontSize;
         _timerTextBox.Margin = new(
             left: 0.0,
-            top: (baseScaleFactor * BasePrimaryTextControlTopMargin) + ((baseScaleFactor - 1.0) * BasePrimaryTextControlAdditionalMargin),
+            top: baseScaleFactor * BasePrimaryTextControlTopMargin + (baseScaleFactor - 1.0) * BasePrimaryTextControlAdditionalMargin,
             right: 0.0,
-            bottom: (baseScaleFactor * BasePrimaryTextControlBottomMargin) + ((baseScaleFactor - 1.0) * BasePrimaryTextControlAdditionalMargin));
+            bottom: baseScaleFactor * BasePrimaryTextControlBottomMargin + (baseScaleFactor - 1.0) * BasePrimaryTextControlAdditionalMargin);
 
         _titleTextBox.MaxFontSize = reducedScaleFactor * BaseFontSize;
 
@@ -268,7 +268,7 @@ public sealed class InterfaceScaler
     private double GetReducedScaleFactor(double baseScaleFactor, double reductionFactor)
     {
         double difference = baseScaleFactor - 1.0;
-        return 1.0 + (difference * reductionFactor);
+        return 1.0 + difference * reductionFactor;
     }
 
     /// <summary>

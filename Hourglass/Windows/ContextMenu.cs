@@ -347,7 +347,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
             menuItem.IsChecked = menuItemTheme == _timerWindow.Options.Theme;
             if (_timerWindow.Options.Theme.Type == ThemeType.UserProvided)
             {
-                menuItem.Visibility = menuItemTheme.Type == ThemeType.BuiltInLight || menuItemTheme.Type == ThemeType.UserProvided
+                menuItem.Visibility = menuItemTheme.Type is ThemeType.BuiltInLight or ThemeType.UserProvided
                     ? Visibility.Visible
                     : Visibility.Collapsed;
             }
@@ -953,7 +953,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         TimerStart timerStart = (TimerStart)menuItem.Tag;
 
         TimerWindow window;
-        if (_timerWindow.Timer.State == TimerState.Stopped || _timerWindow.Timer.State == TimerState.Expired)
+        if (_timerWindow.Timer.State is TimerState.Stopped or TimerState.Expired)
         {
             window = _timerWindow;
         }
@@ -1156,7 +1156,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     /// <param name="savedTimer">An existing <see cref="Timer"/>.</param>
     private void ShowSavedTimer(Timer savedTimer)
     {
-        if (_timerWindow.Timer.State == TimerState.Stopped || _timerWindow.Timer.State == TimerState.Expired)
+        if (_timerWindow.Timer.State is TimerState.Stopped or TimerState.Expired)
         {
             ShowSavedTimerInCurrentWindow(savedTimer);
         }

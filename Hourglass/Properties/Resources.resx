@@ -1012,6 +1012,14 @@ $</value>
     <value>Stopped "{2}"</value>
     <comment>A format string for the string representation of a stopped timer that has a title and is looped, where {0} is the time left, {1} is the timer target, and {2} is the timer title</comment>
   </data>
+  <data name="TimerPausedToolTipFormatString" xml:space="preserve">
+    <value>{0} (Paused)</value>
+    <comment>A paused timer string tooltip format</comment>
+  </data>
+  <data name="TimerStoppedToolTipFormatString" xml:space="preserve">
+    <value>{0} (Stopped)</value>
+    <comment>A stopped timer string tooltip format</comment>
+  </data>
   <data name="NormalTimeTokenMilitaryTimePattern" xml:space="preserve">
     <value>(?&lt;hour&gt;\d\d)
 (?&lt;minute&gt;\d\d)

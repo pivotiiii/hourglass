@@ -145,7 +145,7 @@ public sealed class TaskDialogProgressBar : TaskDialogControl
 
         set
         {
-            if (value < 0 || value > ushort.MaxValue)
+            if (value is < 0 or > ushort.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(value));
 
             DenyIfBoundAndNotCreated();
@@ -176,7 +176,7 @@ public sealed class TaskDialogProgressBar : TaskDialogControl
 
         set
         {
-            if (value < 0 || value > ushort.MaxValue)
+            if (value is < 0 or > ushort.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(value));
 
             DenyIfBoundAndNotCreated();
@@ -207,7 +207,7 @@ public sealed class TaskDialogProgressBar : TaskDialogControl
 
         set
         {
-            if (value < 0 || value > ushort.MaxValue)
+            if (value is < 0 or > ushort.MaxValue)
                 throw new ArgumentOutOfRangeException(nameof(value));
 
             DenyIfBoundAndNotCreated();
@@ -264,8 +264,7 @@ public sealed class TaskDialogProgressBar : TaskDialogControl
     private static bool ProgressBarStateIsMarquee(
         TaskDialogProgressBarState state)
     {
-        return state == TaskDialogProgressBarState.Marquee ||
-               state == TaskDialogProgressBarState.MarqueePaused;
+        return state is TaskDialogProgressBarState.Marquee or TaskDialogProgressBarState.MarqueePaused;
     }
 
     private static int GetNativeProgressBarState(

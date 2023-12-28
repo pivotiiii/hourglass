@@ -802,9 +802,9 @@ public partial class TaskDialog
     /// </remarks>
     internal unsafe void SetProgressBarRange(int min, int max)
     {
-        if (min < 0 || min > ushort.MaxValue)
+        if (min is < 0 or > ushort.MaxValue)
             throw new ArgumentOutOfRangeException(nameof(min));
-        if (max < 0 || max > ushort.MaxValue)
+        if (max is < 0 or > ushort.MaxValue)
             throw new ArgumentOutOfRangeException(nameof(max));
 
         // Note: The MAKELPARAM macro converts the value to an unsigned int
@@ -827,7 +827,7 @@ public partial class TaskDialog
     /// <param name="pos"></param>
     internal void SetProgressBarPosition(int pos)
     {
-        if (pos < 0 || pos > ushort.MaxValue)
+        if (pos is < 0 or > ushort.MaxValue)
             throw new ArgumentOutOfRangeException(nameof(pos));
 
         SendTaskDialogMessage(
@@ -1718,7 +1718,7 @@ public partial class TaskDialog
                 _windowSubclassHandler.Dispose();
                 _windowSubclassHandler = null;
             }
-            catch (Exception ex) when (ex is InvalidOperationException || ex is Win32Exception)
+            catch (Exception ex) when (ex is InvalidOperationException or Win32Exception)
             {
                 // Ignore. This could happen for example if some other code
                 // also subclassed the window after us but didn't correctly

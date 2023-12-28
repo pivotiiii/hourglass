@@ -28,7 +28,7 @@ public static class TimeSpanExtensions
             timeSpan.Days,
             timeSpan.Hours,
             timeSpan.Minutes,
-            timeSpan.Seconds + ((timeSpan.Ticks % TimeSpan.TicksPerSecond) > 0 ? 1 : 0));
+            timeSpan.Seconds + (timeSpan.Ticks % TimeSpan.TicksPerSecond > 0 ? 1 : 0));
     }
 
     /// <summary>

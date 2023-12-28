@@ -108,12 +108,13 @@ public sealed class TimerManager : Manager
     /// removed.</exception>
     public void Remove(Timer timer)
     {
-        if (!_timers.Contains(timer))
+        timer.Stop();
+
+        if (!_timers.Remove(timer))
         {
             throw new InvalidOperationException();
         }
 
-        _timers.Remove(timer);
         timer.Dispose();
     }
 

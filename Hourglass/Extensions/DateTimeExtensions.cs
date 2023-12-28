@@ -101,7 +101,7 @@ public static class DateTimeExtensions
     /// <returns>The ordinal string representation of the day.</returns>
     public static string GetOrdinalDayString(int day, IFormatProvider provider)
     {
-        if (day < 1 || day > 31)
+        if (day is < 1 or > 31)
         {
             throw new ArgumentOutOfRangeException(nameof(day));
         }
@@ -143,7 +143,7 @@ public static class DateTimeExtensions
     /// <param name="month">A month number between 1 and 12 inclusive.</param>
     public static void IncrementMonth(ref int year, ref int month)
     {
-        if (month < 1 || month > 12)
+        if (month is < 1 or > 12)
         {
             throw new ArgumentOutOfRangeException(nameof(month));
         }

@@ -224,7 +224,7 @@ namespace Hourglass.Properties
         {
             return collection
                 .Cast<SettingsPropertyValue>()
-                .Where(static v => v.Property.SerializeAs == SettingsSerializeAs.String || v.Property.SerializeAs == SettingsSerializeAs.Xml)
+                .Where(static v => v.Property.SerializeAs is SettingsSerializeAs.String or SettingsSerializeAs.Xml)
                 .OrderBy(static v => v.Name, StringComparer.Create(CultureInfo.InvariantCulture, false /* ignoreCase */));
         }
 

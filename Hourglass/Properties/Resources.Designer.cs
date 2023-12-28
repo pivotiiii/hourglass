@@ -1067,7 +1067,7 @@ namespace Hourglass.Properties {
         /// <summary>
         ///   Looks up a localized string similar to MIT License
         ///
-        ///Copyright © 2021 Chris Dziemborowicz, 2023 Ivan Ivon
+        ///Copyright © 2021 Chris Dziemborowicz, 2024 Ivan Ivon
         ///
         ///Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
         ///
@@ -1913,6 +1913,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} (Paused).
+        /// </summary>
+        public static string TimerPausedToolTipFormatString {
+            get {
+                return ResourceManager.GetString("TimerPausedToolTipFormatString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} ➔ {1} &quot;{2}&quot; (Paused).
         /// </summary>
         public static string TimerPausedWithTitleFormatString {
@@ -2008,6 +2017,15 @@ namespace Hourglass.Properties {
         public static string TimerStoppedLoopedFormatString {
             get {
                 return ResourceManager.GetString("TimerStoppedLoopedFormatString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (Stopped).
+        /// </summary>
+        public static string TimerStoppedToolTipFormatString {
+            get {
+                return ResourceManager.GetString("TimerStoppedToolTipFormatString", resourceCulture);
             }
         }
         

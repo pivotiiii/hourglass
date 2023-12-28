@@ -111,8 +111,7 @@ public sealed class TaskDialogCustomButton : TaskDialogButton
         // LFs with CR, because CR is treated as a line break.
         string text = _text?.Replace("\r\n", "\r").Replace("\n", "\r");
 
-        if ((page?.CustomButtonStyle == TaskDialogCustomButtonStyle.CommandLinks ||
-             page?.CustomButtonStyle == TaskDialogCustomButtonStyle.CommandLinksNoIcon) &&
+        if (page?.CustomButtonStyle is TaskDialogCustomButtonStyle.CommandLinks or TaskDialogCustomButtonStyle.CommandLinksNoIcon &&
             text != null && _descriptionText != null)
             text += '\n' + _descriptionText;
 

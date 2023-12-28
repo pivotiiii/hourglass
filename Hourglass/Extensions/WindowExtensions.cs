@@ -403,8 +403,8 @@ public static class WindowExtensions
         {
             offsetRect.Width = Math.Min(rect.Width, SystemParameters.WorkArea.Width);
             offsetRect.Height = Math.Min(rect.Height, SystemParameters.WorkArea.Height);
-            offsetRect.X = ((SystemParameters.WorkArea.Width - offsetRect.Width) / 2) + SystemParameters.WorkArea.Left;
-            offsetRect.Y = ((SystemParameters.WorkArea.Height - offsetRect.Height) / 2) + SystemParameters.WorkArea.Top;
+            offsetRect.X = (SystemParameters.WorkArea.Width - offsetRect.Width) / 2 + SystemParameters.WorkArea.Left;
+            offsetRect.Y = (SystemParameters.WorkArea.Height - offsetRect.Height) / 2 + SystemParameters.WorkArea.Top;
         }
 
         return offsetRect;
@@ -448,8 +448,8 @@ public static class WindowExtensions
         if (rect.HasSizeAndLocation())
         {
             return new(
-                (int)(rect.X + (rect.Width / 2)),
-                (int)(rect.Y + (rect.Height / 2)));
+                (int)(rect.X + rect.Width / 2),
+                (int)(rect.Y + rect.Height / 2));
         }
 
         return rect.Location;
@@ -558,7 +558,7 @@ public static class WindowExtensions
         }
 
         // Move the rect to the top and to the right
-        offsetRect.X += OffsetAmount - (Math.Floor((offsetRect.Y - SystemParameters.VirtualScreenTop) / OffsetAmount) * OffsetAmount);
+        offsetRect.X += OffsetAmount - Math.Floor((offsetRect.Y - SystemParameters.VirtualScreenTop) / OffsetAmount) * OffsetAmount;
         offsetRect.Y = SystemParameters.VirtualScreenTop;
 
         if (offsetRect.IsOnScreen())
@@ -581,13 +581,13 @@ public static class WindowExtensions
 
     #endregion
 
-    private static TaskDialog taskDialog;
+    private static TaskDialog _taskDialogInstance;
 
     public static MessageBoxResult ShowTaskDialog(this Window window, string instruction, string yesText, string noText = null)
     {
-        if (taskDialog is not null)
+        if (_taskDialogInstance is not null)
         {
-            SetForegroundWindow(taskDialog.Handle);
+            SetForegroundWindow(_taskDialogInstance.Handle);
             return MessageBoxResult.Cancel;
         }
 
@@ -625,14 +625,14 @@ public static class WindowExtensions
                 : MessageBoxResult.Cancel;
 #pragma warning restore S3358
 
-        taskDialog = null;
+        _taskDialogInstance = null;
 
         return messageBoxResult;
 
         void OnShown(object sender, EventArgs e)
         {
             dialog.Shown -= OnShown;
-            taskDialog = dialog;
+            _taskDialogInstance = dialog;
         }
 
         [DllImport("user32.dll")]
@@ -644,8 +644,8 @@ public static class WindowExtensions
 
     public static void Clean()
     {
-        taskDialog?.Close();
-        taskDialog = null;
+        _taskDialogInstance?.Close();
+        _taskDialogInstance = null;
     }
 
     public static double GetMinTrackWidth(this Visual visual) =>

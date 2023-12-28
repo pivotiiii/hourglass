@@ -7,6 +7,7 @@ internal static class ExceptionExtensions
 {
     public static bool CanBeHandled(this Exception ex) =>
         ex is not (
+            ArgumentNullException    or
             NullReferenceException   or
             IndexOutOfRangeException or
             OutOfMemoryException     or

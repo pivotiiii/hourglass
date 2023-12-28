@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 
 using Hourglass.Timing;
 using Hourglass.Windows;
@@ -94,4 +96,123 @@ public static class TimerWindowExtensions
         static TimeSpan ToTimeSpanValue(TimeSpan? timeSpan) =>
             TimeSpan.FromSeconds(Math.Round((timeSpan ?? TimeSpan.Zero).TotalSeconds));
     }
+
+    public static void AddWindowProcHook(this TimerWindow timerWindow)
+    {
+        var handle = new WindowInteropHelper(timerWindow).Handle;
+
+        var hwndSource = HwndSource.FromHwnd(handle);
+        hwndSource?.AddHook(WindowProc);
+
+        timerWindow.Closed += TimerWindowClosed;
+
+        void TimerWindowClosed(object sender, EventArgs e)
+        {
+            timerWindow.Closed -= TimerWindowClosed;
+
+            // ReSharper disable AccessToDisposedClosure
+            hwndSource?.RemoveHook(WindowProc);
+            hwndSource?.Dispose();
+            // ReSharper restore AccessToDisposedClosure
+        }
+
+        IntPtr WindowProc(
+            IntPtr hwnd,
+            int msg,
+            IntPtr wParam,
+            IntPtr lParam,
+            ref bool handled)
+        {
+            if (msg == 0x0024 /* WM_GETMINMAXINFO */)
+            {
+                handled = WmGetMinMaxInfo(hwnd, lParam);
+            }
+
+            return IntPtr.Zero;
+        }
+
+        bool WmGetMinMaxInfo(IntPtr hwnd, IntPtr lParam)
+        {
+            if (timerWindow.WindowState != WindowState.Maximized ||
+                timerWindow.IsFullScreen)
+            {
+                return false;
+            }
+
+            var hMonitor = MonitorFromWindow(hwnd, 0x00000002 /* MONITOR_DEFAULTTONEAREST */);
+            if (hMonitor == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            var monitorInfo = new MONITORINFO
+            {
+                cbSize = Marshal.SizeOf(typeof(MONITORINFO))
+            };
+            if (!GetMonitorInfo(hMonitor, ref monitorInfo))
+            {
+                return false;
+            }
+
+            var rcWork = monitorInfo.rcWork;
+            var rcMonitor = monitorInfo.rcMonitor;
+
+            var mmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
+
+            mmi.ptMaxPosition.x = Math.Abs(rcWork.left - rcMonitor.left);
+            mmi.ptMaxPosition.y = Math.Abs(rcWork.top - rcMonitor.top);
+            mmi.ptMaxSize.x = Math.Abs(rcWork.right - rcWork.left);
+            mmi.ptMaxSize.y = Math.Abs(rcWork.bottom - rcWork.top);
+
+            Marshal.StructureToPtr(mmi, lParam, true);
+
+            return true;
+
+            [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+#pragma warning disable S3241
+            static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+#pragma warning restore S3241
+
+            [DllImport("user32.dll")]
+            static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
+        }
+    }
+
+#pragma warning disable S101
+    [StructLayout(LayoutKind.Sequential)]
+    private struct POINT
+    {
+        public int x;
+        public int y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct RECT
+    {
+        public int left;
+        public int top;
+        public int right;
+        public int bottom;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MINMAXINFO
+    {
+        public POINT ptReserved;
+        public POINT ptMaxSize;
+        public POINT ptMaxPosition;
+        public POINT ptMinTrackSize;
+        public POINT ptMaxTrackSize;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MONITORINFO
+    {
+        public int cbSize;
+        public RECT rcMonitor;
+        public RECT rcWork;
+        public uint dwFlags;
+    }
+#pragma warning restore S101
 }

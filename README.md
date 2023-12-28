@@ -52,6 +52,7 @@ Run `hourglass -h` to display the **Hourglass** command-line reference or select
 - The `Ctrl+N` shortcut creates a new timer window.
 - The mouse double-click on progress border makes the timer window full screen and back.
 - The minimum timer window size is limited by the Windows.
+- The timer tooltip is shown if the timer window size is too small.
 - All the timer windows are arranged by the time left. The order of timer windows is new, expired, paused, running.
 - When the timer window is minimized or closed the next visible non-minimized timer window is activated.
 - The **Window title** submenu is available directly from the timer window context menu.
