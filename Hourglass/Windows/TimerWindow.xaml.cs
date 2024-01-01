@@ -10,13 +10,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Shell;
-using System.Windows;
+
+using StickyWindows;
+using StickyWindows.WPF;
 
 using Extensions;
 using Managers;
@@ -227,6 +230,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// </summary>
     private WindowState _restoreWindowState = WindowState.Normal;
 
+    private StickyWindow _stickyWindow;
+
     #endregion
 
     public IEnumerable<TimerCommand> Commands { get; private set; }
@@ -391,7 +396,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             else
             {
                 WindowState restoreWindowState = _restoreWindowState;
-                if (restoreWindowState != WindowState.Normal)
+                if (restoreWindowState != WindowState.Normal && WindowStyle == WindowStyle.None)
                 {
                     WindowState = WindowState.Normal;
                 }
@@ -1545,7 +1550,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         TimeToolTip = Timer.State switch
         {
             TimerState.Stopped => string.Format(Properties.Resources.TimerStoppedToolTipFormatString, toolTip),
-            TimerState.Paused =>  string.Format(Properties.Resources.TimerPausedToolTipFormatString,  toolTip),
+            TimerState.Paused  => string.Format(Properties.Resources.TimerPausedToolTipFormatString,  toolTip),
             _ => toolTip
         };
     }
@@ -1970,6 +1975,14 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         }
 
         UpdateTimeToolTip();
+
+        _stickyWindow = new StickyWindow(new WpfFormAdapter(this))
+        {
+            StickToScreen = true,
+            StickToOther  = true,
+            StickOnMove   = true,
+            StickOnResize = false
+        };
     }
 
     /// <summary>
@@ -1981,14 +1994,15 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     {
         if (e.ChangedButton == MouseButton.Left)
         {
-            DragMove();
+            this.StartDragMove();
         }
+    }
 
-        if (e.OriginalSource is Panel)
-        {
-            CancelOrReset();
-            e.Handled = true;
-        }
+    private void WindowMouseUp(object sender, MouseButtonEventArgs e)
+    {
+        e.Handled = e.OriginalSource is Panel &&
+                    CancelOrReset() &&
+                    e.ChangedButton == MouseButton.Left;
     }
 
     /// <summary>
@@ -2118,6 +2132,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     private void WindowClosed(object sender, EventArgs e)
     {
         this.BringNextToFrontAndActivate();
+
+        _stickyWindow?.ReleaseHandle();
     }
 
     private void OnSourceInitialized(object sender, EventArgs e)

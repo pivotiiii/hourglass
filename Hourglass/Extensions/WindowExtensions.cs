@@ -9,6 +9,7 @@ namespace Hourglass.Extensions;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 
@@ -61,7 +62,7 @@ public static class WindowExtensions
             ? DwmWindowAttribute.UseImmersiveDarkMode
             : DwmWindowAttribute.UseImmersiveDarkModeBefore20H1;
 
-        if (NativeMethods.DwmGetWindowAttribute(handle, attribute, out var prevUseImmersiveDarkMode, sizeof(int)) != 0)
+        if (NativeMethods.DwmGetWindowAttribute(handle, attribute, out bool prevUseImmersiveDarkMode, sizeof(int)) != 0)
         {
             return false;
         }
@@ -660,6 +661,28 @@ public static class WindowExtensions
 
     public static bool IsTextBoxView(this object o) =>
         StringComparer.Ordinal.Equals(o.GetType().FullName, "System.Windows.Controls.TextBoxView");
+
+    public static void StartDragMove(this Window window)
+    {
+        if (window.WindowState != WindowState.Normal)
+        {
+            return;
+        }
+
+        IntPtr handle = new WindowInteropHelper(window).Handle;
+        if (handle == IntPtr.Zero)
+        {
+            return;
+        }
+
+        Point point = window.PointToScreen(Mouse.GetPosition(window));
+        SendMessage(handle, 0xA1 /* WM_NCLBUTTONDOWN */, (IntPtr)0x2 /* HTCAPTION */, (IntPtr)((int)point.X | ((int)point.Y << 16)));
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+#pragma warning disable S3241
+        static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+#pragma warning restore S3241
+    }
 
     [DllImport("user32.dll")]
     private static extern int GetSystemMetrics(int nIndex);

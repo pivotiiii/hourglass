@@ -13,10 +13,10 @@
         Closing="WindowClosing"
         Closed="WindowClosed"
         MouseDown="WindowMouseDown"
+        MouseUp="WindowMouseUp"
         MouseDoubleClick="WindowMouseDoubleClick"
         ToolTip="{Binding TimeToolTip, Mode=OneWay, RelativeSource={RelativeSource Self}}"
-        ToolTipService.IsEnabled="{Binding ShowTimeToolTip, Mode=OneWay, RelativeSource={RelativeSource Self}}"
-        ToolTipService.InitialShowDelay="0">
+        ToolTipService.IsEnabled="{Binding ShowTimeToolTip, Mode=OneWay, RelativeSource={RelativeSource Self}}">
     <Window.Style>
         <Style TargetType="{x:Type Window}">
             <Style.Triggers>
