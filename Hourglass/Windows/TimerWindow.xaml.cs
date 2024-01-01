@@ -10,13 +10,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Shell;
-using System.Windows;
 
 using Extensions;
 using Managers;
@@ -391,7 +391,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             else
             {
                 WindowState restoreWindowState = _restoreWindowState;
-                if (restoreWindowState != WindowState.Normal)
+                if (restoreWindowState != WindowState.Normal && WindowStyle == WindowStyle.None)
                 {
                     WindowState = WindowState.Normal;
                 }
@@ -1545,7 +1545,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         TimeToolTip = Timer.State switch
         {
             TimerState.Stopped => string.Format(Properties.Resources.TimerStoppedToolTipFormatString, toolTip),
-            TimerState.Paused =>  string.Format(Properties.Resources.TimerPausedToolTipFormatString,  toolTip),
+            TimerState.Paused  => string.Format(Properties.Resources.TimerPausedToolTipFormatString,  toolTip),
             _ => toolTip
         };
     }
@@ -1979,16 +1979,15 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <param name="e">The event data.</param>
     private void WindowMouseDown(object sender, MouseButtonEventArgs e)
     {
-        if (e.ChangedButton == MouseButton.Left)
+        bool isLeftButton = e.ChangedButton == MouseButton.Left;
+        if (isLeftButton)
         {
             DragMove();
         }
 
-        if (e.OriginalSource is Panel)
-        {
-            CancelOrReset();
-            e.Handled = true;
-        }
+        e.Handled = e.OriginalSource is Panel &&
+                    CancelOrReset() &&
+                    isLeftButton;
     }
 
     /// <summary>
@@ -2025,6 +2024,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         }
 
         UpdateBoundControls();
+        UpdateShowTimeToolTip();
 
         if (isMinimized)
         {
@@ -2034,8 +2034,13 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
     private void UpdateShowTimeToolTip()
     {
-        double minTrackHeight = this.GetMinTrackHeight();
+        if (WindowState == WindowState.Minimized)
+        {
+            ShowTimeToolTip = false;
+            return;
+        }
 
+        double minTrackHeight = this.GetMinTrackHeight();
         FrameworkElement content = (FrameworkElement)Content;
 
         ShowTimeToolTip = content.ActualHeight <= minTrackHeight * 1.2 || content.ActualWidth <= minTrackHeight * 3.1;

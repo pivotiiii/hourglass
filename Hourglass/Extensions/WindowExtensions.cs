@@ -61,7 +61,7 @@ public static class WindowExtensions
             ? DwmWindowAttribute.UseImmersiveDarkMode
             : DwmWindowAttribute.UseImmersiveDarkModeBefore20H1;
 
-        if (NativeMethods.DwmGetWindowAttribute(handle, attribute, out var prevUseImmersiveDarkMode, sizeof(int)) != 0)
+        if (NativeMethods.DwmGetWindowAttribute(handle, attribute, out bool prevUseImmersiveDarkMode, sizeof(int)) != 0)
         {
             return false;
         }
