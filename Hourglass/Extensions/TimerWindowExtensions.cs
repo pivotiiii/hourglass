@@ -133,7 +133,7 @@ public static class TimerWindowExtensions
 
         bool WmGetMinMaxInfo(IntPtr hwnd, IntPtr lParam)
         {
-            if (timerWindow.WindowState != WindowState.Maximized ||
+            if (timerWindow.WindowState == WindowState.Normal ||
                 timerWindow.IsFullScreen)
             {
                 return false;
