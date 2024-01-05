@@ -61,6 +61,7 @@ Run `hourglass -h` to display the **Hourglass** command-line reference or select
 - All the timer window commands are available in the timer window context menu.
 - Shortcuts are displayed in the timer window context menu.
 - The progress bar changes direction to vertical when the height is more than the width and vice versa.
+- The switching between light and dark themes is improved.
 
 ### Mics
 

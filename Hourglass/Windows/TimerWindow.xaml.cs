@@ -562,7 +562,14 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             Topmost = true;
             Topmost = Options.AlwaysOnTop;
 
-            Activate();
+            Dispatcher.BeginInvoke(Sleep);
+            Dispatcher.BeginInvoke(Activate);
+            Dispatcher.BeginInvoke(Focus);
+
+            static void Sleep()
+            {
+                System.Threading.Thread.Sleep(10);
+            }
         }
         catch (InvalidOperationException)
         {
@@ -1400,6 +1407,11 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
     public override void OnApplyTemplate()
     {
+        SetImmersiveDarkMode();
+    }
+
+    private void SetImmersiveDarkMode()
+    {
         this.SetImmersiveDarkMode(Options.Theme.Type == ThemeType.BuiltInDark);
     }
 
@@ -1518,6 +1530,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 PropertyChangedEventManager.RemoveHandler(_theme, ThemePropertyChanged, string.Empty);
                 _theme = Options.Theme;
                 PropertyChangedEventManager.AddHandler(_theme, ThemePropertyChanged, string.Empty);
+                SetImmersiveDarkMode();
                 break;
         }
 
@@ -2029,6 +2042,10 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         if (isMinimized)
         {
             this.BringNextToFrontAndActivate();
+        }
+        else
+        {
+            BringToFrontAndActivate();
         }
     }
 

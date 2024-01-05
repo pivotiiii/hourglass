@@ -45,10 +45,10 @@ public static class WindowExtensions
     /// Sets the Desktop Window Manager (DWM) non-client rendering attributes on the window to use (or not use)
     /// immersive dark mode. This method has no effect on versions of windows that do not support it.
     /// </summary>
-    /// <param name="window">A <see cref="Window"/>.</param>
+    /// <param name="window">A <see cref="TimerWindow"/>.</param>
     /// <param name="useImmersiveDarkMode">A value indicating whether to use immersive dark mode.</param>
     /// <returns>A value indicating whether immersive dark mode was successfully applied.</returns>
-    public static bool SetImmersiveDarkMode(this Window window, bool useImmersiveDarkMode)
+    public static bool SetImmersiveDarkMode(this TimerWindow window, bool useImmersiveDarkMode)
     {
         if (!EnvironmentExtensions.IsWindows10BuildOrNewer(17763))
         {
@@ -77,13 +77,19 @@ public static class WindowExtensions
         }
 
         // This hack appears to be the only way to get the non-client area of the window to redraw correctly.
-        if (window.IsVisible)
+        if (window.IsVisible && !window.IsFullScreen)
         {
-            WindowStyle prevWindowStyle = window.WindowStyle;
-            window.WindowStyle = prevWindowStyle != WindowStyle.None
-                ? WindowStyle.None
-                : WindowStyle.SingleBorderWindow;
-            window.WindowStyle = prevWindowStyle;
+            if (window.WindowState == WindowState.Maximized)
+            {
+                window.WindowState = WindowState.Normal;
+                window.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                double width = window.Width;
+                window.Width += 1;
+                window.Width = width;
+            }
         }
 
         return true;
