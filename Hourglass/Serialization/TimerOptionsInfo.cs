@@ -45,6 +45,11 @@ public sealed class TimerOptionsInfo
     public bool ReverseProgressBar { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether to display time in the digital clock format.
+    /// </summary>
+    public bool DigitalClockTime { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether to show the time elapsed rather than the time left.
     /// </summary>
     public bool ShowTimeElapsed { get; set; }

@@ -206,6 +206,24 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to hh&apos;:&apos;mm&apos;:&apos;ss.
+        /// </summary>
+        public static string CompactTimeSpanFormat {
+            get {
+                return ResourceManager.GetString("CompactTimeSpanFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to d&apos;.&apos;hh&apos;:&apos;mm&apos;:&apos;ss.
+        /// </summary>
+        public static string CompactTimeSpanWithDaysFormat {
+            get {
+                return ResourceManager.GetString("CompactTimeSpanWithDaysFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _About.
         /// </summary>
         public static string ContextMenuAboutMenuItem {
@@ -283,6 +301,15 @@ namespace Hourglass.Properties {
         public static string ContextMenuDarkThemeMenuItem {
             get {
                 return ResourceManager.GetString("ContextMenuDarkThemeMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display time in the digital _clock format.
+        /// </summary>
+        public static string ContextMenuDigitalClockTimeMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuDigitalClockTimeMenuItem", resourceCulture);
             }
         }
         
@@ -2138,6 +2165,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New timer: {0}.
+        /// </summary>
+        public static string TimerWindowNewTimerFormatString {
+            get {
+                return ResourceManager.GetString("TimerWindowNewTimerFormatString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New timer: {0} &quot;{1}&quot;.
         /// </summary>
         public static string TimerWindowNewTimerWithTitleFormatString {
@@ -2233,15 +2269,6 @@ namespace Hourglass.Properties {
         public static string TimerWindowUpdateButtonContent {
             get {
                 return ResourceManager.GetString("TimerWindowUpdateButtonContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New timer: {0}.
-        /// </summary>
-        public static string TimerWindwoNewTimerFormatString {
-            get {
-                return ResourceManager.GetString("TimerWindwoNewTimerFormatString", resourceCulture);
             }
         }
         
@@ -2551,7 +2578,8 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Usage: {0} [OPTIONS] [&lt;input&gt;]
+        ///   Looks up a localized string similar to Usage: hourglass.exe [OPTIONS] [&lt;input&gt;]
+        ///
         ///A simple countdown timer for Windows.
         ///
         ///  &lt;input&gt;
@@ -2563,7 +2591,7 @@ namespace Hourglass.Properties {
         ///        &quot;7:30:00&quot;               count down for 7 hours 30 minutes
         ///        &quot;5 minutes&quot;             count down for 5 minutes
         ///        &quot;5 minutes 30 seconds&quot;  count down for 5 minutes 30 seconds
-        ///        &quot;7 hours 30 minutes&quot;    count d [rest of string was truncated]&quot;;.
+        ///        &quot;7 hours 30 minutes [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Usage {
             get {

@@ -1,4 +1,5 @@
-Usage: {0} [OPTIONS] [<input>]
+﻿Usage: hourglass.exe [OPTIONS] [<input>]
+
 A simple countdown timer for Windows.
 
   <input>
@@ -26,6 +27,7 @@ A simple countdown timer for Windows.
         Variations of some of these formats are also supported.
 
 Options:
+
   --title <title>
         Sets the title for the timer.
 
@@ -81,6 +83,15 @@ Options:
         Required        no
         Default value   last
         Alias           -g
+
+  --digital-clock-time on|off|last
+        Displays time in the digital clock format:
+        - d.hh:mm:ss if a time is longer than a day;
+        -   hh:mm:ss otherwise.
+
+        Required        no
+        Default value   last
+        Alias           -c
 
   --show-time-elapsed on|off|last
         Shows the time elapsed since the timer was started, rather than the
@@ -250,6 +261,7 @@ Options:
             --do-not-keep-awake           -k off
             --show-in-notification-area   -n off
             --reverse-progress-bar        -g off
+            --digital-clock-time          -c off
             --show-time-elapsed           -u off
             --loop-timer                  -l off
             --pop-up-when-expired         -p on
@@ -262,7 +274,7 @@ Options:
             --prefer-24h-time             -j off
             --window-title                -i app
             --window-state                -w normal
-            --window-bounds               -b auto,auto,350,150
+            --window-bounds               -b auto,auto,355,160
             --lock-interface              -z off
 
         Required        no

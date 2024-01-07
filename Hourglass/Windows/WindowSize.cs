@@ -6,6 +6,7 @@
 
 namespace Hourglass.Windows;
 
+using System;
 using System.Linq;
 using System.Windows;
 
@@ -143,19 +144,19 @@ public sealed class WindowSize
 
         T window = Application.Current.Windows
             .OfType<T>()
-            .LastOrDefault(w => w.IsVisible);
+            .LastOrDefault(static w => w.IsVisible);
 
         return FromWindow(window);
     }
 
     /// <summary>
-    /// Returns a <see cref="WindowSize"/> for another visible window of the same type, or <c>null</c> if there is
-    /// no other visible window of the same type.
+    /// Returns a <see cref="WindowSize"/> for another visible or last window of the same type, or <c>null</c> if there is
+    /// no other visible or last window of the same type.
     /// </summary>
     /// <typeparam name="T">The type of the window.</typeparam>
     /// <param name="window">A window.</param>
-    /// <returns>A <see cref="WindowSize"/> for another visible window of the same type, or <c>null</c> if there is
-    /// no other visible window of the same type.</returns>
+    /// <returns>A <see cref="WindowSize"/> for another visible or last window of the same type, or <c>null</c> if there is
+    /// no other visible or last window of the same type.</returns>
     public static WindowSize FromSiblingOfWindow<T>(T window)
         where T : Window, IRestorableWindow
     {
@@ -164,11 +165,12 @@ public sealed class WindowSize
             return null;
         }
 
-        T otherWindow = Application.Current.Windows
+        T[] otherWindows = Application.Current.Windows
             .OfType<T>()
-            .LastOrDefault(w => !w.Equals(window) && w.IsVisible);
+            .Where(w => !ReferenceEquals(w, window))
+            .ToArray();
 
-        return FromWindow(otherWindow);
+        return FromWindow(Array.FindLast(otherWindows, static w => w.IsVisible) ?? otherWindows.LastOrDefault());
     }
 
     /// <summary>

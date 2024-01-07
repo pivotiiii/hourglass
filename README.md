@@ -1,5 +1,9 @@
 # Hourglass
 
+[![Latest build](https://github.com/i2van/hourglass/workflows/build/badge.svg)](https://github.com/i2van/hourglass/actions)
+[![Latest release](https://img.shields.io/github/downloads/i2van/hourglass/total.svg)](https://github.com/i2van/hourglass/releases/latest)
+[![License](https://img.shields.io/badge/license-MIT-yellow)](https://opensource.org/licenses/MIT)
+
 This project is the modified [simple countdown timer for Windows](https://github.com/dziemborowicz/hourglass). The changes were made to the original **Hourglass** can be found [here](#hourglass-changes). The latest **Hourglass** installer or portable distribution can be downloaded [here](https://github.com/i2van/hourglass/releases/latest).
 
 Visit the [original Hourglass site](https://chris.dziemborowicz.com/apps/hourglass) to learn more. **Hourglass** FAQ can be found [here](https://chris.dziemborowicz.com/apps/hourglass/#downloads).
@@ -7,7 +11,7 @@ Visit the [original Hourglass site](https://chris.dziemborowicz.com/apps/hourgla
 ## Hourglass Command-line Example
 
 ```shell
-hourglass -n on -a on -g on -w minimized -i left+title -t "Timer 1" 1h23
+hourglass -n on -a on -g on -c on -w minimized -i left+title -t "Timer 1" 1h23
 ```
 
 creates
@@ -18,10 +22,11 @@ creates
 - with the timer window:
   - which is always on top: `-a on`
   - shows the reversed progress bar: `-g on`
+  - displays time in the digital clock format: `-c on`
   - initially minimized: `-w minimized`
   - has the time left and the timer name displayed in the title: `-i left+title`
 
-Run `hourglass -h` to display the **Hourglass** command-line reference or select **Command-line usage** from notification area context menu.
+Run `hourglass -h` to display the **Hourglass** [command-line reference](https://github.com/i2van/hourglass/blob/develop/Hourglass/Resources/Usage.txt) or select **Command-line usage** from the notification area context menu.
 
 ## Prerequisites
 
@@ -56,14 +61,15 @@ Run `hourglass -h` to display the **Hourglass** command-line reference or select
 - All the timer windows are arranged by the time left. The order of timer windows is new, expired, paused, running.
 - When the timer window is minimized or closed the next visible non-minimized timer window is activated.
 - The **Window title** submenu is available directly from the timer window context menu.
-- The **Reset bounds** submenu sets the timer window default position and size.
+- The **Reset bounds** menu item sets the timer window default position and size.
 - The **Restore**, **Minimize** and **Maximize** timer window commands are always present in the timer window context menu.
 - All the timer window commands are available in the timer window context menu.
 - Shortcuts are displayed in the timer window context menu.
 - The progress bar changes direction to vertical when the height is more than the width and vice versa.
 - The switching between light and dark themes is improved.
+- The **Display time in the digital clock format** menu item toggles the displayed time digital clock time format. It can be found under the **Advanced options** submenu of the timer window context menu. Command-line option is  `--digital-clock-time` / `-c`
 
-### Mics
+### Misc
 
 - The **Hourglass** is built deterministically using the [GitHub Actions](https://github.com/i2van/hourglass/actions).
 

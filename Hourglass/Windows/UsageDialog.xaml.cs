@@ -56,13 +56,13 @@ public sealed partial class UsageDialog
             ErrorMessage = errorMessage
         };
 
-        if (Application.Current?.Dispatcher is not null)
+        if (Application.Current?.Dispatcher is null)
         {
-            _instance.Show();
+            _instance.ShowDialog();
         }
         else
         {
-            _instance.ShowDialog();
+            _instance.Show();
         }
     }
 

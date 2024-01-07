@@ -18,6 +18,9 @@ using Timing;
 /// </summary>
 public sealed class ThemeManager : Manager
 {
+    private const string DefaultThemeIdentifier = "blue";
+    private const string DefaultDarkThemeIdentifier = $"{DefaultThemeIdentifier}-dark";
+
     /// <summary>
     /// Singleton instance of the <see cref="ThemeManager"/> class.
     /// </summary>
@@ -38,12 +41,12 @@ public sealed class ThemeManager : Manager
     /// <summary>
     /// Gets the default theme.
     /// </summary>
-    public Theme DefaultTheme => GetThemeByIdentifier("blue");
+    public Theme DefaultTheme => GetThemeByIdentifier(DefaultThemeIdentifier);
 
     /// <summary>
     /// Gets the default dark theme.
     /// </summary>
-    public Theme DefaultDarkTheme => GetThemeByIdentifier("blue-dark");
+    public Theme DefaultDarkTheme => GetThemeByIdentifier(DefaultDarkThemeIdentifier);
 
     /// <summary>
     /// Gets a collection of the themes stored in the assembly.

@@ -47,36 +47,48 @@ public static class TimeSpanExtensions
     /// </summary>
     /// <param name="timeSpan">A <see cref="TimeSpan"/>.</param>
     /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
+    /// <param name="compact">Use compact time format.</param>
     /// <returns>The natural string representation of the <see cref="TimeSpan"/>.</returns>
-    public static string ToNaturalString(this TimeSpan timeSpan, IFormatProvider provider)
+    public static string ToNaturalString(this TimeSpan timeSpan, IFormatProvider provider, bool compact)
     {
-        List<string> parts = new();
+        return compact
+#pragma warning disable S3358
+            ? timeSpan.ToString(
+                timeSpan.Days != 0
+                    ? Resources.CompactTimeSpanWithDaysFormat
+                    : Resources.CompactTimeSpanFormat)
+#pragma warning restore S3358
+            : string.Join(
+                Resources.ResourceManager.GetString("TimeSpanExtensionsUnitSeparator", provider),
+                GetParts());
 
-        // Days
-        if (timeSpan.Days != 0)
+        IEnumerable<string> GetParts()
         {
-            parts.Add(GetStringWithUnits(timeSpan.Days, "Day", provider));
+            bool hasValue = false;
+
+            // Days
+            if (timeSpan.Days != 0)
+            {
+                hasValue = true;
+                yield return GetStringWithUnits(timeSpan.Days, "Day", provider);
+            }
+
+            // Hours
+            if (timeSpan.Hours != 0 || hasValue)
+            {
+                hasValue = true;
+                yield return GetStringWithUnits(timeSpan.Hours, "Hour", provider);
+            }
+
+            // Minutes
+            if (timeSpan.Minutes != 0 || hasValue)
+            {
+                yield return GetStringWithUnits(timeSpan.Minutes, "Minute", provider);
+            }
+
+            // Seconds
+            yield return GetStringWithUnits(timeSpan.Seconds, "Second", provider);
         }
-
-        // Hours
-        if (timeSpan.Hours != 0 || parts.Count != 0)
-        {
-            parts.Add(GetStringWithUnits(timeSpan.Hours, "Hour", provider));
-        }
-
-        // Minutes
-        if (timeSpan.Minutes != 0 || parts.Count != 0)
-        {
-            parts.Add(GetStringWithUnits(timeSpan.Minutes, "Minute", provider));
-        }
-
-        // Seconds
-        parts.Add(GetStringWithUnits(timeSpan.Seconds, "Second", provider));
-
-        // Join parts
-        return string.Join(
-            Resources.ResourceManager.GetString("TimeSpanExtensionsUnitSeparator", provider),
-            parts);
     }
 
     /// <summary>
@@ -84,11 +96,12 @@ public static class TimeSpanExtensions
     /// representation.
     /// </summary>
     /// <param name="timeSpan">A <see cref="Nullable{TimeSpan}"/>.</param>
+    /// <param name="compact">Use compact time format.</param>
     /// <returns>The natural string representation of the <see cref="TimeSpan"/> represented by <paramref
     /// name="timeSpan"/>, or <see cref="string.Empty"/> if <paramref name="timeSpan"/> is <c>null</c>.</returns>
-    public static string ToNaturalString(this TimeSpan? timeSpan)
+    public static string ToNaturalString(this TimeSpan? timeSpan, bool compact)
     {
-        return timeSpan.ToNaturalString(CultureInfo.CurrentCulture);
+        return timeSpan.ToNaturalString(CultureInfo.CurrentCulture, compact);
     }
 
     /// <summary>
@@ -97,11 +110,12 @@ public static class TimeSpanExtensions
     /// </summary>
     /// <param name="timeSpan">A <see cref="Nullable{TimeSpan}"/>.</param>
     /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
+    /// <param name="compact">Use compact time format.</param>
     /// <returns>The natural string representation of the <see cref="TimeSpan"/> represented by <paramref
     /// name="timeSpan"/>, or <see cref="string.Empty"/> if <paramref name="timeSpan"/> is <c>null</c>.</returns>
-    public static string ToNaturalString(this TimeSpan? timeSpan, IFormatProvider provider)
+    public static string ToNaturalString(this TimeSpan? timeSpan, IFormatProvider provider, bool compact)
     {
-        return timeSpan.HasValue ? timeSpan.Value.ToNaturalString(provider) : string.Empty;
+        return timeSpan.HasValue ? timeSpan.Value.ToNaturalString(provider, compact) : string.Empty;
     }
 
     /// <summary>

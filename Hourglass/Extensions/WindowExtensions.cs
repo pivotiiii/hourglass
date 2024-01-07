@@ -551,7 +551,8 @@ public static class WindowExtensions
             return rect;
         }
 
-        const int OffsetAmount = 25;
+        const int OffsetAmount = 0;
+
         Rect offsetRect = rect;
 
         // Move the rect down and to the right

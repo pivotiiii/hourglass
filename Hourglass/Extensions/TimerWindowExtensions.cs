@@ -37,6 +37,11 @@ public static class TimerWindowExtensions
 
         TimerWindow GetNextWindow()
         {
+            if (Application.Current is null)
+            {
+                return null;
+            }
+
             var allWindows = Application.Current.Windows.OfType<TimerWindow>().Arrange().ToList();
 
             return GetNextApplicableWindow(allWindows.SkipWhile(NotThisWindow).Skip(1)) ??

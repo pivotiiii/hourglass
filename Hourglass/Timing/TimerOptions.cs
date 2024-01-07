@@ -160,6 +160,11 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// </summary>
     private bool _lockInterface;
 
+    /// <summary>
+    /// A value indicating whether to display time in the digital clock format.
+    /// </summary>
+    private bool _digitalClockTime;
+
     #endregion
 
     #region Constructors
@@ -175,6 +180,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
         _showProgressInTaskbar = true;
         _doNotKeepComputerAwake = false;
         _reverseProgressBar = false;
+        _digitalClockTime = false;
         _showTimeElapsed = false;
         _loopTimer = false;
         _popUpWhenExpired = true;
@@ -331,6 +337,25 @@ public sealed class TimerOptions : INotifyPropertyChanged
             }
 
             _reverseProgressBar = value;
+            PropertyChanged.Notify(this);
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to display time in the digital clock format.
+    /// </summary>
+    public bool DigitalClockTime
+    {
+        get => _digitalClockTime;
+
+        set
+        {
+            if (_digitalClockTime == value)
+            {
+                return;
+            }
+
+            _digitalClockTime = value;
             PropertyChanged.Notify(this);
         }
     }
@@ -592,6 +617,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
         _showProgressInTaskbar = options._showProgressInTaskbar;
         _doNotKeepComputerAwake = options._doNotKeepComputerAwake;
         _reverseProgressBar = options._reverseProgressBar;
+        _digitalClockTime = options._digitalClockTime;
         _showTimeElapsed = options._showTimeElapsed;
         _loopTimer = options._loopTimer;
         _popUpWhenExpired = options._popUpWhenExpired;
@@ -613,6 +639,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             nameof(ShowProgressInTaskbar),
             nameof(DoNotKeepComputerAwake),
             nameof(ReverseProgressBar),
+            nameof(DigitalClockTime),
             nameof(ShowTimeElapsed),
             nameof(LoopTimer),
             nameof(PopUpWhenExpired),
@@ -641,6 +668,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
         _showProgressInTaskbar = info.ShowProgressInTaskbar;
         _doNotKeepComputerAwake = info.DoNotKeepComputerAwake;
         _reverseProgressBar = info.ReverseProgressBar;
+        _digitalClockTime = info.DigitalClockTime;
         _showTimeElapsed = info.ShowTimeElapsed;
         _loopTimer = info.LoopTimer;
         _popUpWhenExpired = info.PopUpWhenExpired;
@@ -662,6 +690,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             nameof(ShowProgressInTaskbar),
             nameof(DoNotKeepComputerAwake),
             nameof(ReverseProgressBar),
+            nameof(DigitalClockTime),
             nameof(ShowTimeElapsed),
             nameof(LoopTimer),
             nameof(PopUpWhenExpired),
@@ -687,6 +716,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             ShowProgressInTaskbar = _showProgressInTaskbar,
             DoNotKeepComputerAwake = _doNotKeepComputerAwake,
             ReverseProgressBar = _reverseProgressBar,
+            DigitalClockTime = _digitalClockTime,
             ShowTimeElapsed = _showTimeElapsed,
             LoopTimer = _loopTimer,
             PopUpWhenExpired = _popUpWhenExpired,

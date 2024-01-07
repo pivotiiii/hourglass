@@ -1,4 +1,4 @@
-MIT License
+﻿MIT License
 
 Copyright © 2021 Chris Dziemborowicz, 2024 Ivan Ivon
 

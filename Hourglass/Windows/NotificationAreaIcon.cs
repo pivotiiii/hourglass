@@ -135,12 +135,14 @@ public class NotificationAreaIcon : IDisposable
     /// </summary>
     private void RestoreAllTimerWindows()
     {
-        if (Application.Current is not null)
+        if (Application.Current is null)
         {
-            foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().ArrangeDescending())
-            {
-                window.BringToFrontAndActivate();
-            }
+            return;
+        }
+
+        foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().ArrangeDescending())
+        {
+            window.BringToFrontAndActivate();
         }
     }
 
@@ -149,12 +151,14 @@ public class NotificationAreaIcon : IDisposable
     /// </summary>
     private void RestoreAllExpiredTimerWindows()
     {
-        if (Application.Current is not null)
+        if (Application.Current is null)
         {
-            foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().Where(static w => w.Timer.State == TimerState.Expired))
-            {
-                window.BringToFrontAndActivate();
-            }
+            return;
+        }
+
+        foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().Where(static w => w.Timer.State == TimerState.Expired))
+        {
+            window.BringToFrontAndActivate();
         }
     }
 

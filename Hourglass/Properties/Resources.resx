@@ -291,7 +291,7 @@
     <comment>A format string for N years with units, where {0} is the number of years with a possible fraction part (e.g., "{0} years" =&gt; "5 years")</comment>
   </data>
   <data name="Usage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Usage.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;UTF-8</value>
+    <value>..\Resources\Usage.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="TimeSpanTokenUnitSeparator" xml:space="preserve">
     <value> </value>
@@ -924,7 +924,7 @@ $</value>
     <value>_Update</value>
     <comment>The text for the update button in the timer window, where the character following the optional underscore (_) is the access key</comment>
   </data>
-  <data name="TimerWindwoNewTimerFormatString" xml:space="preserve">
+  <data name="TimerWindowNewTimerFormatString" xml:space="preserve">
     <value>New timer: {0}</value>
     <comment>A format string for the string representation of a timer window used when the timer window does not have a running timer, where {0} is the current user input into the window</comment>
   </data>
@@ -1313,6 +1313,10 @@ $</value>
     <value>Prefer 24-_hour time when parsing</value>
     <comment>The text for the prefer 24-hour time when parsing menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
+  <data name="ContextMenuDigitalClockTimeMenuItem" xml:space="preserve">
+    <value>Display time in the digital _clock format</value>
+    <comment>The text for the dispay time in the digital clock format when displaying menu item, where the character following the optional underscore (_) is the access key</comment>
+  </data>
   <data name="ContextMenuFAQMenuItem" xml:space="preserve">
     <value>FA_Q</value>
     <comment>The text for the FAQ menu item, where the character following the optional underscore (_) is the access key</comment>
@@ -1367,5 +1371,13 @@ $</value>
   <data name="FAQUrl" xml:space="preserve">
     <value>https://chris.dziemborowicz.com/apps/hourglass/#downloads</value>
     <comment>FAQ URL</comment>
+  </data>
+  <data name="CompactTimeSpanWithDaysFormat" xml:space="preserve">
+    <value>d'.'hh':'mm':'ss</value>
+    <comment>Compact date with days format</comment>
+  </data>
+  <data name="CompactTimeSpanFormat" xml:space="preserve">
+    <value>hh':'mm':'ss</value>
+    <comment>Compact date without days format</comment>
   </data>
 </root>

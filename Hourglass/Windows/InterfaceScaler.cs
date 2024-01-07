@@ -82,7 +82,7 @@ public sealed class InterfaceScaler
     /// <summary>
     /// The default width of a <see cref="_timerWindow"/>.
     /// </summary>
-    public const double BaseWindowWidth = 370;
+    public const double BaseWindowWidth = 355;
 
     /// <summary>
     /// The default height of a <see cref="_timerWindow"/>.
@@ -92,7 +92,7 @@ public sealed class InterfaceScaler
     /// <summary>
     /// The reduction factor that relates the base scale factor with the reduced scale factor.
     /// </summary>
-    private const double ReductionFactor = 0.5;
+    private const double ReductionFactor = 0.55;
 
     /// <summary>
     /// A <see cref="TimerWindow"/>.

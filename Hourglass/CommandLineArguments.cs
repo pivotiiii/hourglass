@@ -36,7 +36,7 @@ public sealed class CommandLineArguments
         {
             string assemblyLocation = Assembly.GetEntryAssembly()!.CodeBase;
             string assemblyFileName = Path.GetFileName(assemblyLocation);
-            return string.Format(Resources.Usage, assemblyFileName.ToLowerInvariant());
+            return Resources.Usage.Replace("hourglass.exe", assemblyFileName.ToLowerInvariant());
         }
     }
 
@@ -101,6 +101,11 @@ public sealed class CommandLineArguments
     /// Gets a value indicating whether to reverse the progress bar (count backwards).
     /// </summary>
     public bool ReverseProgressBar { get; private set; }
+
+    /// <summary>
+    /// Gets a value indicating whether to display time in the digital clock format.
+    /// </summary>
+    public bool DigitalClockTime { get; private set; }
 
     /// <summary>
     /// Gets a value indicating whether to show the time elapsed rather than the time left.
@@ -228,6 +233,7 @@ public sealed class CommandLineArguments
             ShowProgressInTaskbar = ShowProgressInTaskbar,
             DoNotKeepComputerAwake = DoNotKeepComputerAwake,
             ReverseProgressBar = ReverseProgressBar,
+            DigitalClockTime = DigitalClockTime,
             ShowTimeElapsed = ShowTimeElapsed,
             LoopTimer = LoopTimer,
             PopUpWhenExpired = PopUpWhenExpired,
@@ -277,6 +283,7 @@ public sealed class CommandLineArguments
             ShowProgressInTaskbar = options.ShowProgressInTaskbar,
             DoNotKeepComputerAwake = options.DoNotKeepComputerAwake,
             ReverseProgressBar = options.ReverseProgressBar,
+            DigitalClockTime = options.DigitalClockTime,
             ShowTimeElapsed = options.ShowTimeElapsed,
             ShowInNotificationArea = Settings.Default.ShowInNotificationArea,
             LoopTimer = options.LoopTimer,
@@ -317,6 +324,7 @@ public sealed class CommandLineArguments
             ShowProgressInTaskbar = defaultOptions.ShowProgressInTaskbar,
             DoNotKeepComputerAwake = defaultOptions.DoNotKeepComputerAwake,
             ReverseProgressBar = defaultOptions.ReverseProgressBar,
+            DigitalClockTime = defaultOptions.DigitalClockTime,
             ShowTimeElapsed = defaultOptions.ShowTimeElapsed,
             ShowInNotificationArea = false,
             LoopTimer = defaultOptions.LoopTimer,
@@ -453,6 +461,19 @@ public sealed class CommandLineArguments
 
                     argumentsBasedOnMostRecentOptions.ReverseProgressBar = reverseProgressBar;
                     argumentsBasedOnFactoryDefaults.ReverseProgressBar = reverseProgressBar;
+                    break;
+
+                case "--digital-clock-time":
+                case "-c":
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "--digital-clock-time");
+
+                    bool digitalClockTime = GetBoolValue(
+                        arg,
+                        remainingArgs,
+                        argumentsBasedOnMostRecentOptions.DigitalClockTime);
+
+                    argumentsBasedOnMostRecentOptions.DigitalClockTime = digitalClockTime;
+                    argumentsBasedOnFactoryDefaults.DigitalClockTime = digitalClockTime;
                     break;
 
                 case "--show-time-elapsed":
@@ -1011,7 +1032,7 @@ public sealed class CommandLineArguments
                 arg,
                 value);
 
-            throw new ParseException(message);
+            throw new ParseException(message, ex);
         }
     }
 
@@ -1102,6 +1123,16 @@ public sealed class CommandLineArguments
         /// <param name="message">The message that describes the error.</param>
         public ParseException(string message)
             : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParseException"/> class.
+        /// </summary>
+        /// <param name="message">The error message that explains the reason for the exception.</param>
+        /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (<see langword="Nothing" /> in Visual Basic) if no inner exception is specified.</param>
+        public ParseException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
     }

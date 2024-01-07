@@ -203,7 +203,7 @@ public sealed class Timer : TimerBase
         return string.Format(
             Resources.ResourceManager.GetEffectiveProvider(),
             Resources.ResourceManager.GetString(resourceName) ?? GetType().ToString(),
-            Options.ShowTimeElapsed ? TimeElapsed.ToNaturalString() : TimeLeft.RoundUp().ToNaturalString(),
+            Options.ShowTimeElapsed ? TimeElapsed.ToNaturalString(Options.DigitalClockTime) : TimeLeft.RoundUp().ToNaturalString(Options.DigitalClockTime),
             TimerStart,
             Options.Title);
     }
@@ -324,9 +324,9 @@ public sealed class Timer : TimerBase
         TimerStart = State != TimerState.Stopped ? TimerStart : null;
         TimeLeftAsPercentage = GetTimeLeftAsPercentage();
         TimeElapsedAsPercentage = GetTimeElapsedAsPercentage();
-        TimeLeftAsString = GetTimeLeftAsString();
-        TimeElapsedAsString = GetTimeElapsedAsString();
-        TimeExpiredAsString = GetTimeExpiredAsString();
+        TimeLeftAsString = GetTimeLeftAsString(Options.DigitalClockTime);
+        TimeElapsedAsString = GetTimeElapsedAsString(Options.DigitalClockTime);
+        TimeExpiredAsString = GetTimeExpiredAsString(false); // Always human-readable.
 
         OnPropertyChanged(
             nameof(TimerStart),
@@ -394,8 +394,9 @@ public sealed class Timer : TimerBase
     /// <summary>
     /// Returns the string representation of the time left until the timer expires.
     /// </summary>
+    /// <param name="compact">Use compact time format.</param>
     /// <returns>The string representation of the time left until the timer expires.</returns>
-    private string GetTimeLeftAsString()
+    private string GetTimeLeftAsString(bool compact)
     {
         if (State == TimerState.Stopped)
         {
@@ -407,14 +408,15 @@ public sealed class Timer : TimerBase
             return Resources.TimerTimerExpired;
         }
 
-        return TimeLeft.RoundUp().ToNaturalString();
+        return TimeLeft.RoundUp().ToNaturalString(compact);
     }
 
     /// <summary>
     /// Returns the string representation of the time elapsed since the timer was started.
     /// </summary>
+    /// <param name="compact">Use compact time format.</param>
     /// <returns>The string representation of the time elapsed since the timer was started.</returns>
-    private string GetTimeElapsedAsString()
+    private string GetTimeElapsedAsString(bool compact)
     {
         if (!SupportsTimeElapsed)
         {
@@ -431,14 +433,15 @@ public sealed class Timer : TimerBase
             return Resources.TimerTimerExpired;
         }
 
-        return TimeElapsed.ToNaturalString();
+        return TimeElapsed.ToNaturalString(compact);
     }
 
     /// <summary>
     /// Returns the string representation of the time since the timer expired.
     /// </summary>
+    /// <param name="compact">Use compact time format.</param>
     /// <returns>The string representation of the time since the timer expired.</returns>
-    private string GetTimeExpiredAsString()
+    private string GetTimeExpiredAsString(bool compact)
     {
         if (State != TimerState.Expired)
         {
@@ -448,7 +451,7 @@ public sealed class Timer : TimerBase
         return string.Format(
             Resources.ResourceManager.GetEffectiveProvider(),
             Resources.TimerTimeExpiredFormatString,
-            TimeExpired.ToNaturalString());
+            TimeExpired.ToNaturalString(compact));
     }
 
     #endregion

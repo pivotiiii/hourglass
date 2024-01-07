@@ -619,7 +619,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             string title = TitleTextBox.Text;
 
             string format = string.IsNullOrWhiteSpace(title)
-                ? Properties.Resources.TimerWindwoNewTimerFormatString
+                ? Properties.Resources.TimerWindowNewTimerFormatString
                 : Properties.Resources.TimerWindowNewTimerWithTitleFormatString;
 
             return string.Format(format, input, title);

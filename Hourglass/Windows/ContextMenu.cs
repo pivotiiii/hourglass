@@ -152,6 +152,11 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     private MenuItem _openSavedTimersOnStartupMenuItem;
 
     /// <summary>
+    /// The "Display time in the digital clock format" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _digitalClockTimeMenuItem;
+
+    /// <summary>
     /// The "Prefer 24-hour time when parsing" <see cref="MenuItem"/>.
     /// </summary>
     private MenuItem _prefer24HourTimeMenuItem;
@@ -380,6 +385,9 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         // Prefer 24-hour time when parsing
         _prefer24HourTimeMenuItem.IsChecked = Settings.Default.Prefer24HourTime;
 
+        // Display time in the digital clock format
+        _digitalClockTimeMenuItem.IsChecked = _timerWindow.Options.DigitalClockTime;
+
         // Reverse progress bar
         _reverseProgressBarMenuItem.IsChecked = _timerWindow.Options.ReverseProgressBar;
 
@@ -457,8 +465,14 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         // Prefer 24-hour time when parsing
         Settings.Default.Prefer24HourTime = _prefer24HourTimeMenuItem.IsChecked;
 
+        // Display time in the digital clock format
+        Settings.Default.DigitalClockTime = _digitalClockTimeMenuItem.IsChecked;
+
         // Reverse progress bar
         _timerWindow.Options.ReverseProgressBar = _reverseProgressBarMenuItem.IsChecked;
+
+        // Display time in the digital clock format
+        _timerWindow.Options.DigitalClockTime = _digitalClockTimeMenuItem.IsChecked;
 
         // Show time elapsed
         _timerWindow.Options.ShowTimeElapsed = _showTimeElapsedMenuItem.IsChecked;
@@ -757,14 +771,34 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         };
         Items.Add(advancedOptionsMenuItem);
 
-        // Do not keep computer awake
-        _doNotKeepComputerAwakeMenuItem = new()
+        // Display time in the digital clock format
+        _digitalClockTimeMenuItem = new()
         {
-            Header = Properties.Resources.ContextMenuDoNotKeepComputerAwakeMenuItem,
+            Header = Properties.Resources.ContextMenuDigitalClockTimeMenuItem,
             IsCheckable = true
         };
-        _doNotKeepComputerAwakeMenuItem.Click += CheckableMenuItemClick;
-        advancedOptionsMenuItem.Items.Add(_doNotKeepComputerAwakeMenuItem);
+        _digitalClockTimeMenuItem.Click += CheckableMenuItemClick;
+        advancedOptionsMenuItem.Items.Add(_digitalClockTimeMenuItem);
+
+        // Show time elapsed
+        _showTimeElapsedMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuShowTimeElapsedMenuItem,
+            IsCheckable = true
+        };
+        _showTimeElapsedMenuItem.Click += CheckableMenuItemClick;
+        advancedOptionsMenuItem.Items.Add(_showTimeElapsedMenuItem);
+
+        // Reverse progress bar
+        _reverseProgressBarMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuReverseProgressBarMenuItem,
+            IsCheckable = true
+        };
+        _reverseProgressBarMenuItem.Click += CheckableMenuItemClick;
+        advancedOptionsMenuItem.Items.Add(_reverseProgressBarMenuItem);
+
+        advancedOptionsMenuItem.Items.Add(new Separator());
 
         // Open saved timers on startup
         _openSavedTimersOnStartupMenuItem = new()
@@ -784,23 +818,16 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         _prefer24HourTimeMenuItem.Click += CheckableMenuItemClick;
         advancedOptionsMenuItem.Items.Add(_prefer24HourTimeMenuItem);
 
-        // Reverse progress bar
-        _reverseProgressBarMenuItem = new()
-        {
-            Header = Properties.Resources.ContextMenuReverseProgressBarMenuItem,
-            IsCheckable = true
-        };
-        _reverseProgressBarMenuItem.Click += CheckableMenuItemClick;
-        advancedOptionsMenuItem.Items.Add(_reverseProgressBarMenuItem);
+        advancedOptionsMenuItem.Items.Add(new Separator());
 
-        // Show time elapsed
-        _showTimeElapsedMenuItem = new()
+        // Do not keep computer awake
+        _doNotKeepComputerAwakeMenuItem = new()
         {
-            Header = Properties.Resources.ContextMenuShowTimeElapsedMenuItem,
+            Header = Properties.Resources.ContextMenuDoNotKeepComputerAwakeMenuItem,
             IsCheckable = true
         };
-        _showTimeElapsedMenuItem.Click += CheckableMenuItemClick;
-        advancedOptionsMenuItem.Items.Add(_showTimeElapsedMenuItem);
+        _doNotKeepComputerAwakeMenuItem.Click += CheckableMenuItemClick;
+        advancedOptionsMenuItem.Items.Add(_doNotKeepComputerAwakeMenuItem);
 
         // Shut down when expired
         _shutDownWhenExpiredMenuItem = new()
@@ -1375,15 +1402,15 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     private void ManageThemesMenuItemClick(object sender, RoutedEventArgs e)
     {
         ThemeManagerWindow window = Application.Current.Windows.OfType<ThemeManagerWindow>().FirstOrDefault();
-        if (window is not null)
-        {
-            window.SetTimerWindow(_timerWindow);
-            window.BringToFrontAndActivate();
-        }
-        else
+        if (window is null)
         {
             window = new(_timerWindow);
             window.Show();
+        }
+        else
+        {
+            window.SetTimerWindow(_timerWindow);
+            window.BringToFrontAndActivate();
         }
     }
 
