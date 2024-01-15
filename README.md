@@ -36,7 +36,7 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 
 ### Installer
 
-- Adds the **Hourglass** executable path to the [Windows App Paths](https://learn.microsoft.com/en-us/windows/win32/shell/app-registration#using-the-app-paths-subkey), so the **Hourglass** command-line is available out of the box.
+- Adds the **Hourglass** executable path to the [Windows App Paths](https://learn.microsoft.com/en-us/windows/win32/shell/app-registration#using-the-app-paths-subkey), so the **Hourglass** [command-line](https://github.com/i2van/hourglass/blob/develop/Hourglass/Resources/Usage.txt) is available out of the box.
 
 ### UI
 
@@ -67,7 +67,7 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 - Shortcuts are displayed in the timer window context menu.
 - The progress bar changes direction to vertical when the height is more than the width and vice versa.
 - The switching between light and dark themes is improved.
-- The **Display time in the digital clock format** menu item toggles the displayed time digital clock time format. It can be found under the **Advanced options** submenu of the timer window context menu. Command-line option is  `--digital-clock-time` / `-c`
+- The **Display time in the digital clock format** menu item toggles the displayed time digital clock time format. It can be found under the **Advanced options** submenu of the timer window context menu. The command-line option is  `--digital-clock-time` / `-c`
 
 ### Misc
 
