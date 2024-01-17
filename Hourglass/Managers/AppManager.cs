@@ -23,6 +23,7 @@ public sealed class AppManager : Manager
     /// </summary>
     private static readonly Manager[] Managers =
     {
+        VirtualDesktopManager.Instance,
         TaskDialogManager.Instance,
         ErrorManager.Instance,
         SettingsManager.Instance,

@@ -197,7 +197,7 @@ public sealed class Timer : TimerBase
             CultureInfo.InvariantCulture,
             "Timer{0}{1}{2}FormatString",
             State,
-            string.IsNullOrEmpty(Options.Title) ? string.Empty : "WithTitle",
+            string.IsNullOrWhiteSpace(Options.Title) ? string.Empty : "WithTitle",
             Options.LoopTimer && SupportsLooping ? "Looped" : string.Empty);
 
         return string.Format(

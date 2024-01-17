@@ -106,6 +106,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update available.
+        /// </summary>
+        public static string AboutDialogUpdateAvailableText {
+            get {
+                return ResourceManager.GetString("AboutDialogUpdateAvailableText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon AppIcon {
@@ -323,15 +332,6 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FA_Q.
-        /// </summary>
-        public static string ContextMenuFAQMenuItem {
-            get {
-                return ResourceManager.GetString("ContextMenuFAQMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to _Full screen.
         /// </summary>
         public static string ContextMenuFullScreenMenuItem {
@@ -539,7 +539,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show progress in taskbar.
+        ///   Looks up a localized string similar to S_how progress in taskbar.
         /// </summary>
         public static string ContextMenuShowProgressInTaskbarMenuItem {
             get {
@@ -652,15 +652,6 @@ namespace Hourglass.Properties {
         public static string ContextMenuUnnamedTheme {
             get {
                 return ResourceManager.GetString("ContextMenuUnnamedTheme", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Command-line _usage.
-        /// </summary>
-        public static string ContextMenuUsageMenuItem {
-            get {
-                return ResourceManager.GetString("ContextMenuUsageMenuItem", resourceCulture);
             }
         }
         
@@ -1436,11 +1427,11 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Command-line &amp;usage.
+        ///   Looks up a localized string similar to &amp;About.
         /// </summary>
-        public static string NotificationAreaIconCommandLineMenuItem {
+        public static string NotificationAreaIconAboutMenuItem {
             get {
-                return ResourceManager.GetString("NotificationAreaIconCommandLineMenuItem", resourceCulture);
+                return ResourceManager.GetString("NotificationAreaIconAboutMenuItem", resourceCulture);
             }
         }
         

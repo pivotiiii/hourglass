@@ -51,7 +51,7 @@ public abstract class TimerStartToken
     {
         str = str.Trim();
 
-        if (string.IsNullOrEmpty(str))
+        if (string.IsNullOrWhiteSpace(str))
         {
             return null;
         }

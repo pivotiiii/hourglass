@@ -4,6 +4,7 @@
         xmlns:local="clr-namespace:Hourglass.Windows"
         xmlns:managers="clr-namespace:Hourglass.Managers"
         xmlns:properties="clr-namespace:Hourglass.Properties"
+        xmlns:hourglass="clr-namespace:Hourglass"
         Closed="AboutDialogClosed"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
@@ -11,23 +12,78 @@
         TextOptions.TextFormattingMode="Display"
         RenderOptions.ClearTypeHint="Enabled"
         Title="{x:Static properties:Resources.AboutDialogTitle}"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        FocusManager.FocusedElement="{Binding ElementName=CloseButton}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
-    <Grid>
-        <DockPanel LastChildFill="True">
-            <TextBlock Background="Gray"
-                       TextOptions.TextFormattingMode="Ideal"
-                       DockPanel.Dock="Top"
-                       FontFamily="Segoe UI Light, Segoe UI"
-                       FontSize="20"
-                       Foreground="#F5F5F5"
-                       Padding="20 20 80 20"
-                       Text="{x:Static properties:Resources.AboutDialogTitle}"/>
-            <Border DockPanel.Dock="Bottom" Background="#F9F9F9" BorderBrush="#DDDDDD" BorderThickness="0 1 0 0">
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button Click="CloseButtonClick"
+    <StackPanel>
+        <TextBlock Background="Gray"
+                   TextOptions.TextFormattingMode="Ideal"
+                   FontFamily="Segoe UI Light, Segoe UI"
+                   FontSize="20"
+                   Foreground="#F5F5F5"
+                   Padding="15 20 80 20"
+                   Text="{x:Static properties:Resources.AboutDialogTitle}"/>
+        <StackPanel Margin="15">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>
+                    <Run FontWeight="Bold" Text="{x:Static properties:Resources.AppName}"/>
+                    <Run Text="{x:Static local:AboutDialog.Version}"/>
+                </TextBlock>
+                <TextBlock DataContext="{x:Static managers:UpdateManager.Instance}" Margin="10 0 0 0" Visibility="{Binding Path=HasUpdates, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Hyperlink Focusable="{Binding Path=HasUpdates}" NavigateUri="{Binding Path=UpdateUri}" RequestNavigate="HyperlinkRequestNavigate">
+                        <Run Text="{x:Static properties:Resources.AboutDialogUpdateAvailableText}"/>
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+            <TextBlock Text="{x:Static local:AboutDialog.Copyright}"/>
+            <Separator Height="10" Background="Transparent"/>
+            <TextBlock Text="{x:Static properties:Resources.AboutDialogLicense}"/>
+            <Separator Height="10" Background="Transparent"/>
+            <Border BorderThickness="1" BorderBrush="#DDDDDD" MaxHeight="240">
+                <TextBox BorderThickness="0"
+                         Margin="0"
+                         Padding="13 0 13 0"
+                         IsReadOnly="True"
+                         IsReadOnlyCaretVisible="True"
+                         HorizontalScrollBarVisibility="Auto"
+                         VerticalScrollBarVisibility="Auto"
+                         TextWrapping="Wrap"
+                         Width="480"
+                         Text="{Binding Source={x:Static local:AboutDialog.License}, Mode=OneTime}"/>
+            </Border>
+            <Separator Height="10" Background="Transparent"/>
+            <TextBlock>
+                <Run Text="{x:Static properties:Resources.AboutDialogMoreInformation}"/><LineBreak/>
+                <Hyperlink NavigateUri="https://github.com/i2van/hourglass#readme" RequestNavigate="HyperlinkRequestNavigate">https://github.com/i2van/hourglass#readme</Hyperlink>
+            </TextBlock>
+            <Separator Height="10" Background="Transparent"/>
+            <TextBlock>
+                <Run Text="{x:Static properties:Resources.AboutDialogContributeOnGitHub}"/><LineBreak/>
+                <Hyperlink NavigateUri="https://github.com/i2van/hourglass" RequestNavigate="HyperlinkRequestNavigate">https://github.com/i2van/hourglass</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+        <Border Background="#F9F9F9" BorderBrush="#DDDDDD" BorderThickness="0 1 0 0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="15 0" VerticalAlignment="Center">
+                    <Hyperlink Click="UsageHyperlinkClick">
+                        <Run Text="{x:Static properties:Resources.UsageDialogDefaultMessageText}"/>
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock Grid.Column="1" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Hyperlink NavigateUri="{x:Static hourglass:Consts.FAQUri}" RequestNavigate="HyperlinkRequestNavigate">
+                        <Run Text="{x:Static properties:Resources.UsageDialogFAQHyperlinkText}"/>
+                    </Hyperlink>
+                </TextBlock>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Name="CloseButton"
+                            Click="CloseButtonClick"
                             Content="{x:Static properties:Resources.AboutDialogCloseButtonContent}"
                             IsDefault="True"
                             IsCancel="True"
@@ -35,39 +91,7 @@
                             Width="100"
                             Height="25"/>
                 </StackPanel>
-            </Border>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Padding="20">
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>
-                            <Run FontWeight="Bold" Text="{x:Static properties:Resources.AppName}"/>
-                            <Run Text="{x:Static local:AboutDialog.Version}"/>
-                        </TextBlock>
-                        <TextBlock DataContext="{x:Static managers:UpdateManager.Instance}" Margin="10 0 0 0" Visibility="{Binding Path=HasUpdates, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <Hyperlink NavigateUri="{Binding Path=UpdateUri}" RequestNavigate="HyperlinkRequestNavigate">Update available</Hyperlink>
-                        </TextBlock>
-                    </StackPanel>
-                    <TextBlock Text="{x:Static local:AboutDialog.Copyright}"/>
-                    <Separator Height="10" Background="Transparent"/>
-                    <TextBlock Text="{x:Static properties:Resources.AboutDialogLicense}"/>
-                    <Separator Height="10" Background="Transparent"/>
-                    <Border BorderThickness="1" BorderBrush="#DDDDDD" MaxHeight="240">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <TextBlock Margin="20" Text="{x:Static local:AboutDialog.License}" TextWrapping="Wrap" Width="480"/>
-                        </ScrollViewer>
-                    </Border>
-                    <Separator Height="10" Background="Transparent"/>
-                    <TextBlock>
-                        <Run Text="{x:Static properties:Resources.AboutDialogMoreInformation}"/><LineBreak/>
-                        <Hyperlink NavigateUri="https://github.com/i2van/hourglass#readme" RequestNavigate="HyperlinkRequestNavigate">https://github.com/i2van/hourglass#readme</Hyperlink>
-                    </TextBlock>
-                    <Separator Height="10" Background="Transparent"/>
-                    <TextBlock>
-                        <Run Text="{x:Static properties:Resources.AboutDialogContributeOnGitHub}"/><LineBreak/>
-                        <Hyperlink NavigateUri="https://github.com/i2van/hourglass" RequestNavigate="HyperlinkRequestNavigate">https://github.com/i2van/hourglass</Hyperlink>
-                    </TextBlock>
-                </StackPanel>
-            </ScrollViewer>
-        </DockPanel>
-    </Grid>
+            </Grid>
+        </Border>
+    </StackPanel>
 </Window>

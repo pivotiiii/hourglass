@@ -36,7 +36,7 @@ public sealed class CommandLineArguments
         {
             string assemblyLocation = Assembly.GetEntryAssembly()!.CodeBase;
             string assemblyFileName = Path.GetFileName(assemblyLocation);
-            return Resources.Usage.Replace("hourglass.exe", assemblyFileName.ToLowerInvariant());
+            return $"{Environment.NewLine}{Resources.Usage.Replace("hourglass.exe", assemblyFileName.ToLowerInvariant())}{Environment.NewLine}";
         }
     }
 

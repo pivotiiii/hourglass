@@ -840,24 +840,6 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
 
         Items.Add(new Separator());
 
-        // FAQ
-        MenuItem faqMenuItem = new()
-        {
-            Header = Properties.Resources.ContextMenuFAQMenuItem
-        };
-        faqMenuItem.Click += FAQMenuItemClick;
-        Items.Add(faqMenuItem);
-
-        // Usage
-        MenuItem usageMenuItem = new()
-        {
-            Header = Properties.Resources.ContextMenuUsageMenuItem
-        };
-        usageMenuItem.Click += UsageMenuItemClick;
-        Items.Add(usageMenuItem);
-
-        Items.Add(new Separator());
-
         // About
         MenuItem aboutMenuItem = new()
         {
@@ -1521,16 +1503,6 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         _restoreMenuItem.IsEnabled = _timerWindow.WindowState != WindowState.Normal;
         _minimizeMenuItem.IsEnabled = _timerWindow.WindowState != WindowState.Minimized;
         _maximizeMenuItem.IsEnabled = _timerWindow.WindowState != WindowState.Maximized;
-    }
-
-    private void FAQMenuItemClick(object sender, RoutedEventArgs e)
-    {
-        Consts.FAQUri.Navigate();
-    }
-
-    private void UsageMenuItemClick(object sender, RoutedEventArgs e)
-    {
-        CommandLineArguments.ShowUsage();
     }
 
     /// <summary>

@@ -139,7 +139,7 @@ public sealed class ThemeManager : Manager
     /// <returns>The theme for the specified identifier, or <c>null</c> if no such theme is loaded.</returns>
     public Theme GetThemeByIdentifier(string identifier)
     {
-        if (string.IsNullOrEmpty(identifier))
+        if (string.IsNullOrWhiteSpace(identifier))
         {
             return null;
         }
@@ -167,7 +167,7 @@ public sealed class ThemeManager : Manager
     /// <returns>The first theme for the specified name, or <c>null</c> if no such theme is loaded.</returns>
     public Theme GetThemeByName(string name, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        if (string.IsNullOrEmpty(name))
+        if (string.IsNullOrWhiteSpace(name))
         {
             return null;
         }

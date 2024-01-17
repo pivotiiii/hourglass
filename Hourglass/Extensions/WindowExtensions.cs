@@ -14,6 +14,7 @@ using System.Windows.Media;
 
 using KPreisser.UI;
 
+using Managers;
 using Windows;
 
 /// <summary>
@@ -586,7 +587,8 @@ public static class WindowExtensions
         return rect.CenterOnScreen();
     }
 
-    #endregion
+    public static void MoveToCurrentVirtualDesktop(this Window window) =>
+        VirtualDesktopManager.Instance.MoveToCurrentVirtualDesktop(window);
 
     private static TaskDialog _taskDialogInstance;
 
@@ -668,6 +670,12 @@ public static class WindowExtensions
     public static bool IsTextBoxView(this object o) =>
         StringComparer.Ordinal.Equals(o.GetType().FullName, "System.Windows.Controls.TextBoxView");
 
+    #endregion
+
+    #region DllImport
+
     [DllImport("user32.dll")]
     private static extern int GetSystemMetrics(int nIndex);
+
+    #endregion
 }

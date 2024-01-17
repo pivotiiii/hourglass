@@ -11,46 +11,60 @@
         SnapsToDevicePixels="True"
         Title="{x:Static properties:Resources.UsageDialogTitle}"
         Closed="UsageDialogClosed"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        FocusManager.FocusedElement="{Binding ElementName=CloseButton}">
     <Grid>
-        <DockPanel LastChildFill="True">
-            <TextBlock x:Name="MessageTextBlock"
-                       TextOptions.TextFormattingMode="Ideal"
-                       Background="Gray"
-                       DockPanel.Dock="Top"
-                       FontFamily="Segoe UI Light, Segoe UI"
-                       FontSize="20"
-                       Foreground="#F5F5F5"
-                       Padding="20 20 80 20"/>
-            <Border DockPanel.Dock="Bottom" Background="#F9F9F9" BorderBrush="#DDDDDD" BorderThickness="0 1 0 0">
-                <DockPanel LastChildFill="true">
-                    <Button Click="CloseButtonClick"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="MessageTextBlock"
+                   Focusable="False"
+                   TextOptions.TextFormattingMode="Ideal"
+                   Background="Gray"
+                   FontFamily="Segoe UI Light, Segoe UI"
+                   FontSize="20"
+                   Foreground="#F5F5F5"
+                   Padding="15 20 80 20"/>
+        <TextBox Grid.Row="1"
+                 BorderThickness="0"
+                 Margin="0"
+                 Padding="13 0 13 0"
+                 FontFamily="Consolas, Courier New, Courier"
+                 IsReadOnly="True"
+                 IsReadOnlyCaretVisible="True"
+                 HorizontalScrollBarVisibility="Auto"
+                 VerticalScrollBarVisibility="Auto"
+                 Text="{Binding Source={x:Static local:CommandLineArguments.Usage}, Mode=OneTime}"/>
+        <Border Grid.Row="2" Background="#F9F9F9" BorderBrush="#DDDDDD" BorderThickness="0 1 0 0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="15 0" VerticalAlignment="Center">
+                    <Hyperlink Click="AboutHourglassHyperlinkClick">
+                        <Run Text="{x:Static properties:Resources.UsageDialogAboutHourglassHyperlinkText}"/>
+                    </Hyperlink>
+                </TextBlock>
+                <TextBlock Grid.Column="1" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Hyperlink NavigateUri="{x:Static local:Consts.FAQUri}" RequestNavigate="HyperlinkRequestNavigate">
+                        <Run Text="{x:Static properties:Resources.UsageDialogFAQHyperlinkText}"/>
+                    </Hyperlink>
+                </TextBlock>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Name="CloseButton"
+                            Click="CloseButtonClick"
                             Content="{x:Static properties:Resources.UsageDialogCloseButtonContent}"
-                            DockPanel.Dock="Right"
                             IsDefault="True"
                             IsCancel="True"
                             Margin="10"
                             Width="100"
                             Height="25"/>
-                    <TextBlock Margin="15 0" VerticalAlignment="Center">
-                        <Hyperlink Click="AboutHourglassHyperlinkClick">
-                            <Run Text="{x:Static properties:Resources.UsageDialogAboutHourglassHyperlinkText}"/>
-                        </Hyperlink>
-                    </TextBlock>
-                    <TextBlock Margin="0" VerticalAlignment="Center">
-                        <Hyperlink NavigateUri="{x:Static local:Consts.FAQUri}" RequestNavigate="HyperlinkRequestNavigate">
-                            <TextBlock Text="{x:Static properties:Resources.UsageDialogFAQHyperlinkText}"/>
-                        </Hyperlink>
-                    </TextBlock>
-                </DockPanel>
-            </Border>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <TextBox BorderThickness="0"
-                         FontFamily="Consolas, Courier New, Courier"
-                         IsReadOnly="True"
-                         Margin="20"
-                         Text="{Binding Source={x:Static local:CommandLineArguments.Usage}, Mode=OneTime}"/>
-            </ScrollViewer>
-        </DockPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

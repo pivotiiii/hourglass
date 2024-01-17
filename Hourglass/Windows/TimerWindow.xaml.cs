@@ -551,6 +551,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     {
         try
         {
+            this.MoveToCurrentVirtualDesktop();
+
             Show();
 
             if (WindowState == WindowState.Minimized)

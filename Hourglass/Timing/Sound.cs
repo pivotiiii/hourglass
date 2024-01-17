@@ -30,7 +30,7 @@ public sealed class Sound
     /// <param name="path">The path to the sound file.</param>
     public Sound(string path)
     {
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrWhiteSpace(path))
             {
                 throw new ArgumentNullException(nameof(path));
             }
@@ -51,12 +51,12 @@ public sealed class Sound
     /// <param name="duration">The length of the sound.</param>
     public Sound(string invariantName, string name, Func<UnmanagedMemoryStream> streamProvider, TimeSpan duration)
     {
-            if (string.IsNullOrEmpty(invariantName))
+            if (string.IsNullOrWhiteSpace(invariantName))
             {
                 throw new ArgumentNullException(nameof(invariantName));
             }
 
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentNullException(nameof(name));
             }
@@ -139,7 +139,7 @@ public sealed class Sound
     /// <returns>The friendly name for a sound file.</returns>
     private static string GetNameFromPath(string path)
     {
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrWhiteSpace(path))
             {
                 throw new ArgumentNullException(nameof(path));
             }
@@ -154,7 +154,7 @@ public sealed class Sound
     /// <returns>The unique identifier for a sound file.</returns>
     private static string GetIdentifierFromPath(string path)
     {
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrWhiteSpace(path))
             {
                 throw new ArgumentNullException(nameof(path));
             }

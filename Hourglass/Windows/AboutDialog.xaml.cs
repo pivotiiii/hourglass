@@ -7,6 +7,7 @@
 namespace Hourglass.Windows;
 
 using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Navigation;
 
@@ -36,15 +37,12 @@ public sealed partial class AboutDialog
     /// A string describing the app's copyright.
     /// </summary>
     public static string Copyright =>
-        // Finds the copyright line in the license string. Perhaps overkill, but doing it this way means there's
-        // one less place to update the copyright notice.
-        Array.Find(License.Split(Environment.NewLine.ToCharArray()), static line => line.StartsWith("Copyright")) ??
-        throw new NotSupportedException("Could not find copyright line in license.");
+        Regex.Match(License, @"Copyright[^\r\n]+").Value;
 
     /// <summary>
     /// A string containing the app's license.
     /// </summary>
-    public static string License => Properties.Resources.License;
+    public static string License => $"{Environment.NewLine}{Properties.Resources.License}{Environment.NewLine}";
 
     /// <summary>
     /// A string describing the app's version.
@@ -55,17 +53,9 @@ public sealed partial class AboutDialog
         {
             Version version = UpdateManager.Instance.CurrentVersion;
 
-            if (version.Revision != 0)
-            {
-                return version.ToString();
-            }
-
-            if (version.Build != 0)
-            {
-                return version.ToString(3 /* fieldCount */);
-            }
-
-            return version.ToString(2 /* fieldCount */);
+            return version.Revision != 0
+                    ? version.ToString()
+                    : version.ToString(version.Build != 0 ? 3 : 2);
         }
     }
 
@@ -110,6 +100,12 @@ public sealed partial class AboutDialog
     private void HyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
     {
         e.Uri.Navigate();
+    }
+
+
+    private void UsageHyperlinkClick(object sender, RoutedEventArgs e)
+    {
+        UsageDialog.ShowOrActivate();
     }
 
     /// <summary>

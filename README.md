@@ -41,6 +41,7 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 ### UI
 
 - Uses a [Windows Task Dialog](https://learn.microsoft.com/en-us/windows/win32/controls/task-dialogs-overview) instead of a message box ([GitHub](https://github.com/kpreisser/TaskDialog)).
+- The **Command-line usage** dialog can be accessed from the **About** dialog and vice versa.
 
 ### Notification Area
 
@@ -48,7 +49,6 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 - All the timers are arranged by the time left in the notification area context menu.
 - The nearest remaining running timers are shown in the notification area tooltip.
 - The **Exit** menu asks to close all the running timer windows if the **Prompt on exit** option is on.
-- The new **Command-line usage** menu.
 
 ### Timer Windows
 
@@ -68,6 +68,7 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 - The progress bar changes direction to vertical when the height is more than the width and vice versa.
 - The switching between light and dark themes is improved.
 - The **Display time in the digital clock format** menu item toggles the displayed time digital clock time format. It can be found under the **Advanced options** submenu of the timer window context menu. The command-line option is  `--digital-clock-time` / `-c`
+- The timer window pops up on the current virtual desktop.
 
 ### Misc
 

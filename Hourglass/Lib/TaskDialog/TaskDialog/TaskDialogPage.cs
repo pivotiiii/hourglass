@@ -452,7 +452,7 @@ public class TaskDialogPage
     {
         // From a native point of view, the string is empty if its first
         // character is a NUL char.
-        return string.IsNullOrEmpty(str) || str[0] == '\0';
+        return string.IsNullOrWhiteSpace(str) || str[0] == '\0';
     }
 
     internal static (IntPtr iconValue, bool? iconIsFromHandle) GetIconValue(

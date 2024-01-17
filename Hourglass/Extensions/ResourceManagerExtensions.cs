@@ -24,7 +24,7 @@ public static class ResourceManagerExtensions
     public static IFormatProvider GetEffectiveProvider(this ResourceManager resourceManager)
     {
         string cultureName = resourceManager.GetString("CultureName");
-        return !string.IsNullOrEmpty(cultureName) ? CultureInfo.GetCultureInfo(cultureName) : CultureInfo.InvariantCulture;
+        return !string.IsNullOrWhiteSpace(cultureName) ? CultureInfo.GetCultureInfo(cultureName) : CultureInfo.InvariantCulture;
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public static class ResourceManagerExtensions
     public static IFormatProvider GetEffectiveProvider(this ResourceManager resourceManager, IFormatProvider provider)
     {
         string cultureName = resourceManager.GetString("CultureName", (CultureInfo)provider);
-        return !string.IsNullOrEmpty(cultureName) ? CultureInfo.GetCultureInfo(cultureName) : CultureInfo.InvariantCulture;
+        return !string.IsNullOrWhiteSpace(cultureName) ? CultureInfo.GetCultureInfo(cultureName) : CultureInfo.InvariantCulture;
     }
 
     /// <summary>

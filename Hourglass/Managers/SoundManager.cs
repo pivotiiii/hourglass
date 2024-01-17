@@ -89,7 +89,7 @@ public sealed class SoundManager : Manager
     /// <returns>The sound for the specified identifier, or <c>null</c> if no such sound is loaded.</returns>
     public Sound GetSoundByIdentifier(string identifier)
     {
-        if (string.IsNullOrEmpty(identifier))
+        if (string.IsNullOrWhiteSpace(identifier))
         {
             return null;
         }
@@ -105,7 +105,7 @@ public sealed class SoundManager : Manager
     /// </returns>
     public Sound GetSoundOrDefaultByIdentifier(string identifier)
     {
-        if (string.IsNullOrEmpty(identifier))
+        if (string.IsNullOrWhiteSpace(identifier))
         {
             return null;
         }
@@ -122,7 +122,7 @@ public sealed class SoundManager : Manager
     /// <returns>The first sound for the specified name, or <c>null</c> if no such sound is loaded.</returns>
     public Sound GetSoundByName(string name, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        if (string.IsNullOrEmpty(name))
+        if (string.IsNullOrWhiteSpace(name))
         {
             return null;
         }

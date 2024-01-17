@@ -7,6 +7,7 @@
 namespace Hourglass.Windows;
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -169,17 +170,16 @@ public class NotificationAreaIcon : IDisposable
     /// <param name="e">The event data.</param>
     private void SettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (IsVisible != Settings.Default.ShowInNotificationArea)
+        if (IsVisible == Settings.Default.ShowInNotificationArea)
         {
-            if (Settings.Default.ShowInNotificationArea)
-            {
-                IsVisible = true;
-            }
-            else
-            {
-                IsVisible = false;
-                RestoreAllTimerWindows();
-            }
+            return;
+        }
+
+        IsVisible = Settings.Default.ShowInNotificationArea;
+
+        if (!IsVisible)
+        {
+            RestoreAllTimerWindows();
         }
     }
 
@@ -321,27 +321,7 @@ public class NotificationAreaIcon : IDisposable
 
         if (hasApplication)
         {
-            MenuItem newTimerMenuItem = new(Resources.NotificationAreaIconNewTimerMenuItem);
-            newTimerMenuItem.Click += NewTimerMenuItemClick;
-            _notifyIcon.ContextMenu.MenuItems.Add(newTimerMenuItem);
-
-            _notifyIcon.ContextMenu.MenuItems.Add("-" /* separator */);
-
-            foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().Arrange())
-            {
-                MenuItem windowMenuItem = new(window.ToString());
-                windowMenuItem.Tag = window;
-                windowMenuItem.Click += WindowMenuItemClick;
-                _notifyIcon.ContextMenu.MenuItems.Add(windowMenuItem);
-            }
-
-            _notifyIcon.ContextMenu.MenuItems.Add("-" /* separator */);
-
-            MenuItem commandLineMenuItem = new(Resources.NotificationAreaIconCommandLineMenuItem);
-            commandLineMenuItem.Click += CommandLineMenuItemClick;
-            _notifyIcon.ContextMenu.MenuItems.Add(commandLineMenuItem);
-
-            _notifyIcon.ContextMenu.MenuItems.Add("-" /* separator */);
+            _notifyIcon.ContextMenu.MenuItems.AddRange(GetApplicationMenuItems().ToArray());
         }
 
         MenuItem exitMenuItem = new(Resources.NotificationAreaIconExitMenuItem);
@@ -352,11 +332,47 @@ public class NotificationAreaIcon : IDisposable
         {
             _dispatcherTimer.Start();
         }
+
+        IEnumerable<MenuItem> GetApplicationMenuItems()
+        {
+            MenuItem menuItem = new(Resources.NotificationAreaIconNewTimerMenuItem);
+            menuItem.Click += NewTimerMenuItemClick;
+            yield return menuItem;
+
+            yield return NewSeparatorMenuItem();
+
+            bool addSeparator = false;
+            foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().Arrange())
+            {
+                addSeparator = true;
+
+                menuItem = new(window.ToString())
+                {
+                    Tag = window
+                };
+                menuItem.Click += WindowMenuItemClick;
+                yield return menuItem;
+            }
+
+            if (addSeparator)
+            {
+                yield return NewSeparatorMenuItem();
+            }
+
+            menuItem = new(Resources.NotificationAreaIconAboutMenuItem);
+            menuItem.Click += AboutMenuItemClick;
+            yield return menuItem;
+
+            yield return NewSeparatorMenuItem();
+
+            static MenuItem NewSeparatorMenuItem() =>
+                new("-");
+        }
     }
 
-    private void CommandLineMenuItemClick(object sender, EventArgs e)
+    private void AboutMenuItemClick(object sender, EventArgs e)
     {
-        CommandLineArguments.ShowUsage();
+        AboutDialog.ShowOrActivate();
     }
 
     /// <summary>

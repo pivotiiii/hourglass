@@ -170,6 +170,17 @@
     <Compile Include="Lib\TaskDialog\TaskDialog\TaskDialogStartupLocation.cs" />
     <Compile Include="Lib\TaskDialog\TaskDialog\WindowSubclassHandler.cs" />
     <Compile Include="Lib\TaskDialog\TaskDialog\WindowSubclassHandlerNativeMethods.cs" />
+    <Compile Include="Lib\WindowsVirtualDesktopHelper\Source\VirtualDesktopAPI\Implementation\VirtualDesktopWin10.cs" />
+    <Compile Include="Lib\WindowsVirtualDesktopHelper\Source\VirtualDesktopAPI\Implementation\VirtualDesktopWin11_21H2.cs" />
+    <Compile Include="Lib\WindowsVirtualDesktopHelper\Source\VirtualDesktopAPI\Implementation\VirtualDesktopWin11_22H2.cs" />
+    <Compile Include="Lib\WindowsVirtualDesktopHelper\Source\VirtualDesktopAPI\Implementation\VirtualDesktopWin11_23H2.cs" />
+    <Compile Include="Lib\WindowsVirtualDesktopHelper\Source\VirtualDesktopAPI\Implementation\VirtualDesktopWin11_23H2_2921.cs" />
+    <Compile Include="Lib\WindowsVirtualDesktopHelper\Source\VirtualDesktopAPI\Implementation\VirtualDesktopWin11_Insider.cs" />
+    <Compile Include="Lib\WindowsVirtualDesktopHelper\Source\VirtualDesktopAPI\Implementation\VirtualDesktopWin11_Insider22631.cs" />
+    <Compile Include="Lib\WindowsVirtualDesktopHelper\Source\VirtualDesktopAPI\Implementation\VirtualDesktopWin11_Insider25314.cs" />
+    <Compile Include="Lib\WindowsVirtualDesktopHelper\Source\VirtualDesktopAPI\ImmersiveShellProvider.cs" />
+    <Compile Include="Lib\WindowsVirtualDesktopHelper\Source\VirtualDesktopAPI\VirtualDesktop.cs" />
+    <Compile Include="Managers\VirtualDesktopManager.cs" />
     <Compile Include="Managers\AppManager.cs" />
     <Compile Include="Managers\ErrorManager.cs" />
     <Compile Include="Managers\KeepAwakeManager.cs" />
@@ -292,6 +303,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Lib\TaskDialog\github.url" />
+    <None Include="Lib\WindowsVirtualDesktopHelper\github.url" />
     <None Include="Properties\App.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

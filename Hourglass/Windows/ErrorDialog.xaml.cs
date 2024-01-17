@@ -34,10 +34,10 @@ public sealed partial class ErrorDialog
         TitleTextBlock.Text = title;
 
         MessageTextBox.Text = message ?? string.Empty;
-        MessageBorder.Visibility = string.IsNullOrEmpty(message) ? Visibility.Collapsed : Visibility.Visible;
+        MessageBorder.Visibility = string.IsNullOrWhiteSpace(message) ? Visibility.Collapsed : Visibility.Visible;
 
         DetailsTextBox.Text = details ?? string.Empty;
-        ShowDetailsButton.IsEnabled = !string.IsNullOrEmpty(details);
+        ShowDetailsButton.IsEnabled = !string.IsNullOrWhiteSpace(details);
 
         ShowDialog();
     }
@@ -59,7 +59,12 @@ public sealed partial class ErrorDialog
     private void InitializeMaxSize()
     {
         MaxWidth = 0.75 * SystemParameters.WorkArea.Width;
-        MaxHeight = 0.75 * SystemParameters.WorkArea.Height;
+
+        double maxHeight = 0.75 * SystemParameters.WorkArea.Height;
+
+        TitleTextBlock.MaxHeight = maxHeight * 0.1;
+        MessageTextBox.MaxHeight = maxHeight * 0.15;
+        DetailsTextBox.MaxHeight = maxHeight * 0.75;
     }
 
     /// <summary>
@@ -73,6 +78,7 @@ public sealed partial class ErrorDialog
         {
             DetailsBorder.Visibility = Visibility.Visible;
             ShowDetailsButton.IsEnabled = false;
+            CloseButton.Focus();
         }
     }
 }

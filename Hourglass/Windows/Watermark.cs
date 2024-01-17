@@ -264,12 +264,12 @@ public static class Watermark
     {
         if (control is TextBox textBox)
         {
-            return !string.IsNullOrEmpty(textBox.Text);
+            return !string.IsNullOrWhiteSpace(textBox.Text);
         }
 
         if (control is ComboBox comboBox)
         {
-            return !string.IsNullOrEmpty(comboBox.Text);
+            return !string.IsNullOrWhiteSpace(comboBox.Text);
         }
 
         return true;
