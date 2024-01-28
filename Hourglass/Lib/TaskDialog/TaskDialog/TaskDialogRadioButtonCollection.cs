@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -12,7 +14,7 @@ public class TaskDialogRadioButtonCollection
 {
     // HashSet to detect duplicate items.
     private readonly HashSet<TaskDialogRadioButton> _itemSet =
-        new HashSet<TaskDialogRadioButton>();
+        [];
 
     /// <summary>
     /// 

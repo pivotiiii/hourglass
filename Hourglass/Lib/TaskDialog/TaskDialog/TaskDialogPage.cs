@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -98,10 +100,10 @@ public class TaskDialogPage
     public TaskDialogPage()
     {
         // Create empty (hidden) controls.
-        _checkBox = new TaskDialogCheckBox();
-        _expander = new TaskDialogExpander();
-        _footer = new TaskDialogFooter();
-        _progressBar = new TaskDialogProgressBar(TaskDialogProgressBarState.None);
+        _checkBox = new();
+        _expander = new();
+        _footer = new();
+        _progressBar = new(TaskDialogProgressBarState.None);
     }
 
     /// <summary>
@@ -109,8 +111,7 @@ public class TaskDialogPage
     /// </summary>
     public TaskDialogStandardButtonCollection StandardButtons
     {
-        get => _standardButtons ??
-               (_standardButtons = new TaskDialogStandardButtonCollection());
+        get => _standardButtons ??= [];
 
         set
         {
@@ -127,8 +128,7 @@ public class TaskDialogPage
     /// </summary>
     public TaskDialogCustomButtonCollection CustomButtons
     {
-        get => _customButtons ??
-               (_customButtons = new TaskDialogCustomButtonCollection());
+        get => _customButtons ??= [];
 
         set
         {
@@ -145,8 +145,7 @@ public class TaskDialogPage
     /// </summary>
     public TaskDialogRadioButtonCollection RadioButtons
     {
-        get => _radioButtons ??
-               (_radioButtons = new TaskDialogRadioButtonCollection());
+        get => _radioButtons ??= [];
 
         set
         {

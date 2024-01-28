@@ -29,7 +29,7 @@ public sealed class ThemeManager : Manager
     /// <summary>
     /// A collection of themes.
     /// </summary>
-    private readonly List<Theme> _themes = new();
+    private readonly List<Theme> _themes = [];
 
     /// <summary>
     /// Prevents a default instance of the <see cref="ThemeManager"/> class from being created.
@@ -41,12 +41,12 @@ public sealed class ThemeManager : Manager
     /// <summary>
     /// Gets the default theme.
     /// </summary>
-    public Theme DefaultTheme => GetThemeByIdentifier(DefaultThemeIdentifier);
+    public Theme DefaultTheme => GetThemeByIdentifier(DefaultThemeIdentifier)!;
 
     /// <summary>
     /// Gets the default dark theme.
     /// </summary>
-    public Theme DefaultDarkTheme => GetThemeByIdentifier(DefaultDarkThemeIdentifier);
+    public Theme DefaultDarkTheme => GetThemeByIdentifier(DefaultDarkThemeIdentifier)!;
 
     /// <summary>
     /// Gets a collection of the themes stored in the assembly.
@@ -137,7 +137,7 @@ public sealed class ThemeManager : Manager
     /// </summary>
     /// <param name="identifier">The identifier for the theme.</param>
     /// <returns>The theme for the specified identifier, or <c>null</c> if no such theme is loaded.</returns>
-    public Theme GetThemeByIdentifier(string identifier)
+    public Theme? GetThemeByIdentifier(string? identifier)
     {
         if (string.IsNullOrWhiteSpace(identifier))
         {
@@ -153,7 +153,7 @@ public sealed class ThemeManager : Manager
     /// <param name="identifier">The identifier for the theme.</param>
     /// <returns>The theme for the specified identifier, or <see cref="DefaultTheme"/> if no such theme is loaded.
     /// </returns>
-    public Theme GetThemeOrDefaultByIdentifier(string identifier)
+    public Theme? GetThemeOrDefaultByIdentifier(string? identifier)
     {
         return GetThemeByIdentifier(identifier) ?? DefaultTheme;
     }
@@ -165,7 +165,7 @@ public sealed class ThemeManager : Manager
     /// <param name="stringComparison">One of the enumeration values that specifies how the strings will be
     /// compared.</param>
     /// <returns>The first theme for the specified name, or <c>null</c> if no such theme is loaded.</returns>
-    public Theme GetThemeByName(string name, StringComparison stringComparison = StringComparison.Ordinal)
+    public Theme? GetThemeByName(string name, StringComparison stringComparison = StringComparison.Ordinal)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -180,7 +180,7 @@ public sealed class ThemeManager : Manager
     /// </summary>
     /// <param name="theme">A theme.</param>
     /// <returns>The light variant of the <paramref name="theme"/>.</returns>
-    public Theme GetLightVariantForTheme(Theme theme)
+    public Theme? GetLightVariantForTheme(Theme theme)
     {
         return theme.Type switch
         {
@@ -196,7 +196,7 @@ public sealed class ThemeManager : Manager
     /// </summary>
     /// <param name="theme">A theme.</param>
     /// <returns>The dark variant of the <paramref name="theme"/>.</returns>
-    public Theme GetDarkVariantForTheme(Theme theme)
+    public Theme? GetDarkVariantForTheme(Theme theme)
     {
         return theme.Type switch
         {
@@ -227,8 +227,8 @@ public sealed class ThemeManager : Manager
     /// <returns>A collection of themes defined in the assembly.</returns>
     private IList<Theme> GetBuiltInThemes()
     {
-        return new List<Theme>
-        {
+        return
+        [
             // Light themes
             new(
                 ThemeType.BuiltInLight,
@@ -456,7 +456,7 @@ public sealed class ThemeManager : Manager
                 "#505050" /* secondaryHintColor */,
                 "#0066CC" /* buttonColor */,
                 "#FF0000" /* buttonHoverColor */)
-        };
+        ];
     }
 
     /// <summary>

@@ -74,7 +74,7 @@ public sealed class WindowSize
     /// <param name="windowSize">A <see cref="WindowSize"/>.</param>
     /// <returns>A <see cref="WindowSize"/> for the specified <see cref="WindowSize"/>, or <c>null</c> if the
     /// specified <see cref="WindowSize"/> is <c>null</c>.</returns>
-    public static WindowSize FromWindowSize(WindowSize windowSize)
+    public static WindowSize? FromWindowSize(WindowSize? windowSize)
     {
         return windowSize is null
             ? null
@@ -92,7 +92,7 @@ public sealed class WindowSize
     /// <param name="info">A <see cref="WindowSizeInfo"/>.</param>
     /// <returns>A <see cref="WindowSize"/> for the specified <see cref="WindowSizeInfo"/>, or <c>null</c> if the
     /// specified <see cref="WindowSizeInfo"/> is <c>null</c>.</returns>
-    public static WindowSize FromWindowSizeInfo(WindowSizeInfo info)
+    public static WindowSize? FromWindowSizeInfo(WindowSizeInfo? info)
     {
         return info is null
             ? null
@@ -111,7 +111,7 @@ public sealed class WindowSize
     /// <param name="window">A window.</param>
     /// <returns>A <see cref="WindowSize"/> for the specified window, or <c>null</c> if the specified window is
     /// <c>null</c>.</returns>
-    public static WindowSize FromWindow<T>(T window)
+    public static WindowSize? FromWindow<T>(T? window)
         where T : Window, IRestorableWindow
     {
         return window is null
@@ -134,7 +134,7 @@ public sealed class WindowSize
     /// <typeparam name="T">The type of the window.</typeparam>
     /// <returns>A <see cref="WindowSize"/> for a visible window of type <typeparamref name="T"/>, or <c>null</c> if
     /// there is no visible window of type <typeparamref name="T"/>.</returns>
-    public static WindowSize FromWindowOfType<T>()
+    public static WindowSize? FromWindowOfType<T>()
         where T : Window, IRestorableWindow
     {
         if (Application.Current is null)
@@ -142,7 +142,7 @@ public sealed class WindowSize
             return null;
         }
 
-        T window = Application.Current.Windows
+        T? window = Application.Current.Windows
             .OfType<T>()
             .LastOrDefault(static w => w.IsVisible);
 
@@ -157,7 +157,7 @@ public sealed class WindowSize
     /// <param name="window">A window.</param>
     /// <returns>A <see cref="WindowSize"/> for another visible or last window of the same type, or <c>null</c> if there is
     /// no other visible or last window of the same type.</returns>
-    public static WindowSize FromSiblingOfWindow<T>(T window)
+    public static WindowSize? FromSiblingOfWindow<T>(T window)
         where T : Window, IRestorableWindow
     {
         if (Application.Current is null)

@@ -33,56 +33,56 @@ Options:
 
         Required        no
         Default value   (none)
-        Alias           -t
+        Alias           -t, /t
 
   --always-on-top on|off|last
         Displays the timer window on top of other windows.
 
         Required        no
         Default value   last
-        Alias           -a
+        Alias           -a, /a
 
   --full-screen on|off|last
         Displays the timer window in full-screen mode.
 
         Required        no
         Default value   last
-        Alias           -f
+        Alias           -f, /f
 
   --prompt-on-exit on|off|last
         Displays a prompt before closing the timer window.
 
         Required        no
         Default value   last
-        Alias           -o
+        Alias           -o, /o
 
   --show-progress-in-taskbar on|off|last
         Shows progress in taskbar.
 
         Required        no
         Default value   last
-        Alias           -y
+        Alias           -y, /y
 
   --do-not-keep-awake on|off|last
         Do not keep the computer awake while the timer is running.
 
         Required        no
         Default value   last
-        Alias           -k
+        Alias           -k, /k
 
   --show-in-notification-area on|off|last
         Shows an icon for the app in the notification area (system tray).
 
         Required        no
         Default value   last
-        Alias           -n
+        Alias           -n, /n
 
   --reverse-progress-bar on|off|last
         Reverses the direction of the progress bar, causing it to run backwards.
 
         Required        no
         Default value   last
-        Alias           -g
+        Alias           -g, /g
 
   --digital-clock-time on|off|last
         Displays time in the digital clock format:
@@ -91,7 +91,7 @@ Options:
 
         Required        no
         Default value   last
-        Alias           -c
+        Alias           -c, /c
 
   --show-time-elapsed on|off|last
         Shows the time elapsed since the timer was started, rather than the
@@ -99,35 +99,35 @@ Options:
 
         Required        no
         Default value   last
-        Alias           -u
+        Alias           -u, /u
 
   --loop-timer on|off|last
         Loops the timer when it expires.
 
         Required        no
         Default value   last
-        Alias           -l
+        Alias           -l, /l
 
   --pop-up-when-expired on|off|last
         Pops up the timer window when the timer expires.
 
         Required        no
         Default value   last
-        Alias           -p
+        Alias           -p, /p
 
   --close-when-expired on|off|last
         Closes the timer window when the timer expires.
 
         Required        no
         Default value   last
-        Alias           -e
+        Alias           -e, /e
 
   --shut-down-when-expired on|off
         Shuts down windows when the timer expires.
 
         Required        no
         Default value   off
-        Alias           -x
+        Alias           -x, /x
 
   --theme last|<theme>
         Sets the theme of the timer window.
@@ -148,28 +148,28 @@ Options:
 
         Required        no
         Default value   last
-        Alias           -m
+        Alias           -m, /m
 
   --sound none|last|<sound>
         Plays a sound when the timer expires.
 
         Required        no
         Default value   last
-        Alias           -s
+        Alias           -s, /s
 
   --loop-sound on|off|last
         Loops the sound that plays when the timer expires.
 
         Required        no
         Default value   last
-        Alias           -r
+        Alias           -r, /r
 
   --open-saved-timers on|off|last
         Opens all saved timers on start up.
 
         Required        no
         Default value   last
-        Alias           -v
+        Alias           -v, /v
 
   --prefer-24h-time on|off|last
         When the input used to start the timer contains a time of day that does
@@ -183,7 +183,7 @@ Options:
 
         Required        no
         Default value   last
-        Alias           -j
+        Alias           -j, /j
 
   --window-title none|app|left|elapsed|title|last
         Sets the timer window title.
@@ -206,14 +206,14 @@ Options:
 
         Required        no
         Default value   last
-        Alias           -i
+        Alias           -i, /i
 
   --window-state normal|maximized|minimized|last
         Sets the state of the timer window.
 
         Required        no
         Default value   last
-        Alias           -w
+        Alias           -w, /w
 
   --window-bounds <left>,<top>,<width>,<height>
         Sets the size and position of the timer window.
@@ -230,7 +230,7 @@ Options:
 
         Required        no
         Default value   last
-        Alias           -b
+        Alias           -b, /b
 
   --lock-interface on|off
         Prevents the user from starting, pausing, stopping, or restarting the
@@ -245,7 +245,7 @@ Options:
 
         Required        no
         Default value   off
-        Alias           -z
+        Alias           -z, /z
 
   --use-factory-defaults
         If specified, any options that are not explicitly set with another
@@ -278,10 +278,10 @@ Options:
             --lock-interface              -z off
 
         Required        no
-        Alias           -d
+        Alias           -d, /d
 
   --help
         Shows this message.
 
         Required        no
-        Alias           -h, -?
+        Alias           -h, -?, /h, /?

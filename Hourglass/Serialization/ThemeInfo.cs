@@ -18,12 +18,12 @@ public sealed class ThemeInfo
     /// <summary>
     /// Gets or sets the unique identifier for this theme.
     /// </summary>
-    public string Identifier { get; set; }
+    public string Identifier { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the friendly name for this theme, or <c>null</c> if no friendly name is specified.
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the background color of the window.
@@ -80,7 +80,7 @@ public sealed class ThemeInfo
     /// </summary>
     /// <param name="options">A <see cref="Theme"/>.</param>
     /// <returns>A <see cref="ThemeInfo"/> for the specified <see cref="Theme"/>.</returns>
-    public static ThemeInfo FromTheme(Theme options)
+    public static ThemeInfo? FromTheme(Theme? options)
     {
         return options?.ToThemeInfo();
     }

@@ -32,7 +32,7 @@ public sealed class Timer : TimerBase
     /// Initializes a new instance of the <see cref="Timer"/> class.
     /// </summary>
     /// <param name="options">Configuration data for this timer.</param>
-    public Timer(TimerOptions options)
+    public Timer(TimerOptions? options)
     {
         if (options is null)
         {
@@ -40,7 +40,7 @@ public sealed class Timer : TimerBase
         }
 
         TimerStart = null;
-        Options = TimerOptions.FromTimerOptions(options);
+        Options = TimerOptions.FromTimerOptions(options)!;
 
         UpdateHourglassTimer();
     }
@@ -54,7 +54,7 @@ public sealed class Timer : TimerBase
         : base(timerInfo)
     {
         TimerStart = TimerStart.FromTimerStartInfo(timerInfo.TimerStart);
-        Options = TimerOptions.FromTimerOptionsInfo(timerInfo.Options) ?? new TimerOptions();
+        Options = TimerOptions.FromTimerOptionsInfo(timerInfo.Options) ?? new();
 
         UpdateHourglassTimer();
     }
@@ -72,7 +72,7 @@ public sealed class Timer : TimerBase
     /// Gets the <see cref="TimerStart"/> used to start this timer, or <c>null</c> if the <see
     /// cref="TimerBase.State"/> is <see cref="TimerState.Stopped"/>.
     /// </summary>
-    public TimerStart TimerStart { get; private set; }
+    public TimerStart? TimerStart { get; private set; }
 
     /// <summary>
     /// Gets the percentage of time left until the timer expires.
@@ -94,7 +94,7 @@ public sealed class Timer : TimerBase
     /// <summary>
     /// Gets the string representation of the time left until the timer expires.
     /// </summary>
-    public string TimeLeftAsString { get; private set; }
+    public string? TimeLeftAsString { get; private set; }
 
     /// <summary>
     /// Gets the string representation of the time elapsed since the timer was started.
@@ -102,12 +102,12 @@ public sealed class Timer : TimerBase
     /// <remarks>
     /// This property is <c>null</c> if <see cref="SupportsTimeElapsed"/> is <c>false</c>.
     /// </remarks>
-    public string TimeElapsedAsString { get; private set; }
+    public string? TimeElapsedAsString { get; private set; }
 
     /// <summary>
     /// Gets the string representation of the time since the timer expired.
     /// </summary>
-    public string TimeExpiredAsString { get; private set; }
+    public string? TimeExpiredAsString { get; private set; }
 
     /// <summary>
     /// Gets a value indicating whether the timer supports pause.
@@ -141,7 +141,7 @@ public sealed class Timer : TimerBase
     /// </summary>
     /// <param name="timerInfo">A <see cref="TimerInfo"/>.</param>
     /// <returns>The <see cref="Timer"/> for the <see cref="TimerInfo"/>.</returns>
-    public static Timer FromTimerInfo(TimerInfo timerInfo) => timerInfo is null ? null : new(timerInfo);
+    public static Timer? FromTimerInfo(TimerInfo? timerInfo) => timerInfo is null ? null : new(timerInfo);
 
     #region Public Methods
 
@@ -156,7 +156,7 @@ public sealed class Timer : TimerBase
         ThrowIfDisposed();
 
         DateTime start = DateTime.Now;
-        if (newTimerStart?.TryGetEndTime(start, out var end) == true)
+        if (newTimerStart.TryGetEndTime(start, out var end))
         {
             TimerStart = newTimerStart;
             OnPropertyChanged(nameof(TimerStart));
@@ -177,7 +177,7 @@ public sealed class Timer : TimerBase
     {
         ThrowIfDisposed();
 
-        TimerStart actualTimerStart = TimerStart;
+        TimerStart? actualTimerStart = TimerStart;
         if (actualTimerStart?.Type == TimerStartType.TimeSpan)
         {
             Stop();
@@ -197,8 +197,8 @@ public sealed class Timer : TimerBase
             CultureInfo.InvariantCulture,
             "Timer{0}{1}{2}FormatString",
             State,
-            string.IsNullOrWhiteSpace(Options.Title) ? string.Empty : "WithTitle",
-            Options.LoopTimer && SupportsLooping ? "Looped" : string.Empty);
+            string.IsNullOrWhiteSpace(Options.Title) ? string.Empty : Resources.WithTitleText,
+            Options.LoopTimer && SupportsLooping ? Resources.LoopedText : string.Empty);
 
         return string.Format(
             Resources.ResourceManager.GetEffectiveProvider(),
@@ -299,11 +299,11 @@ public sealed class Timer : TimerBase
 
         DateTime now = DateTime.Now;
         DateTime start = EndTime.Value;
-        DateTime end;
+        DateTime end = start;
 
         // Try to find the current loop iteration
         int iteration = 0;
-        while (TimerStart.TryGetEndTime(start, out end) && end <= now && end > start && iteration++ < 10000)
+        while (TimerStart?.TryGetEndTime(start, out end) == true && end <= now && end > start && iteration++ < 10000)
         {
             // Keep looping
             start = end;
@@ -416,7 +416,7 @@ public sealed class Timer : TimerBase
     /// </summary>
     /// <param name="compact">Use compact time format.</param>
     /// <returns>The string representation of the time elapsed since the timer was started.</returns>
-    private string GetTimeElapsedAsString(bool compact)
+    private string? GetTimeElapsedAsString(bool compact)
     {
         if (!SupportsTimeElapsed)
         {

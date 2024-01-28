@@ -28,12 +28,11 @@ $ThisFolder = Split-Path (Get-Item (&{ $MyInvocation.ScriptName }))
 
 function Main
 {
-    $latestFile           = Join-Path $ThisFolder latest.xml
-    $appManifestFile      = Join-Path $ThisFolder Hourglass\Properties\app.manifest
-    $assemblyInfoFile     = Join-Path $ThisFolder Hourglass\Properties\AssemblyInfo.cs
-    $testAssemblyInfoFile = Join-Path $ThisFolder Hourglass.Test\Properties\AssemblyInfo.cs
-    $bundleWxsFile        = Join-Path $ThisFolder Hourglass.Bundle\Bundle.wxs
-    $productWxsFile       = Join-Path $ThisFolder Hourglass.Setup\Product.wxs
+    $latestFile      = Join-Path $ThisFolder latest.xml
+    $buildPropsFile  = Join-Path $ThisFolder Directory.Build.props
+    $appManifestFile = Join-Path $ThisFolder Hourglass\Properties\app.manifest
+    $bundleWxsFile   = Join-Path $ThisFolder Hourglass.Bundle\Bundle.wxs
+    $productWxsFile  = Join-Path $ThisFolder Hourglass.Setup\Product.wxs
 
     Write-Output "Reading '$latestFile'..."
 
@@ -49,11 +48,10 @@ function Main
 
     Write-Output "`n$(($latest | Format-List $fieldsFormat | Out-String).Trim())`n"
 
-    Update-Content $appManifestFile      '(?<=assemblyIdentity\s+version=")[^"]+(?=[\s\S]+?name)',$latest.Version
-    Update-Content $assemblyInfoFile     '(?<=Version\(")[^"]+',$latest.Version
-    Update-Content $testAssemblyInfoFile '(?<=Version\(")[^"]+',$latest.Version
-    Update-Content $bundleWxsFile        '(?<=\s+Version=")[^"]+',$latest.Version
-    Update-Content $productWxsFile       '(?<=\s+Version=")[^"]+',$latest.Version
+    Update-Content $appManifestFile '(?<=assemblyIdentity\s+version=")[^"]+(?=[\s\S]+?name)',$latest.Version
+    Update-Content $buildPropsFile  '(?<=\<Version\>)[^<]+',$latest.Version
+    Update-Content $bundleWxsFile   '(?<=\s+Version=")[^"]+',$latest.Version
+    Update-Content $productWxsFile  '(?<=\s+Version=")[^"]+',$latest.Version
 }
 
 function Update-Content($file, $replace)

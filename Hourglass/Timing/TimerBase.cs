@@ -96,37 +96,37 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
     /// <summary>
     /// Raised when the timer is started.
     /// </summary>
-    public event EventHandler Started;
+    public event EventHandler? Started;
 
     /// <summary>
     /// Raised when the timer is paused.
     /// </summary>
-    public event EventHandler Paused;
+    public event EventHandler? Paused;
 
     /// <summary>
     /// Raised when the timer is resumed from a paused state.
     /// </summary>
-    public event EventHandler Resumed;
+    public event EventHandler? Resumed;
 
     /// <summary>
     /// Raised when the timer is stopped.
     /// </summary>
-    public event EventHandler Stopped;
+    public event EventHandler? Stopped;
 
     /// <summary>
     /// Raised when the timer expires.
     /// </summary>
-    public event EventHandler Expired;
+    public event EventHandler? Expired;
 
     /// <summary>
     /// Raised when the timer ticks.
     /// </summary>
-    public event EventHandler Tick;
+    public event EventHandler? Tick;
 
     /// <summary>
     /// Raised when a property value changes.
     /// </summary>
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     #endregion
 
@@ -474,7 +474,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
 
         if (disposing)
         {
-            _dispatcherTimer?.Stop();
+            _dispatcherTimer.Stop();
         }
     }
 

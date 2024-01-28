@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -99,7 +101,7 @@ public partial class TaskDialog
     /// <see cref="TaskDialogNotification.TDN_NAVIGATED"/> notification was
     /// not yet received.
     /// </summary>
-    private readonly Queue<TaskDialogPage> _waitingNavigationPages = new Queue<TaskDialogPage>();
+    private readonly Queue<TaskDialogPage> _waitingNavigationPages = new();
 
     /// <summary>
     /// Window handle of the task dialog when it is being shown.
@@ -336,17 +338,12 @@ public partial class TaskDialog
     /// </remarks>
     public TaskDialogPage Page
     {
-        get => _page ??
-               (_page = new TaskDialogPage());
+        get => _page ??= new();
 
         set
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
-            // TODO: Maybe ignore the set call if the value is the same
-            // (but we currently also don't do that for other properties).
-            //if (value == _page)
-            //    return;
 
             if (DialogIsShown)
             {
@@ -511,7 +508,7 @@ public partial class TaskDialog
         TaskDialogButtons buttons = TaskDialogButtons.OK,
         TaskDialogStandardIcon icon = TaskDialogStandardIcon.None)
     {
-        var dialog = new TaskDialog(new TaskDialogPage()
+        var dialog = new TaskDialog(new()
         {
             Text = text,
             Instruction = instruction,
@@ -548,7 +545,7 @@ public partial class TaskDialog
         // cannot change the properties, like it is the
         // case with the regular buttons added to the
         // collections.
-        return new TaskDialogStandardButton(result)
+        return new(result)
         {
             Visible = false
         };
@@ -1228,11 +1225,7 @@ public partial class TaskDialog
                         // AllowCancel but not adding a "Cancel" button), we need
                         // to create a new instance and save it, so that we can
                         // return that instance after TaskDialogIndirect() returns.
-                        if (button == null)
-                        {
-                            button = CreatePlaceholderButton(
-                                (TaskDialogResult)buttonID);
-                        }
+                        button ??= CreatePlaceholderButton((TaskDialogResult)buttonID);
 
                         // The button would close the dialog, so raise the event.
                         var closingEventArgs = new TaskDialogClosingEventArgs(button);
@@ -1565,7 +1558,7 @@ public partial class TaskDialog
                     // automatically initialize its other members with their default
                     // value.
                     Align(ref currentPtr, sizeof(char));
-                    taskDialogConfig = new TaskDialogConfig()
+                    taskDialogConfig = new()
                     {
                         cbSize = (uint)sizeof(TaskDialogConfig),
                         hwndParent = hwndOwner,
@@ -1601,7 +1594,7 @@ public partial class TaskDialog
                         for (int i = 0; i < page.CustomButtons.Count; i++)
                         {
                             TaskDialogCustomButton currentCustomButton = page.CustomButtons[i];
-                            customButtonStructs[i] = new TaskDialogButtonStruct()
+                            customButtonStructs[i] = new()
                             {
                                 nButtonID = currentCustomButton.ButtonID,
                                 pszButtonText = MarshalString(currentCustomButton.GetResultingText())
@@ -1622,7 +1615,7 @@ public partial class TaskDialog
                         for (int i = 0; i < page.RadioButtons.Count; i++)
                         {
                             TaskDialogRadioButton currentCustomButton = page.RadioButtons[i];
-                            customRadioButtonStructs[i] = new TaskDialogButtonStruct()
+                            customRadioButtonStructs[i] = new()
                             {
                                 nButtonID = currentCustomButton.RadioButtonID,
                                 pszButtonText = MarshalString(currentCustomButton.Text)
@@ -1677,9 +1670,7 @@ public partial class TaskDialog
                         // Disable incorrect IDE warning as the latter cast is
                         // actually not redundant.
                         // See: https://github.com/dotnet/roslyn/issues/20617
-#pragma warning disable IDE0004 // Remove Unnecessary Cast
                         currentPtr = (byte*)(((ulong)currentPtr + add) & ~(ulong)add);
-#pragma warning restore IDE0004 // Remove Unnecessary Cast
                     else
                         currentPtr = (byte*)(((uint)currentPtr + add) & ~add);
                 }
@@ -1705,7 +1696,7 @@ public partial class TaskDialog
             throw new InvalidOperationException();
 
         // Subclass the window.
-        _windowSubclassHandler = new WindowSubclassHandler(this);
+        _windowSubclassHandler = new(this);
         _windowSubclassHandler.Open();
     }
 

@@ -46,7 +46,7 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
     /// <summary>
     /// Raised when a property value changes.
     /// </summary>
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     /// <summary>
     /// Gets the name of the app.
@@ -66,7 +66,7 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
     /// <summary>
     /// Gets the latest version of the app.
     /// </summary>
-    public Version LatestVersion { get; private set; }
+    public Version? LatestVersion { get; private set; }
 
     /// <summary>
     /// Gets the unique identifier of this instance of the app.
@@ -87,7 +87,7 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
     /// <summary>
     /// Gets the URI to download the update to the latest version of the app.
     /// </summary>
-    public Uri UpdateUri { get; private set; }
+    public Uri UpdateUri { get; private set; } = null!;
 
     /// <summary>
     /// Initializes the class.
@@ -106,14 +106,14 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
 
-        Task.Run(async () => SetUpdateInfo(await FetchUpdateInfo()));
+        Task.Run(async () => SetUpdateInfo(await FetchUpdateInfoAsync()));
     }
 
     /// <summary>
     /// Fetches the latest <see cref="UpdateInfo"/> from the <see cref="UpdateCheckUrl"/>.
     /// </summary>
     /// <returns>An <see cref="UpdateInfo"/>.</returns>
-    private async Task<UpdateInfo> FetchUpdateInfo()
+    private async Task<UpdateInfo?> FetchUpdateInfoAsync()
     {
         try
         {
@@ -144,9 +144,13 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
     /// Sets the properties of this manager from an <see cref="UpdateInfo"/>.
     /// </summary>
     /// <param name="updateInfo">An <see cref="UpdateInfo"/>.</param>
-    /// <returns><c>true</c> if the properties were set successfully, or <c>false</c> otherwise.</returns>
-    private bool SetUpdateInfo(UpdateInfo updateInfo)
+    private void SetUpdateInfo(UpdateInfo? updateInfo)
     {
+        if (updateInfo is null)
+        {
+            return;
+        }
+
         try
         {
             LatestVersion = new(updateInfo.LatestVersion);
@@ -154,14 +158,12 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
         }
         catch (Exception ex) when (ex.CanBeHandled())
         {
-            return false;
+            return;
         }
 
         PropertyChanged.Notify(this,
             nameof(HasUpdates),
             nameof(LatestVersion),
             nameof(UpdateUri));
-
-        return true;
     }
 }

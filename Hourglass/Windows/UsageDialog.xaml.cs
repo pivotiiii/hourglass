@@ -18,7 +18,7 @@ using Extensions;
 /// </summary>
 public sealed partial class UsageDialog
 {
-    private static UsageDialog _instance;
+    private static UsageDialog? _instance;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UsageDialog"/> class.
@@ -32,7 +32,7 @@ public sealed partial class UsageDialog
     /// <summary>
     /// Gets or sets an optional error message to be displayed.
     /// </summary>
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     /// <summary>
     /// Initializes the <see cref="Window.MaxWidth"/> and <see cref="Window.MaxHeight"/> properties.
@@ -43,7 +43,7 @@ public sealed partial class UsageDialog
         MaxHeight = 0.75 * SystemParameters.WorkArea.Height;
     }
 
-    public static void ShowOrActivate(string errorMessage = null)
+    public static void ShowOrActivate(string? errorMessage = null)
     {
         if (_instance is not null)
         {

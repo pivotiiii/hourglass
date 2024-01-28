@@ -1,4 +1,6 @@
-﻿using TaskDialogFlags = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_FLAGS;
+﻿#nullable disable
+
+using TaskDialogFlags = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_FLAGS;
 
 namespace KPreisser.UI;
 

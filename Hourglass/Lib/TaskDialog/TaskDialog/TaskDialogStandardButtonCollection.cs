@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -10,8 +12,6 @@ namespace KPreisser.UI;
 public class TaskDialogStandardButtonCollection
     : KeyedCollection<TaskDialogResult, TaskDialogStandardButton>
 {
-    private TaskDialogPage _boundPage;
-
     /// <summary>
     /// 
     /// </summary>
@@ -36,11 +36,7 @@ public class TaskDialogStandardButtonCollection
         return collection;
     }
 
-    internal TaskDialogPage BoundPage
-    {
-        get => _boundPage;
-        set => _boundPage = value;
-    }
+    internal TaskDialogPage BoundPage { get; set; }
 
     /// <summary>
     /// 
@@ -114,7 +110,7 @@ public class TaskDialogStandardButtonCollection
     {
         // Disallow collection modification, so that we don't need to copy it
         // when binding the TaskDialogPage.
-        _boundPage?.DenyIfBound();
+        BoundPage?.DenyIfBound();
         DenyIfHasOtherCollection(item);
 
         TaskDialogStandardButton oldItem = this[index];
@@ -136,7 +132,7 @@ public class TaskDialogStandardButtonCollection
     {
         // Disallow collection modification, so that we don't need to copy it
         // when binding the TaskDialogPage.
-        _boundPage?.DenyIfBound();
+        BoundPage?.DenyIfBound();
         DenyIfHasOtherCollection(item);
 
         // Call the base method first, as it will throw if we would insert a
@@ -154,7 +150,7 @@ public class TaskDialogStandardButtonCollection
     {
         // Disallow collection modification, so that we don't need to copy it
         // when binding the TaskDialogPage.
-        _boundPage?.DenyIfBound();
+        BoundPage?.DenyIfBound();
 
         TaskDialogStandardButton oldItem = this[index];
         oldItem.Collection = null;
@@ -168,7 +164,7 @@ public class TaskDialogStandardButtonCollection
     {
         // Disallow collection modification, so that we don't need to copy it
         // when binding the TaskDialogPage.
-        _boundPage?.DenyIfBound();
+        BoundPage?.DenyIfBound();
 
         foreach (TaskDialogStandardButton button in this)
             button.Collection = null;

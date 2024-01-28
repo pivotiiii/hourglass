@@ -8,9 +8,9 @@ internal abstract class VirtualDesktop<TVirtualDesktopManagerInternal> : ICurren
 #pragma warning restore S3881
     where TVirtualDesktopManagerInternal : class
 {
-    private IVirtualDesktopManager _virtualDesktopManager;
+    private IVirtualDesktopManager? _virtualDesktopManager;
 
-    protected TVirtualDesktopManagerInternal VirtualDesktopManagerInternal;
+    protected TVirtualDesktopManagerInternal? VirtualDesktopManagerInternal;
 
     protected VirtualDesktop(ImmersiveShellProvider immersiveShellProvider)
     {
@@ -42,12 +42,12 @@ internal abstract class VirtualDesktop<TVirtualDesktopManagerInternal> : ICurren
             return;
         }
 
-        if (_virtualDesktopManager.IsWindowOnCurrentVirtualDesktop(handle))
+        if (_virtualDesktopManager!.IsWindowOnCurrentVirtualDesktop(handle))
         {
             return;
         }
 
-        _virtualDesktopManager.MoveWindowToDesktop(handle, GetCurrentDesktopId());
+        _virtualDesktopManager!.MoveWindowToDesktop(handle, GetCurrentDesktopId());
     }
 
     public void Dispose()
@@ -58,7 +58,7 @@ internal abstract class VirtualDesktop<TVirtualDesktopManagerInternal> : ICurren
         _virtualDesktopManager = null;
         VirtualDesktopManagerInternal = null;
 
-        static void ReleaseComObject(object o)
+        static void ReleaseComObject(object? o)
         {
             if (o is not null)
             {

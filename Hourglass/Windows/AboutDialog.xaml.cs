@@ -22,7 +22,7 @@ public sealed partial class AboutDialog
     /// <summary>
     /// The instance of the <see cref="AboutDialog"/> that is showing, or null if there is no instance showing.
     /// </summary>
-    private static AboutDialog _instance;
+    private static AboutDialog? _instance;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AboutDialog"/> class.
@@ -55,7 +55,9 @@ public sealed partial class AboutDialog
 
             return version.Revision != 0
                     ? version.ToString()
+#pragma warning disable S3358
                     : version.ToString(version.Build != 0 ? 3 : 2);
+#pragma warning restore S3358
         }
     }
 

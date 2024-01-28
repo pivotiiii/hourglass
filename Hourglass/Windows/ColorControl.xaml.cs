@@ -49,7 +49,7 @@ public sealed partial class ColorControl
     /// <summary>
     /// Occurs when the <see cref="Color"/> property changes.
     /// </summary>
-    public event EventHandler ColorChanged;
+    public event EventHandler? ColorChanged;
 
     /// <summary>
     /// Gets or sets the text label.
@@ -88,13 +88,9 @@ public sealed partial class ColorControl
         ColorDialog dialog = new()
         {
             AnyColor = true,
-            FullOpen = true
+            FullOpen = true,
+            CustomColors = Theme.GetPalette().Select(static c => c.ToInt()).ToArray()
         };
-
-        if (Theme is not null)
-        {
-            dialog.CustomColors = Theme.GetPalette().Select(static c => c.ToInt()).ToArray();
-        }
 
         DialogResult result = dialog.ShowDialog();
         if (result == DialogResult.OK)

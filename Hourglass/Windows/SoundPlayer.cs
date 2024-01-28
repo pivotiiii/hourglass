@@ -63,17 +63,17 @@ public class SoundPlayer : IDisposable
     /// <summary>
     /// Raised when sound playback has started.
     /// </summary>
-    public event EventHandler PlaybackStarted;
+    public event EventHandler? PlaybackStarted;
 
     /// <summary>
     /// Raised when sound playback has stopped.
     /// </summary>
-    public event EventHandler PlaybackStopped;
+    public event EventHandler? PlaybackStopped;
 
     /// <summary>
     /// Raised when sound playback has completed.
     /// </summary>
-    public event EventHandler PlaybackCompleted;
+    public event EventHandler? PlaybackCompleted;
 
     #endregion
 
@@ -99,7 +99,7 @@ public class SoundPlayer : IDisposable
     /// <param name="sound">A <see cref="Sound"/>.</param>
     /// <param name="loop">A value indicating whether playback should be looped.</param>
     /// <returns><c>true</c> if the <see cref="Sound"/> plays successfully, or <c>false</c> otherwise.</returns>
-    public bool Play(Sound sound, bool loop)
+    public bool Play(Sound? sound, bool loop)
     {
         ThrowIfDisposed();
 
@@ -146,7 +146,7 @@ public class SoundPlayer : IDisposable
             else
             {
                 // Use the media player
-                _mediaPlayer.Open(new(sound.Path));
+                _mediaPlayer.Open(new(sound.Path!));
                 _mediaPlayer.Play();
             }
         }

@@ -98,7 +98,7 @@ public sealed class WakeUpManager : Manager
     {
         return TimerManager.Instance.RunningTimers
             .Where(static t => t.EndTime.HasValue)
-            .Select(static t => t.EndTime.Value)
+            .Select(static t => t.EndTime!.Value)
             .OrderBy(static t => t)
             .FirstOrDefault();
     }

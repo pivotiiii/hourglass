@@ -45,7 +45,7 @@ public sealed class SpecialDateToken : DateToken
     /// A list of supported special dates.
     /// </summary>
     private static readonly SpecialDateDefinition[] SpecialDates =
-    {
+    [
         new(
             SpecialDate.NewYear,
             1 /* month */,
@@ -60,7 +60,7 @@ public sealed class SpecialDateToken : DateToken
             SpecialDate.NewYearsEve,
             12 /* month */,
             31 /* day */)
-    };
+    ];
 
     /// <summary>
     /// Gets or sets the <see cref="SpecialDate"/> represented by this token.
@@ -88,12 +88,14 @@ public sealed class SpecialDateToken : DateToken
     {
         ThrowIfNotValid();
 
-        SpecialDateDefinition specialDateDefinition = GetSpecialDateDefinition();
+        SpecialDateDefinition specialDateDefinition = GetSpecialDateDefinition()!;
 
+#pragma warning disable S6562
         DateTime date = new(
             minDate.Year,
             specialDateDefinition.Month,
             specialDateDefinition.Day);
+#pragma warning restore S6562
 
         if (date < minDate.Date ||
             (date == minDate.Date && !inclusive))
@@ -115,7 +117,7 @@ public sealed class SpecialDateToken : DateToken
         {
             ThrowIfNotValid();
 
-            SpecialDateDefinition specialDateDefinition = GetSpecialDateDefinition();
+            SpecialDateDefinition specialDateDefinition = GetSpecialDateDefinition()!;
             return specialDateDefinition.GetName(provider);
         }
         catch (Exception ex) when (ex.CanBeHandled())
@@ -130,7 +132,7 @@ public sealed class SpecialDateToken : DateToken
     /// <param name="match">A <see cref="Match"/>.</param>
     /// <returns>The <see cref="SpecialDateDefinition"/> object for a <see cref="Match"/>.</returns>
 #pragma warning disable S3398
-    private static SpecialDateDefinition GetSpecialDateDefinitionForMatch(Match match)
+    private static SpecialDateDefinition? GetSpecialDateDefinitionForMatch(Match match)
 #pragma warning restore S3398
     {
         return Array.Find(SpecialDates, e => match.Groups[e.MatchGroup].Success);
@@ -140,7 +142,7 @@ public sealed class SpecialDateToken : DateToken
     /// Returns the <see cref="SpecialDateDefinition"/> object for this part.
     /// </summary>
     /// <returns>The <see cref="SpecialDateDefinition"/> object for this part.</returns>
-    private SpecialDateDefinition GetSpecialDateDefinition()
+    private SpecialDateDefinition? GetSpecialDateDefinition()
     {
         return Array.Find(SpecialDates, e => e.SpecialDate == SpecialDate);
     }
@@ -184,14 +186,11 @@ public sealed class SpecialDateToken : DateToken
         /// a <see cref="DateToken"/>.</exception>
         protected override DateToken ParseInternal(Match match, IFormatProvider provider)
         {
-            SpecialDateDefinition specialDateDefinition = GetSpecialDateDefinitionForMatch(match);
+            SpecialDateDefinition? specialDateDefinition = GetSpecialDateDefinitionForMatch(match);
 
-            if (specialDateDefinition is null)
-            {
-                throw new FormatException();
-            }
-
-            return new SpecialDateToken { SpecialDate = specialDateDefinition.SpecialDate };
+            return specialDateDefinition is not null
+                ? new SpecialDateToken { SpecialDate = specialDateDefinition.SpecialDate }
+                : throw new FormatException();
         }
     }
 
@@ -206,7 +205,9 @@ public sealed class SpecialDateToken : DateToken
         /// <param name="specialDate">The <see cref="SpecialDate"/>.</param>
         /// <param name="month">The month.</param>
         /// <param name="day">The day.</param>
+#pragma warning disable S1144
         public SpecialDateDefinition(SpecialDate specialDate, int month, int day)
+#pragma warning restore S1144
         {
             SpecialDate = specialDate;
 

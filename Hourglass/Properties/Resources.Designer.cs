@@ -134,7 +134,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Back.
+        ///   Looks up a localized string similar to B&amp;ack.
         /// </summary>
         public static string BackTaskDialogCommand {
             get {
@@ -1098,6 +1098,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Looped.
+        /// </summary>
+        public static string LoopedText {
+            get {
+                return ResourceManager.GetString("LoopedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hourglass.
         /// </summary>
         public static string MessageBoxTitle {
@@ -1634,7 +1643,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Stop and close.
+        ///   Looks up a localized string similar to Stop and &amp;close.
         /// </summary>
         public static string StopAndCloseWindowCloseTaskDialogCommand {
             get {
@@ -2641,6 +2650,15 @@ namespace Hourglass.Properties {
         public static string WhatWouldYouDoTaskDialogText {
             get {
                 return ResourceManager.GetString("WhatWouldYouDoTaskDialogText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WithTitle.
+        /// </summary>
+        public static string WithTitleText {
+            get {
+                return ResourceManager.GetString("WithTitleText", resourceCulture);
             }
         }
     }

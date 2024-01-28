@@ -11,7 +11,7 @@ public sealed class VirtualDesktopManager : Manager
 {
     public static readonly VirtualDesktopManager Instance = new();
 
-    private readonly Lazy<ICurrentVirtualDesktop> _currentVirtualDesktop = new(GetVirtualDesktop);
+    private readonly Lazy<ICurrentVirtualDesktop?> _currentVirtualDesktop = new(GetVirtualDesktop);
 
     private VirtualDesktopManager()
     {
@@ -35,7 +35,7 @@ public sealed class VirtualDesktopManager : Manager
     public void MoveToCurrentVirtualDesktop(Window window) =>
         _currentVirtualDesktop.Value?.MoveTo(new WindowInteropHelper(window).Handle);
 
-    private static ICurrentVirtualDesktop GetVirtualDesktop()
+    private static ICurrentVirtualDesktop? GetVirtualDesktop()
     {
         foreach (var virtualDesktop in EnumerateVirtualDesktops())
         {

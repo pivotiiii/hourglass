@@ -29,172 +29,172 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     /// <summary>
     /// The <see cref="TimerWindow"/> that uses this context menu.
     /// </summary>
-    private TimerWindow _timerWindow;
+    private TimerWindow _timerWindow = null!;
 
     /// <summary>
     /// A <see cref="DispatcherTimer"/> used to raise events.
     /// </summary>
-    private DispatcherTimer _dispatcherTimer;
+    private DispatcherTimer _dispatcherTimer = null!;
 
     /// <summary>
     /// The "Always on top" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _alwaysOnTopMenuItem;
+    private MenuItem _alwaysOnTopMenuItem = null!;
 
     /// <summary>
     /// The "Full screen" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _fullScreenMenuItem;
+    private MenuItem _fullScreenMenuItem = null!;
 
     /// <summary>
     /// The "Prompt on exit" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _promptOnExitMenuItem;
+    private MenuItem _promptOnExitMenuItem = null!;
 
     /// <summary>
     /// The "Show progress in taskbar" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _showProgressInTaskbarMenuItem;
+    private MenuItem _showProgressInTaskbarMenuItem = null!;
 
     /// <summary>
     /// The "Show in notification area" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _showInNotificationAreaMenuItem;
+    private MenuItem _showInNotificationAreaMenuItem = null!;
 
     /// <summary>
     /// The "Loop timer" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _loopTimerMenuItem;
+    private MenuItem _loopTimerMenuItem = null!;
 
     /// <summary>
     /// The "Pop up when expired" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _popUpWhenExpiredMenuItem;
+    private MenuItem _popUpWhenExpiredMenuItem = null!;
 
     /// <summary>
     /// The "Close when expired" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _closeWhenExpiredMenuItem;
+    private MenuItem _closeWhenExpiredMenuItem = null!;
 
     /// <summary>
     /// The "Recent inputs" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _recentInputsMenuItem;
+    private MenuItem _recentInputsMenuItem = null!;
 
     /// <summary>
     /// The "Clear recent inputs" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _clearRecentInputsMenuItem;
+    private MenuItem? _clearRecentInputsMenuItem;
 
     /// <summary>
     /// The "Saved timers" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _savedTimersMenuItem;
+    private MenuItem _savedTimersMenuItem = null!;
 
     /// <summary>
     /// The "Open all saved timers" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _openAllSavedTimersMenuItem;
+    private MenuItem? _openAllSavedTimersMenuItem;
 
     /// <summary>
     /// The "Clear saved timers" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _clearSavedTimersMenuItem;
+    private MenuItem? _clearSavedTimersMenuItem;
 
     /// <summary>
     /// The "Theme" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _themeMenuItem;
+    private MenuItem _themeMenuItem = null!;
 
     /// <summary>
     /// The "Light theme" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _lightThemeMenuItem;
+    private MenuItem _lightThemeMenuItem = null!;
 
     /// <summary>
     /// The "Dark theme" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _darkThemeMenuItem;
+    private MenuItem _darkThemeMenuItem = null!;
 
     /// <summary>
     /// The "Manage themes" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _manageThemesMenuItem;
+    private MenuItem _manageThemesMenuItem = null!;
 
     /// <summary>
     /// The "Theme" <see cref="MenuItem"/>s associated with <see cref="Theme"/>s.
     /// </summary>
-    private IList<MenuItem> _selectableThemeMenuItems;
+    private IList<MenuItem> _selectableThemeMenuItems = null!;
 
     /// <summary>
     /// The "Sound" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _soundMenuItem;
+    private MenuItem _soundMenuItem = null!;
 
     /// <summary>
     /// The "Sound" <see cref="MenuItem"/>s associated with <see cref="Sound"/>s.
     /// </summary>
-    private IList<MenuItem> _selectableSoundMenuItems;
+    private IList<MenuItem> _selectableSoundMenuItems = null!;
 
     /// <summary>
     /// The "Loop sound" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _loopSoundMenuItem;
+    private MenuItem _loopSoundMenuItem = null!;
 
     /// <summary>
     /// The "Do not keep computer awake" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _doNotKeepComputerAwakeMenuItem;
+    private MenuItem _doNotKeepComputerAwakeMenuItem = null!;
 
     /// <summary>
     /// The "Open saved timers on startup" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _openSavedTimersOnStartupMenuItem;
+    private MenuItem _openSavedTimersOnStartupMenuItem = null!;
 
     /// <summary>
     /// The "Display time in the digital clock format" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _digitalClockTimeMenuItem;
+    private MenuItem _digitalClockTimeMenuItem = null!;
 
     /// <summary>
     /// The "Prefer 24-hour time when parsing" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _prefer24HourTimeMenuItem;
+    private MenuItem _prefer24HourTimeMenuItem = null!;
 
     /// <summary>
     /// The "Reverse progress bar" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _reverseProgressBarMenuItem;
+    private MenuItem _reverseProgressBarMenuItem = null!;
 
     /// <summary>
     /// The "Show time elapsed" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _showTimeElapsedMenuItem;
+    private MenuItem _showTimeElapsedMenuItem = null!;
 
     /// <summary>
     /// The "Shut down when expired" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _shutDownWhenExpiredMenuItem;
+    private MenuItem _shutDownWhenExpiredMenuItem = null!;
 
     /// <summary>
     /// The "Window title" <see cref="MenuItem"/>s associated with <see cref="WindowTitleMode"/>s.
     /// </summary>
-    private IList<MenuItem> _selectableWindowTitleMenuItems;
+    private IList<MenuItem> _selectableWindowTitleMenuItems = null!;
 
     /// <summary>
     /// The "Restore" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _restoreMenuItem;
+    private MenuItem _restoreMenuItem = null!;
 
     /// <summary>
     /// The "Minimize" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _minimizeMenuItem;
+    private MenuItem _minimizeMenuItem = null!;
 
     /// <summary>
     /// The "Maximize" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _maximizeMenuItem;
+    private MenuItem _maximizeMenuItem = null!;
 
     #endregion
 
@@ -230,9 +230,9 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         };
         _dispatcherTimer.Tick += DispatcherTimerTick;
 
-        _selectableThemeMenuItems = new List<MenuItem>();
-        _selectableSoundMenuItems = new List<MenuItem>();
-        _selectableWindowTitleMenuItems = new List<MenuItem>();
+        _selectableThemeMenuItems = [];
+        _selectableSoundMenuItems = [];
+        _selectableWindowTitleMenuItems = [];
 
         // Build the menu
         BuildMenu();
@@ -350,7 +350,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         {
             Theme menuItemTheme = (Theme)menuItem.Tag;
             menuItem.IsChecked = menuItemTheme == _timerWindow.Options.Theme;
-            if (_timerWindow.Options.Theme.Type == ThemeType.UserProvided)
+            if (_timerWindow.Options.Theme?.Type == ThemeType.UserProvided)
             {
                 menuItem.Visibility = menuItemTheme.Type is ThemeType.BuiltInLight or ThemeType.UserProvided
                     ? Visibility.Visible
@@ -358,14 +358,14 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
             }
             else
             {
-                menuItem.Visibility = menuItemTheme.Type == _timerWindow.Options.Theme.Type || menuItemTheme.Type == ThemeType.UserProvided
+                menuItem.Visibility = menuItemTheme.Type == _timerWindow.Options.Theme?.Type || menuItemTheme.Type == ThemeType.UserProvided
                     ? Visibility.Visible
                     : Visibility.Collapsed;
             }
         }
 
-        _lightThemeMenuItem.IsChecked = _timerWindow.Options.Theme.Type == ThemeType.BuiltInLight;
-        _darkThemeMenuItem.IsChecked = _timerWindow.Options.Theme.Type == ThemeType.BuiltInDark;
+        _lightThemeMenuItem.IsChecked = _timerWindow.Options.Theme?.Type == ThemeType.BuiltInLight;
+        _darkThemeMenuItem.IsChecked = _timerWindow.Options.Theme?.Type == ThemeType.BuiltInDark;
 
         // Sound
         foreach (MenuItem menuItem in _selectableSoundMenuItems)
@@ -450,7 +450,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         }
 
         // Sound
-        MenuItem selectedSoundMenuItem = _selectableSoundMenuItems.FirstOrDefault(static mi => mi.IsChecked);
+        MenuItem? selectedSoundMenuItem = _selectableSoundMenuItems.FirstOrDefault(static mi => mi.IsChecked);
         _timerWindow.Options.Sound = selectedSoundMenuItem?.Tag as Sound;
 
         // Loop sound
@@ -484,7 +484,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         }
 
         // Window title
-        MenuItem selectedWindowTitleMenuItem = _selectableWindowTitleMenuItems.FirstOrDefault(static mi => mi.IsChecked);
+        MenuItem? selectedWindowTitleMenuItem = _selectableWindowTitleMenuItems.FirstOrDefault(static mi => mi.IsChecked);
         _timerWindow.Options.WindowTitleMode = selectedWindowTitleMenuItem is not null
             ? (WindowTitleMode)selectedWindowTitleMenuItem.Tag
             : WindowTitleMode.ApplicationName;
@@ -1110,7 +1110,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         {
             Border progress = new()
             {
-                Background = timer.Options.Theme.ProgressBarBrush,
+                Background = timer.Options.Theme?.ProgressBarBrush,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Width = MathExtensions.LimitToRange(timer.TimeLeftAsPercentage.Value / 100.0 * 16.0, 0.0, 16.0),
                 Height = 6
@@ -1122,7 +1122,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         {
             Border progress = new()
             {
-                Background = timer.Options.Theme.ProgressBarBrush,
+                Background = timer.Options.Theme?.ProgressBarBrush,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Width = MathExtensions.LimitToRange(timer.TimeElapsedAsPercentage.Value / 100.0 * 16.0, 0.0, 16.0),
                 Height = 6
@@ -1356,8 +1356,8 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         ThemeType type = (ThemeType)clickedMenuItem.Tag;
 
         _timerWindow.Options.Theme = type == ThemeType.BuiltInDark
-            ? _timerWindow.Options.Theme.DarkVariant
-            : _timerWindow.Options.Theme.LightVariant;
+            ? _timerWindow.Options.Theme?.DarkVariant
+            : _timerWindow.Options.Theme?.LightVariant;
     }
 
     /// <summary>
@@ -1383,16 +1383,16 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     /// <param name="e">The event data.</param>
     private void ManageThemesMenuItemClick(object sender, RoutedEventArgs e)
     {
-        ThemeManagerWindow window = Application.Current.Windows.OfType<ThemeManagerWindow>().FirstOrDefault();
-        if (window is null)
+        ThemeManagerWindow? themeManagerWindow = Application.Current.Windows.OfType<ThemeManagerWindow>().FirstOrDefault();
+        if (themeManagerWindow is null)
         {
-            window = new(_timerWindow);
-            window.Show();
+            themeManagerWindow = new(_timerWindow);
+            themeManagerWindow.Show();
         }
         else
         {
-            window.SetTimerWindow(_timerWindow);
-            window.BringToFrontAndActivate();
+            themeManagerWindow.SetTimerWindow(_timerWindow);
+            themeManagerWindow.BringToFrontAndActivate();
         }
     }
 
@@ -1433,7 +1433,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     /// Creates a <see cref="MenuItem"/> for a <see cref="Sound"/>.
     /// </summary>
     /// <param name="sound">A <see cref="Sound"/>.</param>
-    private void CreateSoundMenuItem(Sound sound)
+    private void CreateSoundMenuItem(Sound? sound)
     {
         MenuItem menuItem = new()
         {

@@ -3,11 +3,11 @@ using System.Runtime.InteropServices;
 
 namespace WindowsVirtualDesktopHelper.VirtualDesktopAPI.Implementation;
 
-internal class VirtualDesktopWin10(ImmersiveShellProvider immersiveShellProvider)
+internal sealed class VirtualDesktopWin10(ImmersiveShellProvider immersiveShellProvider)
     : VirtualDesktop<VirtualDesktopWin10.IVirtualDesktopManagerInternal>(immersiveShellProvider)
 {
     protected override Guid GetCurrentDesktopId() =>
-        VirtualDesktopManagerInternal.GetCurrentDesktop().GetId();
+        VirtualDesktopManagerInternal!.GetCurrentDesktop().GetId();
 
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

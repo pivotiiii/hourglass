@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using System.Collections.Generic;
 
 namespace KPreisser.UI;
@@ -13,8 +15,6 @@ public abstract class TaskDialogButton : TaskDialogControl
     private bool _defaultButton;
 
     private bool _elevationRequired;
-
-    private IReadOnlyList<TaskDialogButton> _collection;
 
     /// <summary>
     /// Occurs when the button is clicked.
@@ -102,9 +102,9 @@ public abstract class TaskDialogButton : TaskDialogControl
             // all other buttons to false.
             // Note that this does not handle buttons that are added later to
             // the collection.
-            if (_collection != null && value)
+            if (Collection != null && value)
             {
-                foreach (TaskDialogButton button in _collection)
+                foreach (TaskDialogButton button in Collection)
                     button._defaultButton = button == this;
             }
         }
@@ -121,11 +121,7 @@ public abstract class TaskDialogButton : TaskDialogControl
     // (e.g. if we ever need to add actions in the setter, it normally would
     // be the same for all subclasses). Instead, the subclass can declare
     // a new (internal) Collection property which has a more specific type.
-    private protected IReadOnlyList<TaskDialogButton> Collection
-    {
-        get => _collection;
-        set => _collection = value;
-    }
+    private protected IReadOnlyList<TaskDialogButton> Collection { get; set; }
 
     /// <summary>
     /// Simulates a click on this button.

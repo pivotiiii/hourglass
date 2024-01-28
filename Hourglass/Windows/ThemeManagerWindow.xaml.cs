@@ -51,18 +51,18 @@ public sealed partial class ThemeManagerWindow
     /// <summary>
     /// The <see cref="TimerWindow"/> that will be updated when a theme is selected in this window.
     /// </summary>
-    private TimerWindow _timerWindow;
+    private TimerWindow _timerWindow = null!;
 
     /// <summary>
     /// The currently selected theme.
     /// </summary>
-    private Theme _selectedTheme;
+    private Theme _selectedTheme = null!;
 
     /// <summary>
     /// A copy of the currently selected theme. The changes to this copy are applied to the selected theme when the
     /// user saves their changes.
     /// </summary>
-    private Theme _editedTheme;
+    private Theme _editedTheme = null!;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ThemeManagerWindow"/> class.
@@ -196,7 +196,7 @@ public sealed partial class ThemeManagerWindow
     /// </summary>
     private void BindTimerWindow()
     {
-        if (_timerWindow.Theme.Type == ThemeType.UserProvided)
+        if (_timerWindow.Theme?.Type == ThemeType.UserProvided)
         {
             EditedTheme = CloneThemeForEditing(_timerWindow.Theme);
             SelectedTheme = _timerWindow.Theme;
@@ -204,8 +204,8 @@ public sealed partial class ThemeManagerWindow
         }
         else
         {
-            EditedTheme = _timerWindow.Theme;
-            SelectedTheme = _timerWindow.Theme;
+            EditedTheme = _timerWindow.Theme!;
+            SelectedTheme = _timerWindow.Theme!;
             State = ThemeManagerWindowState.BuiltInTheme;
         }
     }
@@ -417,23 +417,26 @@ public sealed partial class ThemeManagerWindow
     private void ThemesComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         ComboBoxItem selectedItem = (ComboBoxItem)ThemesComboBox.SelectedItem;
-        if (selectedItem is not null)
+        if (selectedItem is null)
         {
-            Theme newSelectedTheme = (Theme)selectedItem.Tag;
-            if (newSelectedTheme.Identifier != _selectedTheme.Identifier)
-            {
-                if (PromptToSaveIfRequired())
-                {
-                    _timerWindow.Options.Theme = newSelectedTheme;
-                    BindTimerWindow();
-                }
-                else
-                {
-                    // Revert the selection
-                    BindSelectedTheme();
-                }
-            }
+            return;
         }
+
+        Theme newSelectedTheme = (Theme)selectedItem.Tag;
+        if (newSelectedTheme.Identifier == _selectedTheme.Identifier)
+        {
+            return;
+        }
+
+        if (_timerWindow.Options is null || !PromptToSaveIfRequired())
+        {
+            // Revert the selection
+            BindSelectedTheme();
+            return;
+        }
+
+        _timerWindow.Options.Theme = newSelectedTheme;
+        BindTimerWindow();
     }
 
     /// <summary>

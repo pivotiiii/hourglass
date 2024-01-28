@@ -43,7 +43,7 @@ public sealed class TimerOptionsManager : Manager
         get
         {
             UpdateMostRecentOptions();
-            return TimerOptions.FromTimerOptions(_mostRecentOptions);
+            return TimerOptions.FromTimerOptions(_mostRecentOptions)!;
         }
     }
 
@@ -52,7 +52,7 @@ public sealed class TimerOptionsManager : Manager
     /// </summary>
     public override void Initialize()
     {
-        _mostRecentOptions = Settings.Default.MostRecentOptions ?? new TimerOptions();
+        _mostRecentOptions = Settings.Default.MostRecentOptions;
     }
 
     /// <summary>

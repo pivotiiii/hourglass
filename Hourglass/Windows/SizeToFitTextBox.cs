@@ -18,7 +18,7 @@ using Extensions;
 /// </summary>
 public sealed class SizeToFitTextBox : TextBox
 {
-    private FormattedText _formattedText;
+    private FormattedText? _formattedText;
 
     /// <summary>
     /// Identifies the minimum font size <see cref="DependencyProperty"/>.

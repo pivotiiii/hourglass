@@ -48,7 +48,7 @@ public sealed class CommandLineArguments
     /// <summary>
     /// Gets an error message if the command-line arguments were not successfully parsed, or <c>null</c> otherwise.
     /// </summary>
-    public string ParseErrorMessage { get; private set; }
+    public string? ParseErrorMessage { get; private set; }
 
     /// <summary>
     /// Gets a value indicating whether command-line usage information should be showed to the user.
@@ -59,12 +59,12 @@ public sealed class CommandLineArguments
     /// Gets a <see cref="TimerStart"/>, or <c>null</c> if no <see cref="TimerStart"/> was specified on the command
     /// line.
     /// </summary>
-    public TimerStart TimerStart { get; private set; }
+    public TimerStart? TimerStart { get; private set; }
 
     /// <summary>
     /// Gets a user-specified title for the timer.
     /// </summary>
-    public string Title { get; private set; }
+    public string? Title { get; private set; }
 
     /// <summary>
     /// Gets a value indicating whether the timer window should always be displayed on top of other windows.
@@ -136,12 +136,12 @@ public sealed class CommandLineArguments
     /// <summary>
     /// Gets the theme of the timer window.
     /// </summary>
-    public Theme Theme { get; private set; }
+    public Theme? Theme { get; private set; }
 
     /// <summary>
     /// Gets the sound to play when the timer expires, or <c>null</c> if no sound is to be played.
     /// </summary>
-    public Sound Sound { get; private set; }
+    public Sound? Sound { get; private set; }
 
     /// <summary>
     /// Gets a value indicating whether the sound that plays when the timer expires should be looped until stopped
@@ -213,8 +213,8 @@ public sealed class CommandLineArguments
     /// <summary>
     /// Shows the command-line usage of this application in a window.
     /// </summary>
-    /// <param name="errorMessage">An error message to display. (Optional.)</param>
-    public static void ShowUsage(string errorMessage = null)
+    /// <param name="errorMessage">An error message to display (optional).</param>
+    public static void ShowUsage(string? errorMessage = null)
     {
         UsageDialog.ShowOrActivate(errorMessage);
     }
@@ -312,14 +312,14 @@ public sealed class CommandLineArguments
         TimerOptions defaultOptions = new();
 
         WindowSize mostRecentWindowSize = GetMostRecentWindowSize();
-        Rect defaultWindowBounds = defaultOptions.WindowSize.RestoreBounds;
+        Rect defaultWindowBounds = defaultOptions.WindowSize?.RestoreBounds ?? new(new(InterfaceScaler.BaseWindowWidth, InterfaceScaler.BaseWindowHeight));
         Rect defaultWindowBoundsWithLocation = mostRecentWindowSize.RestoreBounds.Merge(defaultWindowBounds);
 
         return new()
         {
             Title = defaultOptions.Title,
             AlwaysOnTop = defaultOptions.AlwaysOnTop,
-            IsFullScreen = defaultOptions.WindowSize.IsFullScreen,
+            IsFullScreen = defaultOptions.WindowSize?.IsFullScreen == true,
             PromptOnExit = defaultOptions.PromptOnExit,
             ShowProgressInTaskbar = defaultOptions.ShowProgressInTaskbar,
             DoNotKeepComputerAwake = defaultOptions.DoNotKeepComputerAwake,
@@ -337,8 +337,8 @@ public sealed class CommandLineArguments
             OpenSavedTimers = false,
             Prefer24HourTime = false,
             WindowTitleMode = WindowTitleMode.ApplicationName,
-            WindowState = defaultOptions.WindowSize.WindowState,
-            RestoreWindowState = defaultOptions.WindowSize.RestoreWindowState,
+            WindowState = defaultOptions.WindowSize?.WindowState ?? WindowState.Normal,
+            RestoreWindowState = defaultOptions.WindowSize?.RestoreWindowState ?? WindowState.Normal,
             WindowBounds = defaultWindowBoundsWithLocation,
             LockInterface = defaultOptions.LockInterface
         };
@@ -350,8 +350,8 @@ public sealed class CommandLineArguments
     /// <returns>The most recent <see cref="WindowSize"/>.</returns>
     private static WindowSize GetMostRecentWindowSize()
     {
-        WindowSize windowSizeFromSettings = Settings.Default.WindowSize;
-        WindowSize windowSizeFromSibling = WindowSize.FromWindowOfType<TimerWindow>().Offset();
+        WindowSize? windowSizeFromSettings = Settings.Default.WindowSize;
+        WindowSize? windowSizeFromSibling = WindowSize.FromWindowOfType<TimerWindow>().Offset();
         return windowSizeFromSibling ?? windowSizeFromSettings ?? new WindowSize();
     }
 
@@ -367,7 +367,7 @@ public sealed class CommandLineArguments
         CommandLineArguments argumentsBasedOnFactoryDefaults = GetArgumentsFromFactoryDefaults();
         bool useFactoryDefaults = false;
 
-        HashSet<string> specifiedSwitches = new();
+        HashSet<string> specifiedSwitches = [];
         Queue<string> remainingArgs = new(args);
         while (remainingArgs.Count > 0)
         {
@@ -377,6 +377,7 @@ public sealed class CommandLineArguments
             {
                 case "--title":
                 case "-t":
+                case "/t":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--title");
 
                     string title = GetRequiredValue(arg, remainingArgs);
@@ -387,6 +388,7 @@ public sealed class CommandLineArguments
 
                 case "--always-on-top":
                 case "-a":
+                case "/a":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--always-on-top");
 
                     bool alwaysOnTop = GetBoolValue(
@@ -400,6 +402,7 @@ public sealed class CommandLineArguments
 
                 case "--full-screen":
                 case "-f":
+                case "/f":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--full-screen");
 
                     bool isFullScreen = GetBoolValue(
@@ -413,6 +416,7 @@ public sealed class CommandLineArguments
 
                 case "--prompt-on-exit":
                 case "-o":
+                case "/o":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--prompt-on-exit");
 
                     bool promptOnExit = GetBoolValue(
@@ -426,6 +430,7 @@ public sealed class CommandLineArguments
 
                 case "--show-progress-in-taskbar":
                 case "-y":
+                case "/y":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--show-progress-in-taskbar");
 
                     bool showProgressInTaskbar = GetBoolValue(
@@ -439,6 +444,7 @@ public sealed class CommandLineArguments
 
                 case "--do-not-keep-awake":
                 case "-k":
+                case "/k":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--do-not-keep-awake");
 
                     bool doNotKeepComputerAwake = GetBoolValue(
@@ -452,6 +458,7 @@ public sealed class CommandLineArguments
 
                 case "--reverse-progress-bar":
                 case "-g":
+                case "/g":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--reverse-progress-bar");
 
                     bool reverseProgressBar = GetBoolValue(
@@ -465,6 +472,7 @@ public sealed class CommandLineArguments
 
                 case "--digital-clock-time":
                 case "-c":
+                case "/c":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--digital-clock-time");
 
                     bool digitalClockTime = GetBoolValue(
@@ -478,6 +486,7 @@ public sealed class CommandLineArguments
 
                 case "--show-time-elapsed":
                 case "-u":
+                case "/u":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--show-time-elapsed");
 
                     bool showTimeElapsed = GetBoolValue(
@@ -491,6 +500,7 @@ public sealed class CommandLineArguments
 
                 case "--show-in-notification-area":
                 case "-n":
+                case "/n":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--show-in-notification-area");
 
                     bool showInNotificationArea = GetBoolValue(
@@ -504,6 +514,7 @@ public sealed class CommandLineArguments
 
                 case "--loop-timer":
                 case "-l":
+                case "/l":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--loop-timer");
 
                     bool loopTimer = GetBoolValue(
@@ -517,6 +528,7 @@ public sealed class CommandLineArguments
 
                 case "--pop-up-when-expired":
                 case "-p":
+                case "/p":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--pop-up-when-expired");
 
                     bool popUpWhenExpired = GetBoolValue(
@@ -530,6 +542,7 @@ public sealed class CommandLineArguments
 
                 case "--close-when-expired":
                 case "-e":
+                case "/e":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--close-when-expired");
 
                     bool closeWhenExpired = GetBoolValue(
@@ -543,6 +556,7 @@ public sealed class CommandLineArguments
 
                 case "--shut-down-when-expired":
                 case "-x":
+                case "/x":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--shut-down-when-expired");
 
                     bool shutDownWhenExpired = GetBoolValue(
@@ -555,9 +569,10 @@ public sealed class CommandLineArguments
 
                 case "--theme":
                 case "-m":
+                case "/m":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--theme");
 
-                    Theme theme = GetThemeValue(
+                    Theme? theme = GetThemeValue(
                         arg,
                         remainingArgs,
                         argumentsBasedOnMostRecentOptions.Theme);
@@ -568,9 +583,10 @@ public sealed class CommandLineArguments
 
                 case "--sound":
                 case "-s":
+                case "/s":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--sound");
 
-                    Sound sound = GetSoundValue(
+                    Sound? sound = GetSoundValue(
                         arg,
                         remainingArgs,
                         argumentsBasedOnMostRecentOptions.Sound);
@@ -581,6 +597,7 @@ public sealed class CommandLineArguments
 
                 case "--loop-sound":
                 case "-r":
+                case "/r":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--loop-sound");
 
                     bool loopSound = GetBoolValue(
@@ -594,6 +611,7 @@ public sealed class CommandLineArguments
 
                 case "--open-saved-timers":
                 case "-v":
+                case "/v":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--open-saved-timers");
 
                     bool openSavedTimers = GetBoolValue(
@@ -607,6 +625,7 @@ public sealed class CommandLineArguments
 
                 case "--prefer-24h-time":
                 case "-j":
+                case "/j":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--prefer-24h-time");
 
                     bool prefer24HourTime = GetBoolValue(
@@ -620,6 +639,7 @@ public sealed class CommandLineArguments
 
                 case "--window-title":
                 case "-i":
+                case "/i":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--window-title");
 
                     WindowTitleMode windowTitleMode = GetWindowTitleModeValue(
@@ -633,6 +653,7 @@ public sealed class CommandLineArguments
 
                 case "--window-state":
                 case "-w":
+                case "/w":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--window-state");
 
                     WindowState windowState = GetWindowStateValue(
@@ -646,6 +667,7 @@ public sealed class CommandLineArguments
 
                 case "--window-bounds":
                 case "-b":
+                case "/b":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--window-bounds");
 
                     Rect windowBounds = GetRectValue(
@@ -659,6 +681,7 @@ public sealed class CommandLineArguments
 
                 case "--lock-interface":
                 case "-z":
+                case "/z":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--lock-interface");
 
                     bool lockInterface = GetBoolValue(
@@ -671,6 +694,7 @@ public sealed class CommandLineArguments
 
                 case "--use-factory-defaults":
                 case "-d":
+                case "/d":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--use-factory-defaults");
 
                     useFactoryDefaults = true;
@@ -679,6 +703,8 @@ public sealed class CommandLineArguments
                 case "--help":
                 case "-h":
                 case "-?":
+                case "/h":
+                case "/?":
                     ThrowIfDuplicateSwitch(specifiedSwitches, "--help");
 
                     argumentsBasedOnMostRecentOptions.ShouldShowUsage = true;
@@ -696,8 +722,7 @@ public sealed class CommandLineArguments
                         throw new ParseException(message);
                     }
 
-                    List<string> inputArgs = remainingArgs.ToList();
-                    inputArgs.Insert(0, arg);
+                    List<string> inputArgs = [arg, ..remainingArgs];
                     remainingArgs.Clear();
 
                     TimerStart timerStart = GetTimerStartValue(inputArgs);
@@ -716,7 +741,7 @@ public sealed class CommandLineArguments
     /// </summary>
     /// <param name="remainingArgs">The unparsed arguments.</param>
     /// <returns>The next value in <paramref name="remainingArgs"/>.</returns>
-    private static string GetValue(Queue<string> remainingArgs)
+    private static string? GetValue(Queue<string> remainingArgs)
     {
         if (remainingArgs.Count > 0 && !IsSwitch(remainingArgs.Peek()))
         {
@@ -738,7 +763,7 @@ public sealed class CommandLineArguments
     /// <paramref name="remainingArgs"/> is a switch.</exception>
     private static string GetRequiredValue(string arg, Queue<string> remainingArgs)
     {
-        string value = GetValue(remainingArgs);
+        string? value = GetValue(remainingArgs);
 
         if (value is null)
         {
@@ -832,7 +857,7 @@ public sealed class CommandLineArguments
     /// <returns>The next <see cref="Theme"/> value in <paramref name="remainingArgs"/></returns>
     /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not
     /// "last" or a valid representation of a <see cref="Theme"/>.</exception>
-    private static Theme GetThemeValue(string arg, Queue<string> remainingArgs, Theme last)
+    private static Theme? GetThemeValue(string arg, Queue<string> remainingArgs, Theme? last)
     {
         string value = GetRequiredValue(arg, remainingArgs);
 
@@ -842,8 +867,8 @@ public sealed class CommandLineArguments
                 return last;
 
             default:
-                Theme theme = ThemeManager.Instance.GetThemeByIdentifier(value.ToLowerInvariant()) ??
-                              ThemeManager.Instance.GetThemeByName(value, StringComparison.CurrentCultureIgnoreCase);
+                Theme? theme = ThemeManager.Instance.GetThemeByIdentifier(value.ToLowerInvariant()) ??
+                               ThemeManager.Instance.GetThemeByName(value, StringComparison.CurrentCultureIgnoreCase);
 
                 if (theme is null)
                 {
@@ -871,7 +896,7 @@ public sealed class CommandLineArguments
     /// <returns>The next <see cref="Sound"/> value in <paramref name="remainingArgs"/>.</returns>
     /// <exception cref="ParseException">if <paramref name="remainingArgs"/> is empty or the next argument is not
     /// "none", "last", or a valid representation of a <see cref="Sound"/>.</exception>
-    private static Sound GetSoundValue(string arg, Queue<string> remainingArgs, Sound last)
+    private static Sound? GetSoundValue(string arg, Queue<string> remainingArgs, Sound? last)
     {
         string value = GetRequiredValue(arg, remainingArgs);
 
@@ -884,7 +909,7 @@ public sealed class CommandLineArguments
                 return last;
 
             default:
-                Sound sound = SoundManager.Instance.GetSoundByName(value, StringComparison.CurrentCultureIgnoreCase);
+                Sound? sound = SoundManager.Instance.GetSoundByName(value, StringComparison.CurrentCultureIgnoreCase);
 
                 if (sound is null)
                 {
@@ -1049,7 +1074,7 @@ public sealed class CommandLineArguments
     private static TimerStart GetTimerStartValue(IEnumerable<string> remainingArgs)
     {
         string value = string.Join(" ", remainingArgs);
-        TimerStart timerStart = TimerStart.FromString(value);
+        TimerStart? timerStart = TimerStart.FromString(value);
 
         if (timerStart is null)
         {
@@ -1071,7 +1096,7 @@ public sealed class CommandLineArguments
     /// <returns>A value indicating whether <paramref name="arg"/> is a command-line switch.</returns>
     private static bool IsSwitch(string arg)
     {
-        return arg.StartsWith("-");
+        return arg.StartsWith("-") || arg.StartsWith("/");
     }
 
     /// <summary>

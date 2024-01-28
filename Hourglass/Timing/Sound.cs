@@ -22,7 +22,7 @@ public sealed class Sound
     /// <summary>
     /// A method that returns a stream to the sound data.
     /// </summary>
-    private readonly Func<UnmanagedMemoryStream> _streamProvider;
+    private readonly Func<UnmanagedMemoryStream>? _streamProvider;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Sound"/> class for a sound stored in the file system.
@@ -77,12 +77,12 @@ public sealed class Sound
     /// <summary>
     /// Gets the default sound.
     /// </summary>
-    public static Sound DefaultSound => SoundManager.Instance.DefaultSound;
+    public static Sound? DefaultSound => SoundManager.Instance.DefaultSound;
 
     /// <summary>
     /// Gets a sound representing no sound.
     /// </summary>
-    public static Sound NoSound => null;
+    public static Sound? NoSound => null;
 
     /// <summary>
     /// Gets the friendly name for this sound.
@@ -102,7 +102,7 @@ public sealed class Sound
     /// <summary>
     /// Gets the path to the sound file.
     /// </summary>
-    public string Path { get; }
+    public string? Path { get; }
 
     /// <summary>
     /// Gets the length of the sound, or <c>null</c> if the length of the sound is unknown.
@@ -116,7 +116,7 @@ public sealed class Sound
     /// <param name="identifier">The identifier for the sound.</param>
     /// <returns>A <see cref="Sound"/> for the specified identifier, or <c>null</c> if the identifier is
     /// <c>null</c> or empty.</returns>
-    public static Sound FromIdentifier(string identifier)
+    public static Sound? FromIdentifier(string? identifier)
     {
             return SoundManager.Instance.GetSoundOrDefaultByIdentifier(identifier);
         }
@@ -129,7 +129,7 @@ public sealed class Sound
     {
             return _streamProvider is not null
                 ? _streamProvider()
-                : new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read);
+                : new FileStream(Path!, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
 
     /// <summary>

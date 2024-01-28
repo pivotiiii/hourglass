@@ -22,7 +22,7 @@ public sealed class KeepAwakeManager : Manager
     /// <summary>
     /// The set of objects that require that the system be kept awake.
     /// </summary>
-    private readonly HashSet<object> _objectsToKeepAwakeFor = new();
+    private readonly HashSet<object> _objectsToKeepAwakeFor = [];
 
     /// <summary>
     /// The <see cref="ExecutionState"/> before the manager started keeping the system awake.

@@ -67,10 +67,10 @@ namespace Hourglass.Properties
         {
             SettingsPropertyValueCollection settingsPropertyValueCollection = GetSettingsPropertyValueCollection(collection);
 
-            XmlDocument document = TryLoadSettingsDocument();
+            XmlDocument? document = TryLoadSettingsDocument();
             foreach (SettingsPropertyValue value in settingsPropertyValueCollection)
             {
-                string serializedValue = TryGetSerializedValue(document, value.Name);
+                string? serializedValue = TryGetSerializedValue(document, value.Name);
                 if (!string.IsNullOrWhiteSpace(serializedValue))
                 {
                     value.SerializedValue = serializedValue;
@@ -161,7 +161,7 @@ namespace Hourglass.Properties
         /// for each <see cref="SettingsProperty"/> in the <see cref="SettingsPropertyCollection"/>.</returns>
         private static SettingsPropertyValueCollection GetSettingsPropertyValueCollection(SettingsPropertyCollection collection)
         {
-            SettingsPropertyValueCollection values = new();
+            SettingsPropertyValueCollection values = [];
 
             foreach (SettingsProperty property in collection)
             {
@@ -180,7 +180,7 @@ namespace Hourglass.Properties
         /// </summary>
         /// <returns>The settings XML document, or <c>null</c> if the settings XML document could not be loaded.
         /// </returns>
-        private static XmlDocument TryLoadSettingsDocument()
+        private static XmlDocument? TryLoadSettingsDocument()
         {
             try
             {
@@ -202,7 +202,7 @@ namespace Hourglass.Properties
         /// <param name="propertyName">The name of the property whose value to get.</param>
         /// <returns>The value of the specified property, or <c>null</c> if a value for the specified property was not
         /// found in the XML document.</returns>
-        private static string TryGetSerializedValue(XmlDocument document, string propertyName)
+        private static string? TryGetSerializedValue(XmlDocument? document, string propertyName)
         {
             if (document is null)
             {

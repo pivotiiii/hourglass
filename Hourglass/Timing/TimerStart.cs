@@ -64,12 +64,12 @@ public sealed class TimerStart
     /// <summary>
     /// Gets the default <see cref="TimerStart"/> object.
     /// </summary>
-    public static TimerStart Default => FromString(Resources.TimerStartDefault);
+    public static TimerStart Default => FromString(Resources.TimerStartDefault)!;
 
     /// <summary>
     /// Gets the zero-length <see cref="TimerStart"/> object.
     /// </summary>
-    public static TimerStart Zero => FromString(Resources.TimerStartZero);
+    public static TimerStart Zero => FromString(Resources.TimerStartZero)!;
 
     /// <summary>
     /// Gets a value indicating whether the <see cref="TimerStart"/> can be used to start a timer now.
@@ -94,9 +94,9 @@ public sealed class TimerStart
     /// <param name="str">A string.</param>
     /// <returns>The <see cref="TimerStart"/> for the string, or <c>null</c> if the string is not a supported
     /// representation of a <see cref="TimerStart"/>.</returns>
-    public static TimerStart FromString(string str)
+    public static TimerStart? FromString(string str)
     {
-        TimerStartToken timerStartToken = TimerStartToken.FromString(str);
+        TimerStartToken? timerStartToken = TimerStartToken.FromString(str);
 
         return timerStartToken is null ? null : new(timerStartToken);
     }
@@ -106,7 +106,7 @@ public sealed class TimerStart
     /// </summary>
     /// <param name="timerStartInfo">A <see cref="TimerStartInfo"/>.</param>
     /// <returns>The <see cref="TimerStart"/> for the <see cref="TimerStartInfo"/>.</returns>
-    public static TimerStart FromTimerStartInfo(TimerStartInfo timerStartInfo)
+    public static TimerStart? FromTimerStartInfo(TimerStartInfo? timerStartInfo)
     {
         return timerStartInfo is null ? null : new(timerStartInfo);
     }

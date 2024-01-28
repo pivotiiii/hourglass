@@ -75,7 +75,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// <summary>
     /// A user-specified title for the timer.
     /// </summary>
-    private string _title;
+    private string? _title;
 
     /// <summary>
     /// A value indicating whether the timer window should always be displayed on top of other windows.
@@ -131,7 +131,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// <summary>
     /// The sound to play when the timer expires, or <c>null</c> if no sound is to be played.
     /// </summary>
-    private Sound _sound;
+    private Sound? _sound;
 
     /// <summary>
     /// A value indicating whether the sound that plays when the timer expires should be looped until stopped by
@@ -142,7 +142,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// <summary>
     /// The theme of the timer window.
     /// </summary>
-    private Theme _theme;
+    private Theme? _theme;
 
     /// <summary>
     /// A value indicating what information to display in the timer window title.
@@ -152,7 +152,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// <summary>
     /// The size, position, and state of the timer window.
     /// </summary>
-    private WindowSize _windowSize;
+    private WindowSize? _windowSize;
 
     /// <summary>
     /// A value indicating whether the user interface should be locked, preventing the user from taking any action
@@ -222,14 +222,14 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// <summary>
     /// Raised when a property value changes.
     /// </summary>
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     #region Properties
 
     /// <summary>
     /// Gets or sets a user-specified title for the timer.
     /// </summary>
-    public string Title
+    public string? Title
     {
         get => _title;
 
@@ -459,7 +459,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// <summary>
     /// Gets or sets the theme of the timer window.
     /// </summary>
-    public Theme Theme
+    public Theme? Theme
     {
         get => _theme;
 
@@ -478,7 +478,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// <summary>
     /// Gets or sets the sound to play when the timer expires, or <c>null</c> if no sound is to be played.
     /// </summary>
-    public Sound Sound
+    public Sound? Sound
     {
         get => _sound;
 
@@ -536,7 +536,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// <summary>
     /// Gets or sets the size, position, and state of the timer window.
     /// </summary>
-    public WindowSize WindowSize
+    public WindowSize? WindowSize
     {
         get => _windowSize;
 
@@ -583,7 +583,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// <param name="options">A <see cref="TimerOptions"/>.</param>
     /// <returns>A <see cref="TimerOptions"/> for the specified <see cref="TimerOptions"/>, or <c>null</c> if the
     /// specified <see cref="TimerOptions"/> is <c>null</c>.</returns>
-    public static TimerOptions FromTimerOptions(TimerOptions options)
+    public static TimerOptions? FromTimerOptions(TimerOptions? options)
     {
         return options is not null ? new TimerOptions(options) : null;
     }
@@ -595,7 +595,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// <param name="info">A <see cref="TimerOptionsInfo"/>.</param>
     /// <returns>A <see cref="TimerOptions"/> for the specified <see cref="TimerOptionsInfo"/>, or <c>null</c> if
     /// the specified <see cref="TimerOptionsInfo"/> is <c>null</c>.</returns>
-    public static TimerOptions FromTimerOptionsInfo(TimerOptionsInfo info)
+    public static TimerOptions? FromTimerOptionsInfo(TimerOptionsInfo? info)
     {
         return info is not null ? new TimerOptions(info) : null;
     }
@@ -726,7 +726,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             SoundIdentifier = _sound?.Identifier,
             LoopSound = _loopSound,
             WindowTitleMode = _windowTitleMode,
-            WindowSize = WindowSizeInfo.FromWindowSize(_windowSize),
+            WindowSize = WindowSizeInfo.FromWindowSize(_windowSize)!,
             LockInterface = _lockInterface
         };
     }

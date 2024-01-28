@@ -40,7 +40,7 @@ public sealed class SpecialTimeToken : TimeToken
     /// The set of supported special times.
     /// </summary>
     private static readonly SpecialTimeDefinition[] SpecialTimes =
-    {
+    [
         new(
             SpecialTime.Midday,
             12 /* hour */,
@@ -52,7 +52,7 @@ public sealed class SpecialTimeToken : TimeToken
             0 /* hour */,
             0 /* minute */,
             0 /* second */)
-    };
+    ];
 
     /// <summary>
     /// Gets or sets the <see cref="SpecialTime"/> represented by this token.
@@ -80,8 +80,9 @@ public sealed class SpecialTimeToken : TimeToken
     {
         ThrowIfNotValid();
 
-        SpecialTimeDefinition specialTimeDefinition = GetSpecialTimeDefinition();
+        SpecialTimeDefinition specialTimeDefinition = GetSpecialTimeDefinition()!;
 
+#pragma warning disable S6562
         return new(
             datePart.Year,
             datePart.Month,
@@ -89,6 +90,7 @@ public sealed class SpecialTimeToken : TimeToken
             specialTimeDefinition.Hour,
             specialTimeDefinition.Minute,
             specialTimeDefinition.Second);
+#pragma warning restore S6562
     }
 
     /// <summary>
@@ -102,7 +104,7 @@ public sealed class SpecialTimeToken : TimeToken
         {
             ThrowIfNotValid();
 
-            SpecialTimeDefinition specialTimeDefinition = GetSpecialTimeDefinition();
+            SpecialTimeDefinition specialTimeDefinition = GetSpecialTimeDefinition()!;
             return specialTimeDefinition.GetName(provider);
         }
         catch (Exception ex) when (ex.CanBeHandled())
@@ -117,7 +119,7 @@ public sealed class SpecialTimeToken : TimeToken
     /// <param name="match">A <see cref="Match"/>.</param>
     /// <returns>The <see cref="SpecialTimeDefinition"/> object for the <see cref="Match"/>.</returns>
 #pragma warning disable S3398
-    private static SpecialTimeDefinition GetSpecialTimeDefinitionForMatch(Match match)
+    private static SpecialTimeDefinition? GetSpecialTimeDefinitionForMatch(Match match)
 #pragma warning restore S3398
     {
         return Array.Find(SpecialTimes, e => match.Groups[e.MatchGroup].Success);
@@ -127,7 +129,7 @@ public sealed class SpecialTimeToken : TimeToken
     /// Returns the <see cref="SpecialTimeDefinition"/> object for this part.
     /// </summary>
     /// <returns>The <see cref="SpecialTimeDefinition"/> object for this part.</returns>
-    private SpecialTimeDefinition GetSpecialTimeDefinition()
+    private SpecialTimeDefinition? GetSpecialTimeDefinition()
     {
         return Array.Find(SpecialTimes, e => e.SpecialTime == SpecialTime);
     }
@@ -171,14 +173,11 @@ public sealed class SpecialTimeToken : TimeToken
         /// a <see cref="TimeToken"/>.</exception>
         protected override TimeToken ParseInternal(Match match, IFormatProvider provider)
         {
-            SpecialTimeDefinition specialTimeDefinition = GetSpecialTimeDefinitionForMatch(match);
+            SpecialTimeDefinition? specialTimeDefinition = GetSpecialTimeDefinitionForMatch(match);
 
-            if (specialTimeDefinition is null)
-            {
-                throw new FormatException();
-            }
-
-            return new SpecialTimeToken { SpecialTime = specialTimeDefinition.SpecialTime };
+            return specialTimeDefinition is not null
+                ? new SpecialTimeToken { SpecialTime = specialTimeDefinition.SpecialTime }
+                : throw new FormatException();
         }
     }
 
@@ -194,7 +193,9 @@ public sealed class SpecialTimeToken : TimeToken
         /// <param name="hour">The hour.</param>
         /// <param name="minute">The minute.</param>
         /// <param name="second">The second.</param>
+#pragma warning disable S1144
         public SpecialTimeDefinition(SpecialTime specialTime, int hour, int minute, int second)
+#pragma warning restore S1144
         {
             SpecialTime = specialTime;
 

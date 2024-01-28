@@ -40,7 +40,7 @@ public sealed class RelativeDateToken : DateToken
     /// A list of supported relative dates.
     /// </summary>
     private static readonly RelativeDateDefinition[] RelativeDates =
-    {
+    [
         new(
             RelativeDate.Today,
             0 /* yearDelta */,
@@ -52,7 +52,7 @@ public sealed class RelativeDateToken : DateToken
             0 /* yearDelta */,
             0 /* monthDelta */,
             1 /* dayDelta */)
-    };
+    ];
 
     /// <summary>
     /// Gets or sets the <see cref="RelativeDate"/> represented by this token.
@@ -80,7 +80,7 @@ public sealed class RelativeDateToken : DateToken
     {
         ThrowIfNotValid();
 
-        RelativeDateDefinition relativeDateDefinition = GetRelativeDateDefinition();
+        RelativeDateDefinition relativeDateDefinition = GetRelativeDateDefinition()!;
 
         DateTime date = minDate.Date;
         date = date.AddDays(relativeDateDefinition.DayDelta);
@@ -100,7 +100,7 @@ public sealed class RelativeDateToken : DateToken
         {
             ThrowIfNotValid();
 
-            RelativeDateDefinition relativeDateDefinition = GetRelativeDateDefinition();
+            RelativeDateDefinition relativeDateDefinition = GetRelativeDateDefinition()!;
             return relativeDateDefinition.GetName(provider);
         }
         catch (Exception ex) when (ex.CanBeHandled())
@@ -115,7 +115,7 @@ public sealed class RelativeDateToken : DateToken
     /// <param name="match">A <see cref="Match"/>.</param>
     /// <returns>The <see cref="RelativeDateDefinition"/> object for a <see cref="Match"/>.</returns>
 #pragma warning disable S3398
-    private static RelativeDateDefinition GetRelativeDateDefinitionForMatch(Match match)
+    private static RelativeDateDefinition? GetRelativeDateDefinitionForMatch(Match match)
 #pragma warning restore S3398
     {
         return Array.Find(RelativeDates, e => match.Groups[e.MatchGroup].Success);
@@ -125,7 +125,7 @@ public sealed class RelativeDateToken : DateToken
     /// Returns the <see cref="RelativeDateDefinition"/> object for this part.
     /// </summary>
     /// <returns>The <see cref="RelativeDateDefinition"/> object for this part.</returns>
-    private RelativeDateDefinition GetRelativeDateDefinition()
+    private RelativeDateDefinition? GetRelativeDateDefinition()
     {
         return Array.Find(RelativeDates, e => e.RelativeDate == RelativeDate);
     }
@@ -169,14 +169,11 @@ public sealed class RelativeDateToken : DateToken
         /// a <see cref="DateToken"/>.</exception>
         protected override DateToken ParseInternal(Match match, IFormatProvider provider)
         {
-            RelativeDateDefinition relativeDateDefinition = GetRelativeDateDefinitionForMatch(match);
+            RelativeDateDefinition? relativeDateDefinition = GetRelativeDateDefinitionForMatch(match);
 
-            if (relativeDateDefinition is null)
-            {
-                throw new FormatException();
-            }
-
-            return new RelativeDateToken { RelativeDate = relativeDateDefinition.RelativeDate };
+            return relativeDateDefinition is not null
+                ? new RelativeDateToken { RelativeDate = relativeDateDefinition.RelativeDate }
+                : throw new FormatException();
         }
     }
 
@@ -192,7 +189,9 @@ public sealed class RelativeDateToken : DateToken
         /// <param name="yearDelta">The year delta.</param>
         /// <param name="monthDelta">The month delta.</param>
         /// <param name="dayDelta">The day delta.</param>
+#pragma warning disable S1144
         public RelativeDateDefinition(RelativeDate relativeDate, int yearDelta, int monthDelta, int dayDelta)
+#pragma warning restore S1144
         {
             RelativeDate = relativeDate;
 

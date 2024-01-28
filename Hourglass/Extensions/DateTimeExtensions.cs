@@ -218,7 +218,7 @@ public static class DateTimeExtensions
     {
         try
         {
-            dateTime = new DateTime(year, month, day);
+            dateTime = new(year, month, day);
             return true;
         }
         catch (Exception ex) when (ex.CanBeHandled())

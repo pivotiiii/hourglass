@@ -56,7 +56,7 @@ public static class Watermark
     /// </summary>
     /// <param name="control">A <see cref="Control"/>.</param>
     /// <param name="value">The value to set.</param>
-    public static void SetHint(Control control, object value)
+    public static void SetHint(Control control, object? value)
     {
         control.SetValue(HintProperty, value);
     }
@@ -76,7 +76,7 @@ public static class Watermark
     /// </summary>
     /// <param name="control">A <see cref="Control"/>.</param>
     /// <param name="value">The value to set.</param>
-    public static void SetHintBrush(Control control, Brush value)
+    public static void SetHintBrush(Control control, Brush? value)
     {
         control.SetValue(HintBrushProperty, value);
     }
@@ -208,8 +208,13 @@ public static class Watermark
     /// <param name="control">A <see cref="Control"/>.</param>
     private static void RemoveWatermarkAdorner(Control control)
     {
-        AdornerLayer layer = AdornerLayer.GetAdornerLayer(control);
-        Adorner[] adorners = layer?.GetAdorners(control);
+        AdornerLayer? layer = AdornerLayer.GetAdornerLayer(control);
+        if (layer is null)
+        {
+            return;
+        }
+
+        Adorner[]? adorners = layer.GetAdorners(control);
         if (adorners is null)
         {
             return;
@@ -234,7 +239,7 @@ public static class Watermark
 
         if (!control.IsKeyboardFocused && !HasActualValue(control) && hint is not null && brush is not null)
         {
-            WatermarkAdorner watermarkAdorner = GetWatermarkAdorner(control);
+            WatermarkAdorner? watermarkAdorner = GetWatermarkAdorner(control);
 
             if (watermarkAdorner is null)
             {
@@ -281,7 +286,7 @@ public static class Watermark
     /// <param name="control">A <see cref="Control"/>.</param>
     /// <returns>A <see cref="WatermarkAdorner"/> for the <see cref="Control"/>, or <c>null</c> if none exists.
     /// </returns>
-    private static WatermarkAdorner GetWatermarkAdorner(Control control)
+    private static WatermarkAdorner? GetWatermarkAdorner(Control control)
     {
         return AdornerLayer.GetAdornerLayer(control)?
             .GetAdorners(control)?

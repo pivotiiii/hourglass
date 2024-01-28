@@ -26,7 +26,7 @@ internal sealed partial class Settings
     /// </summary>
     public TimerOptions MostRecentOptions
     {
-        get => TimerOptions.FromTimerOptionsInfo(MostRecentOptionsInfo);
+        get => TimerOptions.FromTimerOptionsInfo(MostRecentOptionsInfo) ?? new ();
         set => MostRecentOptionsInfo = TimerOptionsInfo.FromTimerOptions(value);
     }
 
@@ -37,15 +37,15 @@ internal sealed partial class Settings
     {
         get
         {
-            IEnumerable<TimerInfo> timerInfos = TimerInfos ?? new TimerInfoList();
+            IEnumerable<TimerInfo> timerInfos = TimerInfos ?? [];
 #pragma warning disable S2365
-            return timerInfos.Select(Timer.FromTimerInfo).ToList();
+            return timerInfos.Select(Timer.FromTimerInfo).Where(static t => t is not null).ToList()!;
 #pragma warning restore S2365
         }
 
         set
         {
-            IEnumerable<TimerInfo> timerInfos = value.Select(TimerInfo.FromTimer);
+            IEnumerable<TimerInfo> timerInfos = value.Select(TimerInfo.FromTimer).Where(static t => t is not null)!;
             TimerInfos = new(timerInfos);
         }
     }
@@ -57,15 +57,15 @@ internal sealed partial class Settings
     {
         get
         {
-            IEnumerable<TimerStartInfo> timerStartInfos = TimerStartInfos ?? new TimerStartInfoList();
+            IEnumerable<TimerStartInfo> timerStartInfos = TimerStartInfos ?? [];
 #pragma warning disable S2365
-            return timerStartInfos.Select(TimerStart.FromTimerStartInfo).ToList();
+            return timerStartInfos.Select(TimerStart.FromTimerStartInfo).Where(static t => t is not null).ToList()!;
 #pragma warning restore S2365
         }
 
         set
         {
-            IEnumerable<TimerStartInfo> timerStartInfos = value.Select(TimerStartInfo.FromTimerStart);
+            IEnumerable<TimerStartInfo> timerStartInfos = value.Select(TimerStartInfo.FromTimerStart)!;
             TimerStartInfos = new(timerStartInfos);
         }
     }
@@ -77,23 +77,23 @@ internal sealed partial class Settings
     {
         get
         {
-            IEnumerable<ThemeInfo> userProvidedThemeInfos = UserProvidedThemeInfos ?? new ThemeInfoList();
+            IEnumerable<ThemeInfo> userProvidedThemeInfos = UserProvidedThemeInfos ?? [];
 #pragma warning disable S2365
-            return userProvidedThemeInfos.Select(Theme.FromThemeInfo).ToList();
+            return userProvidedThemeInfos.Select(Theme.FromThemeInfo).Where(static t => t is not null).ToList()!;
 #pragma warning restore S2365
         }
 
         set
         {
-            IEnumerable<ThemeInfo> userProvidedThemeInfos = value.Select(ThemeInfo.FromTheme);
-            UserProvidedThemeInfos = new(userProvidedThemeInfos);
+            IEnumerable<ThemeInfo?> userProvidedThemeInfos = value.Select(ThemeInfo.FromTheme).Where(static t => t is not null);
+            UserProvidedThemeInfos = new(userProvidedThemeInfos!);
         }
     }
 
     /// <summary>
     /// Gets or sets the <see cref="WindowSize"/>.
     /// </summary>
-    public WindowSize WindowSize
+    public WindowSize? WindowSize
     {
         get => WindowSize.FromWindowSizeInfo(WindowSizeInfo);
         set => WindowSizeInfo = WindowSizeInfo.FromWindowSize(value);

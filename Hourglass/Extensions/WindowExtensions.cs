@@ -120,7 +120,7 @@ public static class WindowExtensions
     /// </summary>
     /// <param name="windowSize">A <see cref="WindowSize"/>.</param>
     /// <returns>The offset <see cref="WindowSize"/>.</returns>
-    public static WindowSize Offset(this WindowSize windowSize)
+    public static WindowSize? Offset(this WindowSize? windowSize)
     {
         return windowSize is null
             ? null
@@ -157,8 +157,8 @@ public static class WindowExtensions
     public static void RestoreFromWindow<T>(this T window, T otherWindow, RestoreOptions options = RestoreOptions.None)
         where T : Window, IRestorableWindow
     {
-        WindowSize windowSize = WindowSize.FromWindow(otherWindow);
-        WindowSize offsetWindowSize = windowSize.Offset();
+        WindowSize? windowSize = WindowSize.FromWindow(otherWindow);
+        WindowSize? offsetWindowSize = windowSize.Offset();
         window.Restore(offsetWindowSize, options);
     }
 
@@ -175,10 +175,10 @@ public static class WindowExtensions
     public static void RestoreFromSibling<T>(this T window, RestoreOptions options = RestoreOptions.None)
         where T : Window, IRestorableWindow
     {
-        WindowSize windowSize = WindowSize.FromSiblingOfWindow(window);
+        WindowSize? windowSize = WindowSize.FromSiblingOfWindow(window);
         if (windowSize is not null)
         {
-            WindowSize offsetWindowSize = windowSize.Offset();
+            WindowSize? offsetWindowSize = windowSize.Offset();
             window.Restore(offsetWindowSize, options);
         }
         else
@@ -194,7 +194,7 @@ public static class WindowExtensions
     /// <param name="window">A window.</param>
     /// <param name="windowSize">The size, position, and state to restore.</param>
     /// <param name="options">Options for performing the restore. (Optional.)</param>
-    public static void Restore<T>(this T window, WindowSize windowSize, RestoreOptions options = RestoreOptions.None)
+    public static void Restore<T>(this T? window, WindowSize? windowSize, RestoreOptions options = RestoreOptions.None)
         where T : Window, IRestorableWindow
     {
         if (window is null || windowSize is null)
@@ -590,9 +590,9 @@ public static class WindowExtensions
     public static void MoveToCurrentVirtualDesktop(this Window window) =>
         VirtualDesktopManager.Instance.MoveToCurrentVirtualDesktop(window);
 
-    private static TaskDialog _taskDialogInstance;
+    private static TaskDialog? _taskDialogInstance;
 
-    public static MessageBoxResult ShowTaskDialog(this Window window, string instruction, string yesText, string noText = null)
+    public static MessageBoxResult ShowTaskDialog(this Window? window, string instruction, string yesText, string? noText = null)
     {
         if (_taskDialogInstance is not null)
         {
@@ -611,7 +611,7 @@ public static class WindowExtensions
         };
 
         TaskDialogCustomButton yesButton = dialogPage.CustomButtons.Add(yesText);
-        TaskDialogCustomButton noButton = string.IsNullOrWhiteSpace(noText) ? null : dialogPage.CustomButtons.Add(noText);
+        TaskDialogCustomButton? noButton = string.IsNullOrWhiteSpace(noText) ? null : dialogPage.CustomButtons.Add(noText);
         dialogPage.CustomButtons.Add(Properties.Resources.BackTaskDialogCommand);
 
         bool hasOwner = window is not null;
@@ -623,7 +623,7 @@ public static class WindowExtensions
 
         dialog.Shown += OnShown;
 
-        IntPtr handle = hasOwner ? new WindowInteropHelper(window).Handle : IntPtr.Zero;
+        IntPtr handle = hasOwner ? new WindowInteropHelper(window!).Handle : IntPtr.Zero;
         TaskDialogButton result = dialog.Show(handle);
 
         MessageBoxResult messageBoxResult = ReferenceEquals(result, yesButton)

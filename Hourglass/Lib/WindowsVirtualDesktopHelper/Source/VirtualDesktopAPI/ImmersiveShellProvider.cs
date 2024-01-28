@@ -3,11 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace WindowsVirtualDesktopHelper.VirtualDesktopAPI.Implementation;
 
-#pragma warning disable S3881
-internal class ImmersiveShellProvider : IDisposable
-#pragma warning restore S3881
+internal sealed class ImmersiveShellProvider : IDisposable
 {
-    private IServiceProvider10 _serviceProvider;
+    private IServiceProvider10? _serviceProvider;
 
     public ImmersiveShellProvider()
     {
@@ -21,13 +19,13 @@ internal class ImmersiveShellProvider : IDisposable
         }
     }
 
-    public T QueryService<T>(Guid service) where T : class
+    public T? QueryService<T>(Guid service) where T : class
     {
-        object obj = null;
+        object? obj = null;
         try
         {
             obj = _serviceProvider?.QueryService(service, typeof(T).GUID);
-            return (T)obj;
+            return (T?)obj;
         }
         catch
         {

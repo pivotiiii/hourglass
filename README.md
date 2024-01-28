@@ -77,7 +77,7 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 
 If the **Hourglass** does not start or fails silently, delete the **Hourglass** settings.
 
-The **Hourglass** settings can be located by the following command (to run it press `Win`+`R` and copy-paste command below):
+The **Hourglass** settings can be located by the following command (to run it press `Win+R` and copy-paste command below):
 
 ```shell
 cmd /k dir "C:\Users\%USERNAME%\AppData\Local\Chris_Dziemborowicz*"

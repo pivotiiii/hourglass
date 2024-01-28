@@ -39,12 +39,12 @@ public sealed class DateTimeToken : TimerStartToken
     /// <summary>
     /// Gets or sets the date part of the date and time represented by this token.
     /// </summary>
-    public DateToken DateToken { get; set; }
+    public DateToken? DateToken { get; set; }
 
     /// <summary>
     /// Gets or sets the time part of the date and time represented by this token.
     /// </summary>
-    public TimeToken TimeToken { get; set; }
+    public TimeToken? TimeToken { get; set; }
 
     /// <summary>
     /// Gets a value indicating whether the token is valid.
@@ -60,8 +60,8 @@ public sealed class DateTimeToken : TimerStartToken
     {
         ThrowIfNotValid();
 
-        DateTime datePart = DateToken.ToDateTime(startTime, true /* inclusive */);
-        DateTime dateTime = TimeToken.ToDateTime(startTime, datePart);
+        DateTime datePart = DateToken!.ToDateTime(startTime, true /* inclusive */);
+        DateTime dateTime = TimeToken!.ToDateTime(startTime, datePart);
 
         if (dateTime <= startTime)
         {
@@ -88,8 +88,8 @@ public sealed class DateTimeToken : TimerStartToken
         {
             ThrowIfNotValid();
 
-            string datePart = DateToken.ToString(provider);
-            string timePart = TimeToken.ToString(provider);
+            string datePart = DateToken!.ToString(provider);
+            string timePart = TimeToken!.ToString(provider);
 
             // Date and time
             if (!string.IsNullOrWhiteSpace(datePart) && !string.IsNullOrWhiteSpace(timePart))
@@ -194,7 +194,7 @@ public sealed class DateTimeToken : TimerStartToken
         /// <returns>A list of <see cref="PatternDefinition"/> objects.</returns>
         private static List<PatternDefinition> GetAllDateTimePatternDefinitions(IFormatProvider provider)
         {
-            List<PatternDefinition> list = new();
+            List<PatternDefinition> list = [];
             list.AddRange(GetDatePatternDefinitions(provider));
             list.AddRange(GetTimePatternDefinitions(provider));
             list.AddRange(GetDateTimePatternDefinitions(provider));
@@ -209,7 +209,7 @@ public sealed class DateTimeToken : TimerStartToken
         /// <returns>A list of <see cref="PatternDefinition"/> objects.</returns>
         private static List<PatternDefinition> GetDatePatternDefinitions(IFormatProvider provider)
         {
-            List<PatternDefinition> list = new();
+            List<PatternDefinition> list = [];
 
             foreach (DateToken.Parser dateTokenParser in DateToken.Parsers)
             {
@@ -227,7 +227,7 @@ public sealed class DateTimeToken : TimerStartToken
         /// <returns>A list of <see cref="PatternDefinition"/> objects.</returns>
         private static List<PatternDefinition> GetTimePatternDefinitions(IFormatProvider provider)
         {
-            List<PatternDefinition> list = new();
+            List<PatternDefinition> list = [];
 
             foreach (TimeToken.Parser timeTokenParser in TimeToken.Parsers)
             {
@@ -245,7 +245,7 @@ public sealed class DateTimeToken : TimerStartToken
         /// <returns>A list of <see cref="PatternDefinition"/> objects.</returns>
         private static List<PatternDefinition> GetDateTimePatternDefinitions(IFormatProvider provider)
         {
-            List<PatternDefinition> list = new();
+            List<PatternDefinition> list = [];
 
             foreach (DateToken.Parser dateTokenParser in DateToken.Parsers)
             {
@@ -270,10 +270,10 @@ public sealed class DateTimeToken : TimerStartToken
         {
             if (!dateTokenParser.IsCompatibleWith(timeTokenParser) || !timeTokenParser.IsCompatibleWith(dateTokenParser))
             {
-                return new();
+                return [];
             }
 
-            List<PatternDefinition> list = new();
+            List<PatternDefinition> list = [];
 
             foreach (string datePartPattern in dateTokenParser.GetPatterns(provider))
             {

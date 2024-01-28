@@ -137,7 +137,7 @@ internal static class NativeMethods
     /// <param name="lpTimerName">The name of the timer object.</param>
     /// <returns>A handle to the timer object if the call succeeds, or <see cref="IntPtr.Zero"/> otherwise.</returns>
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-    public static extern IntPtr CreateWaitableTimer(IntPtr lpTimerAttributes, bool bManualReset, string lpTimerName);
+    public static extern IntPtr CreateWaitableTimer(IntPtr lpTimerAttributes, bool bManualReset, string? lpTimerName);
 
     /// <summary>
     /// Enables an application to inform the system that it is in use, thereby preventing the system from entering

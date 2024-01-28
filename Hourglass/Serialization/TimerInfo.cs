@@ -123,19 +123,19 @@ public sealed class TimerInfo
     /// Gets or sets the <see cref="TimerStart"/> used to start this timer, or <c>null</c> if the <see
     /// cref="TimerBase.State"/> is <see cref="TimerState.Stopped"/>.
     /// </summary>
-    public TimerStartInfo TimerStart { get; set; }
+    public TimerStartInfo? TimerStart { get; set; }
 
     /// <summary>
     /// Gets or sets the configuration data for this timer.
     /// </summary>
-    public TimerOptionsInfo Options { get; set; }
+    public TimerOptionsInfo? Options { get; set; }
 
     /// <summary>
     /// Returns a <see cref="TimerInfo"/> for the specified <see cref="Timer"/>.
     /// </summary>
     /// <param name="timer">A <see cref="Timer"/>.</param>
     /// <returns>A <see cref="TimerInfo"/> for the specified <see cref="Timer"/>.</returns>
-    public static TimerInfo FromTimer(Timer timer)
+    public static TimerInfo? FromTimer(Timer? timer)
     {
         return timer?.ToTimerInfo();
     }

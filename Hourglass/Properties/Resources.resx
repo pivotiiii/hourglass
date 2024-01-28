@@ -1062,11 +1062,11 @@ $</value>
     <comment>The instruction displayed when the user closes a timer window while a timer is running</comment>
   </data>
   <data name="BackTaskDialogCommand" xml:space="preserve">
-    <value>&amp;Back</value>
+    <value>B&amp;ack</value>
     <comment>Back task dialog command</comment>
   </data>
   <data name="StopAndCloseWindowCloseTaskDialogCommand" xml:space="preserve">
-    <value>&amp;Stop and close</value>
+    <value>Stop and &amp;close</value>
     <comment>Stop and close task dialog command</comment>
   </data>
   <data name="MinimizeWindowCloseTaskDialogCommand" xml:space="preserve">
@@ -1375,5 +1375,13 @@ $</value>
   <data name="CompactTimeSpanFormat" xml:space="preserve">
     <value>hh':'mm':'ss</value>
     <comment>Compact date without days format</comment>
+  </data>
+  <data name="LoopedText" xml:space="preserve">
+    <value>Looped</value>
+    <comment>Looped text</comment>
+  </data>
+  <data name="WithTitleText" xml:space="preserve">
+    <value>WithTitle</value>
+    <comment>WithTitle text</comment>
   </data>
 </root>

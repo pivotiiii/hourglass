@@ -29,7 +29,7 @@ public sealed partial class ErrorDialog
     /// <param name="title">The title for the error dialog..</param>
     /// <param name="message">The error message to show. (Optional.)</param>
     /// <param name="details">Details of the error, such as a call stack. (Optional.)</param>
-    public void ShowDialog(string title, string message = null, string details = null)
+    public void ShowDialog(string title, string? message = null, string? details = null)
     {
         TitleTextBlock.Text = title;
 

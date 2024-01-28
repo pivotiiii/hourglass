@@ -17,14 +17,14 @@ public sealed class TimerStartInfo
     /// <summary>
     /// Gets or sets the <see cref="TimerStartToken"/>.
     /// </summary>
-    public TimerStartToken TimerStartToken { get; set; }
+    public TimerStartToken TimerStartToken { get; set; } = null!;
 
     /// <summary>
     /// Returns a <see cref="TimerStartInfo"/> for a <see cref="TimerStart"/>.
     /// </summary>
     /// <param name="timerStart">A <see cref="TimerStart"/>.</param>
     /// <returns>The <see cref="TimerStartInfo"/> for the <see cref="TimerStart"/>.</returns>
-    public static TimerStartInfo FromTimerStart(TimerStart timerStart)
+    public static TimerStartInfo? FromTimerStart(TimerStart? timerStart)
     {
         return timerStart?.ToTimerStartInfo();
     }

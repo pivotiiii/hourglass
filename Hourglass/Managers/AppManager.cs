@@ -22,7 +22,7 @@ public sealed class AppManager : Manager
     /// The manager class singleton instances.
     /// </summary>
     private static readonly Manager[] Managers =
-    {
+    [
         VirtualDesktopManager.Instance,
         TaskDialogManager.Instance,
         ErrorManager.Instance,
@@ -36,7 +36,7 @@ public sealed class AppManager : Manager
         TimerStartManager.Instance,
         TimerOptionsManager.Instance,
         TimerManager.Instance
-    };
+    ];
 
     /// <summary>
     /// Prevents a default instance of the <see cref="AppManager"/> class from being created.

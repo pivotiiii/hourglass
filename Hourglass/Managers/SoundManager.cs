@@ -31,7 +31,7 @@ public sealed class SoundManager : Manager
     /// The extensions of the supported sound files.
     /// </summary>
     private static readonly string[] SupportedTypes =
-    {
+    [
         "*.aac",
         "*.m4a",
         "*.mid",
@@ -39,12 +39,12 @@ public sealed class SoundManager : Manager
         "*.mp3",
         "*.wav",
         "*.wma"
-    };
+    ];
 
     /// <summary>
     /// A collection of sounds.
     /// </summary>
-    private readonly List<Sound> _sounds = new();
+    private readonly List<Sound> _sounds = [];
 
     /// <summary>
     /// Prevents a default instance of the <see cref="SoundManager"/> class from being created.
@@ -56,7 +56,7 @@ public sealed class SoundManager : Manager
     /// <summary>
     /// Gets the default sound.
     /// </summary>
-    public Sound DefaultSound => GetSoundByIdentifier("resource:Normal beep");
+    public Sound DefaultSound => GetSoundByIdentifier("resource:Normal beep")!;
 
     /// <summary>
     /// Gets a collection of the sounds stored in the assembly.
@@ -87,7 +87,7 @@ public sealed class SoundManager : Manager
     /// </summary>
     /// <param name="identifier">The identifier for the sound.</param>
     /// <returns>The sound for the specified identifier, or <c>null</c> if no such sound is loaded.</returns>
-    public Sound GetSoundByIdentifier(string identifier)
+    public Sound? GetSoundByIdentifier(string? identifier)
     {
         if (string.IsNullOrWhiteSpace(identifier))
         {
@@ -103,14 +103,14 @@ public sealed class SoundManager : Manager
     /// <param name="identifier">The identifier for the sound.</param>
     /// <returns>The sound for the specified identifier, or <see cref="DefaultSound"/> if no such sound is loaded.
     /// </returns>
-    public Sound GetSoundOrDefaultByIdentifier(string identifier)
+    public Sound? GetSoundOrDefaultByIdentifier(string? identifier)
     {
         if (string.IsNullOrWhiteSpace(identifier))
         {
             return null;
         }
 
-        return GetSoundByIdentifier(identifier) ?? DefaultSound;
+        return GetSoundByIdentifier(identifier!) ?? DefaultSound;
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public sealed class SoundManager : Manager
     /// <param name="stringComparison">One of the enumeration values that specifies how the strings will be
     /// compared.</param>
     /// <returns>The first sound for the specified name, or <c>null</c> if no such sound is loaded.</returns>
-    public Sound GetSoundByName(string name, StringComparison stringComparison = StringComparison.Ordinal)
+    public Sound? GetSoundByName(string name, StringComparison stringComparison = StringComparison.Ordinal)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
@@ -136,8 +136,8 @@ public sealed class SoundManager : Manager
     /// <returns>A collection of sounds stored in the assembly.</returns>
     private static IList<Sound> GetBuiltInSounds()
     {
-        return new List<Sound>
-        {
+        return
+        [
             new(
                 "Loud beep",
                 Resources.SoundManagerLoudBeep,
@@ -155,7 +155,7 @@ public sealed class SoundManager : Manager
                 Resources.SoundManagerQuietBeep,
                 static () => Resources.BeepQuiet,
                 TimeSpan.FromMilliseconds(600))
-        };
+        ];
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ public sealed class SoundManager : Manager
             string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".";
             string soundsDirectory = Path.Combine(appDirectory, "Sounds");
 
-            List<Sound> list = new();
+            List<Sound> list = [];
             list.AddRange(GetUserProvidedSounds(appDirectory));
             list.AddRange(GetUserProvidedSounds(soundsDirectory));
             list.Sort(static (a, b) => string.Compare(a.Name, b.Name, CultureInfo.CurrentCulture, CompareOptions.StringSort));
@@ -178,7 +178,7 @@ public sealed class SoundManager : Manager
         catch (Exception ex) when (ex.CanBeHandled())
         {
             // Not worth raising an exception
-            return Array.Empty<Sound>();
+            return [];
         }
     }
 
@@ -191,7 +191,7 @@ public sealed class SoundManager : Manager
     {
         try
         {
-            List<Sound> list = new();
+            List<Sound> list = [];
 
             if (Directory.Exists(path))
             {
@@ -208,7 +208,7 @@ public sealed class SoundManager : Manager
         catch (Exception ex) when (ex.CanBeHandled())
         {
             // Not worth raising an exception
-            return Array.Empty<Sound>();
+            return [];
         }
     }
 }

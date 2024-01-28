@@ -55,7 +55,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// The brush used to paint the background color of the window.
     /// </summary>
-    private Brush _backgroundBrush;
+    private Brush? _backgroundBrush;
 
     /// <summary>
     /// The color of the progress bar.
@@ -65,7 +65,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// The brush used to paint the color of the progress bar.
     /// </summary>
-    private Brush _progressBarBrush;
+    private Brush? _progressBarBrush;
 
     /// <summary>
     /// The background color of the progress bar.
@@ -75,7 +75,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// The brush used to paint the background color of the progress bar.
     /// </summary>
-    private Brush _progressBackgroundBrush;
+    private Brush? _progressBackgroundBrush;
 
     /// <summary>
     /// The color that is flashed on expiration.
@@ -85,7 +85,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// The brush used to paint the color that is flashed on expiration.
     /// </summary>
-    private Brush _expirationFlashBrush;
+    private Brush? _expirationFlashBrush;
 
     /// <summary>
     /// The color of the primary text.
@@ -95,7 +95,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// The brush used to paint the color of the primary text.
     /// </summary>
-    private Brush _primaryTextBrush;
+    private Brush? _primaryTextBrush;
 
     /// <summary>
     /// The color of the watermark in the primary text box.
@@ -105,7 +105,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// The brush used to paint the color of the watermark in the primary text box.
     /// </summary>
-    private Brush _primaryHintBrush;
+    private Brush? _primaryHintBrush;
 
     /// <summary>
     /// The color of any secondary text.
@@ -115,7 +115,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// The brush used to paint the color of any secondary text.
     /// </summary>
-    private Brush _secondaryTextBrush;
+    private Brush? _secondaryTextBrush;
 
     /// <summary>
     /// The color of the watermark in any secondary text box.
@@ -125,7 +125,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// The brush used to paint the color of the watermark in any secondary text box.
     /// </summary>
-    private Brush _secondaryHintBrush;
+    private Brush? _secondaryHintBrush;
 
     /// <summary>
     /// The color of the button text.
@@ -135,7 +135,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// The brush used to paint the color of the button text.
     /// </summary>
-    private Brush _buttonBrush;
+    private Brush? _buttonBrush;
 
     /// <summary>
     /// The color of the button text when the user hovers over the button.
@@ -145,7 +145,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// The brush used to paint the color of the button text when the user hovers over the button.
     /// </summary>
-    private Brush _buttonHoverBrush;
+    private Brush? _buttonHoverBrush;
 
     #endregion
 
@@ -297,14 +297,14 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// Raised when a property value changes.
     /// </summary>
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     #region Properties
 
     /// <summary>
     /// Gets the default theme.
     /// </summary>
-    public static Theme DefaultTheme => ThemeManager.Instance.DefaultTheme;
+    public static Theme? DefaultTheme => ThemeManager.Instance.DefaultTheme;
 
     /// <summary>
     /// Gets the type of this theme.
@@ -598,12 +598,12 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// Gets the light variant of this theme.
     /// </summary>
-    public Theme LightVariant => ThemeManager.Instance.GetLightVariantForTheme(this);
+    public Theme? LightVariant => ThemeManager.Instance.GetLightVariantForTheme(this);
 
     /// <summary>
     /// Gets the dark variant of this theme.
     /// </summary>
-    public Theme DarkVariant => ThemeManager.Instance.GetDarkVariantForTheme(this);
+    public Theme? DarkVariant => ThemeManager.Instance.GetDarkVariantForTheme(this);
 
     #endregion
 
@@ -614,7 +614,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// </summary>
     /// <param name="identifier">The identifier for the theme.</param>
     /// <returns>The theme for the specified identifier, or <c>null</c> if no such theme is loaded.</returns>
-    public static Theme FromIdentifier(string identifier)
+    public static Theme? FromIdentifier(string? identifier)
     {
         return ThemeManager.Instance.GetThemeOrDefaultByIdentifier(identifier);
     }
@@ -639,7 +639,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <param name="info">A <see cref="ThemeInfo"/>.</param>
     /// <returns>A <see cref="Theme"/> for the specified <see cref="ThemeInfo"/>, or <c>null</c> if the specified
     /// <see cref="ThemeInfo"/> is <c>null</c>.</returns>
-    public static Theme FromThemeInfo(ThemeInfo info)
+    public static Theme? FromThemeInfo(ThemeInfo? info)
     {
         return info is not null ? new Theme(info) : null;
     }
@@ -655,7 +655,7 @@ public sealed class Theme : INotifyPropertyChanged
     public Color[] GetPalette()
     {
         Color[] allColors =
-        {
+        [
             ProgressBarColor,
             ProgressBackgroundColor,
             BackgroundColor,
@@ -666,7 +666,7 @@ public sealed class Theme : INotifyPropertyChanged
             SecondaryHintColor,
             ButtonColor,
             ButtonHoverColor
-        };
+        ];
 
         return allColors.Distinct().ToArray();
     }

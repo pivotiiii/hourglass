@@ -42,7 +42,7 @@ public sealed class WindowSizeInfo
     /// <param name="windowSize">A <see cref="WindowSize"/>.</param>
     /// <returns>A <see cref="WindowSizeInfo"/> for the specified <see cref="WindowSize"/>, or <c>null</c> if the
     /// specified <see cref="WindowSize"/> is <c>null</c>.</returns>
-    public static WindowSizeInfo FromWindowSize(WindowSize windowSize)
+    public static WindowSizeInfo? FromWindowSize(WindowSize? windowSize)
     {
         return windowSize?.ToWindowSizeInfo();
     }

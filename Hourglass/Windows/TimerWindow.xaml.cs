@@ -44,7 +44,7 @@ public sealed class TimerCommand
     private readonly Button _button;
     private readonly MenuItem _menuItem;
 
-    public TimerCommand(Button button, KeyGesture keyGesture = null)
+    public TimerCommand(Button button, KeyGesture? keyGesture = null)
     {
         _button = button;
 
@@ -179,13 +179,13 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <summary>
     /// The timer to resume when the window loads, or <c>null</c> if no timer is to be resumed.
     /// </summary>
-    private Timer _timerToResumeOnLoad;
+    private Timer? _timerToResumeOnLoad;
 
     /// <summary>
     /// The <see cref="TimerStart"/> to start when the window loads, or <c>null</c> if no <see cref="TimerStart"/>
     /// is to be started.
     /// </summary>
-    private TimerStart _timerStartToStartOnLoad;
+    private TimerStart? _timerStartToStartOnLoad;
 
     /// <summary>
     /// The last <see cref="TimerStart"/> used to start a timer in the window.
@@ -195,7 +195,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <summary>
     /// The currently loaded theme.
     /// </summary>
-    private Theme _theme;
+    private Theme? _theme;
 
     /// <summary>
     /// The number of times the flash expiration storyboard has completed since the timer last expired.
@@ -205,17 +205,17 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <summary>
     /// The storyboard that flashes red to notify the user that the timer has expired.
     /// </summary>
-    private Storyboard _flashExpirationStoryboard;
+    private Storyboard _flashExpirationStoryboard = null!;
 
     /// <summary>
     /// The storyboard that glows red to notify the user that the timer has expired.
     /// </summary>
-    private Storyboard _glowExpirationStoryboard;
+    private Storyboard _glowExpirationStoryboard = null!;
 
     /// <summary>
     /// The storyboard that flashes red to notify the user that the input was invalid.
     /// </summary>
-    private Storyboard _validationErrorStoryboard;
+    private Storyboard _validationErrorStoryboard = null!;
 
     /// <summary>
     /// A value indicating whether the window is in full-screen mode.
@@ -229,7 +229,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
     #endregion
 
-    public IEnumerable<TimerCommand> Commands { get; private set; }
+    public IEnumerable<TimerCommand> Commands { get; private set; } = [];
 
     #region Constructors
 
@@ -269,7 +269,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// </summary>
     /// <param name="timerStart">The <see cref="TimerStart"/> to start when the window loads, or <c>null</c> if no
     /// <see cref="TimerStart"/> is to be started.</param>
-    public TimerWindow(TimerStart timerStart)
+    public TimerWindow(TimerStart? timerStart)
         : this()
     {
         _timerStartToStartOnLoad = timerStart;
@@ -280,14 +280,14 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <summary>
     /// Raised when a property value changes.
     /// </summary>
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     #region Properties
 
     /// <summary>
     /// Gets the <see cref="WindowSize"/> for the window persisted in the settings.
     /// </summary>
-    public WindowSize PersistedSize => Settings.Default.WindowSize;
+    public WindowSize PersistedSize => Settings.Default.WindowSize!;
 
     /// <summary>
     /// Gets the <see cref="TimerWindowMode"/> of the window.
@@ -362,7 +362,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <summary>
     /// Gets the currently loaded theme.
     /// </summary>
-    public Theme Theme => _theme;
+    public Theme? Theme => _theme;
 
     /// <summary>
     /// Gets or sets a value indicating whether the window is in full-screen mode.
@@ -447,9 +447,9 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         }
     }
 
-    private string _timeToolTip;
+    private string? _timeToolTip;
 
-    public string TimeToolTip
+    public string? TimeToolTip
     {
         get => _timeToolTip;
         set
@@ -639,12 +639,12 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// </summary>
     /// <param name="textBoxToFocus">The <see cref="TextBox"/> to focus. The default is <see cref="TimerTextBox"/>.
     /// </param>
-    private void SwitchToInputMode(TextBox textBoxToFocus = null)
+    private void SwitchToInputMode(TextBox? textBoxToFocus = null)
     {
         Mode = TimerWindowMode.Input;
 
-        TitleTextBox.Text = Timer.Options.Title;
-        TimerTextBox.Text = LastTimerStart?.ToString() ?? string.Empty;
+        TitleTextBox.Text = Timer.Options.Title ?? string.Empty;
+        TimerTextBox.Text = LastTimerStart.ToString();
 
         textBoxToFocus ??= TimerTextBox;
         textBoxToFocus.SelectAll();
@@ -760,8 +760,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         CancelButton.Content = Properties.Resources.TimerWindowCancelButtonContent;
         UpdateButton.Content = Properties.Resources.TimerWindowUpdateButtonContent;
 
-        Commands = new TimerCommand[]
-        {
+        Commands =
+        [
             new(StartButton,   StartKeyGesture),
             new(PauseButton,   PauseKeyGesture),
             new(ResumeButton,  ResumeKeyGesture),
@@ -770,7 +770,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             new(CloseButton),
             new(CancelButton),
             new(UpdateButton)
-        };
+        ];
     }
 
     #region Private Methods (Animations and Sounds)
@@ -1013,16 +1013,18 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <param name="e">The event data.</param>
     private void SoundPlayerPlaybackCompleted(object sender, EventArgs e)
     {
-        if (!Options.LoopTimer && Mode == TimerWindowMode.Status)
+        if (Options.LoopTimer || Mode != TimerWindowMode.Status)
         {
-            if (Options.ShutDownWhenExpired)
-            {
-                WindowsExtensions.ShutDown();
-            }
-            else if (Options.CloseWhenExpired)
-            {
-                Close();
-            }
+            return;
+        }
+
+        if (Options.ShutDownWhenExpired)
+        {
+            WindowsExtensions.ShutDown();
+        }
+        else if (Options.CloseWhenExpired)
+        {
+            Close();
         }
     }
 
@@ -1126,22 +1128,26 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 if (Timer.State == TimerState.Expired && !string.IsNullOrWhiteSpace(Timer.Options.Title) && !TitleTextBox.IsFocused)
                 {
                     TitleTextBox.TextChanged -= TitleTextBoxTextChanged;
-                    TitleTextBox.Text = Timer.Options.ShowTimeElapsed
-                        ? Timer.TimeElapsedAsString
-                        : Timer.TimeLeftAsString;
+                    TitleTextBox.Text =
+                        (Timer.Options.ShowTimeElapsed
+                            ? Timer.TimeElapsedAsString
+                            : Timer.TimeLeftAsString)
+                        ?? string.Empty;
                     TitleTextBox.TextChanged += TitleTextBoxTextChanged;
 
-                    TimerTextBox.Text = Timer.Options.Title;
+                    TimerTextBox.Text = Timer.Options.Title ?? string.Empty;
                 }
                 else
                 {
                     TitleTextBox.TextChanged -= TitleTextBoxTextChanged;
-                    TitleTextBox.Text = Timer.Options.Title;
+                    TitleTextBox.Text = Timer.Options.Title ?? string.Empty;
                     TitleTextBox.TextChanged += TitleTextBoxTextChanged;
 
-                    TimerTextBox.Text = Timer.Options.ShowTimeElapsed
-                        ? Timer.TimeElapsedAsString
-                        : Timer.TimeLeftAsString;
+                    TimerTextBox.Text =
+                        (Timer.Options.ShowTimeElapsed
+                            ? Timer.TimeElapsedAsString
+                            : Timer.TimeLeftAsString)
+                        ?? string.Empty;
                 }
 
                 ProgressBar.Value = GetProgressBarValue();
@@ -1208,22 +1214,22 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// </summary>
     private void UpdateBoundTheme()
     {
-        InnerGrid.Background = Theme.BackgroundBrush;
-        ProgressBar.Foreground = Theme.ProgressBarBrush;
-        ProgressBar.Background = Theme.ProgressBackgroundBrush;
-        InnerNotificationBorder.BorderBrush = Theme.ExpirationFlashBrush;
-        OuterNotificationBorder.Background = Theme.ExpirationFlashBrush;
-        TimerTextBox.Foreground = Theme.PrimaryTextBrush;
-        TimerTextBox.CaretBrush = Theme.PrimaryTextBrush;
-        Watermark.SetHintBrush(TimerTextBox, Theme.PrimaryHintBrush);
-        TitleTextBox.Foreground = Theme.SecondaryTextBrush;
-        TitleTextBox.CaretBrush = Theme.SecondaryTextBrush;
-        Watermark.SetHintBrush(TitleTextBox, Theme.SecondaryHintBrush);
-        TimeExpiredLabel.Foreground = Theme.SecondaryTextBrush;
+        InnerGrid.Background = Theme?.BackgroundBrush;
+        ProgressBar.Foreground = Theme?.ProgressBarBrush;
+        ProgressBar.Background = Theme?.ProgressBackgroundBrush;
+        InnerNotificationBorder.BorderBrush = Theme?.ExpirationFlashBrush;
+        OuterNotificationBorder.Background = Theme?.ExpirationFlashBrush;
+        TimerTextBox.Foreground = Theme?.PrimaryTextBrush;
+        TimerTextBox.CaretBrush = Theme?.PrimaryTextBrush;
+        Watermark.SetHintBrush(TimerTextBox, Theme?.PrimaryHintBrush);
+        TitleTextBox.Foreground = Theme?.SecondaryTextBrush;
+        TitleTextBox.CaretBrush = Theme?.SecondaryTextBrush;
+        Watermark.SetHintBrush(TitleTextBox, Theme?.SecondaryHintBrush);
+        TimeExpiredLabel.Foreground = Theme?.SecondaryTextBrush;
 
         foreach (Button button in ButtonPanel.GetAllVisualChildren().OfType<Button>())
         {
-            button.Foreground = button.IsMouseOver ? Theme.ButtonHoverBrush : Theme.ButtonBrush;
+            button.Foreground = button.IsMouseOver ? Theme?.ButtonHoverBrush : Theme?.ButtonBrush;
         }
     }
 
@@ -1414,7 +1420,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
     private void SetImmersiveDarkMode()
     {
-        this.SetImmersiveDarkMode(Options.Theme.Type == ThemeType.BuiltInDark);
+        this.SetImmersiveDarkMode(Options.Theme?.Type == ThemeType.BuiltInDark);
     }
 
     /// <summary>
@@ -1556,7 +1562,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             return;
         }
 
-        string toolTip = GetTimeElapsedPlusTimerTitle();
+        string? toolTip = GetTimeElapsedPlusTimerTitle();
         TimeToolTip = Timer.State switch
         {
             TimerState.Stopped => string.Format(Properties.Resources.TimerStoppedToolTipFormatString, toolTip),
@@ -1565,7 +1571,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         };
     }
 
-    private string GetTimeElapsedPlusTimerTitle()
+    private string? GetTimeElapsedPlusTimerTitle()
     {
         if (Timer.State != TimerState.Stopped)
         {
@@ -1598,7 +1604,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <param name="e">The event data.</param>
     private void StartCommandExecuted(object sender, ExecutedRoutedEventArgs e)
     {
-        TimerStart timerStart = TimerStart.FromString(TimerTextBox.Text);
+        TimerStart? timerStart = TimerStart.FromString(TimerTextBox.Text);
         if (timerStart is null)
         {
             BeginValidationErrorAnimation();
@@ -1745,7 +1751,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     private void UpdateCommandExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         Uri updateUri = UpdateManager.Instance.UpdateUri;
-        if (updateUri?.Scheme == Uri.UriSchemeHttp || updateUri?.Scheme == Uri.UriSchemeHttps)
+        if (updateUri.Scheme == Uri.UriSchemeHttp || updateUri.Scheme == Uri.UriSchemeHttps)
         {
             try
             {
@@ -1812,7 +1818,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     private void ButtonMouseEnter(object sender, MouseEventArgs e)
     {
         Button button = (Button)sender;
-        button.Foreground = Theme.ButtonHoverBrush;
+        button.Foreground = Theme?.ButtonHoverBrush;
     }
 
     /// <summary>
@@ -1823,7 +1829,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     private void ButtonMouseLeave(object sender, MouseEventArgs e)
     {
         Button button = (Button)sender;
-        button.Foreground = Theme.ButtonBrush;
+        button.Foreground = Theme?.ButtonBrush;
     }
 
     /// <summary>
@@ -1901,9 +1907,10 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <param name="e">The event data.</param>
     private void TitleTextBoxTextChanged(object sender, TextChangedEventArgs e)
     {
-        Timer.Options.Title = string.IsNullOrWhiteSpace(TitleTextBox.Text)
-            ? string.Empty
-            : TitleTextBox.Text;
+        Timer.Options.Title =
+            string.IsNullOrWhiteSpace(TitleTextBox.Text)
+                ? string.Empty
+                : TitleTextBox.Text;
     }
 
     /// <summary>

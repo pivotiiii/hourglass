@@ -28,7 +28,7 @@ public sealed class NotificationAreaIconManager : Manager
     /// <summary>
     /// Gets the icon for the app in the notification area of the taskbar.
     /// </summary>
-    public NotificationAreaIcon NotifyIcon { get; private set; }
+    public NotificationAreaIcon NotifyIcon { get; private set; } = null!;
 
     /// <summary>
     /// Initializes the class.

@@ -33,7 +33,7 @@ public sealed class TimerManager : Manager
     /// <summary>
     /// The currently loaded timers in reverse chronological order.
     /// </summary>
-    private readonly List<Timer> _timers = new();
+    private readonly List<Timer> _timers = [];
 
     /// <summary>
     /// Prevents a default instance of the <see cref="TimerManager"/> class from being created.

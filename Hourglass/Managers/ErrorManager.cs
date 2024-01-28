@@ -101,7 +101,7 @@ public sealed class ErrorManager : Manager
     /// <param name="errorMessage">An error message.</param>
     /// <param name="dumpPath">The path of the that was written.</param>
     /// <returns><c>true</c> if the error message is successfully written, or <c>false</c> otherwise.</returns>
-    private static bool TryDumpError(string errorMessage, out string dumpPath)
+    private static bool TryDumpError(string errorMessage, out string? dumpPath)
     {
         try
         {
@@ -131,9 +131,7 @@ public sealed class ErrorManager : Manager
             // Get the dump files with newest files first
             string appName = Assembly.GetExecutingAssembly().GetName().Name;
             string dumpPathPattern = string.Format(CultureInfo.InvariantCulture, "{0}-Crash.*", appName);
-            IList<FileInfo> dumpFiles = (from f in directory.GetFiles(dumpPathPattern)
-                orderby f.LastWriteTimeUtc
-                select f).ToList();
+            IList<FileInfo> dumpFiles = directory.GetFiles(dumpPathPattern).OrderBy(static f => f.LastWriteTimeUtc).ToList();
 
             // Delete dump files until we have only MaxErrorDumps left
             while (dumpFiles.Count > MaxErrorDumps)

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -12,9 +14,7 @@ public class TaskDialogCustomButtonCollection
 {
     // HashSet to detect duplicate items.
     private readonly HashSet<TaskDialogCustomButton> _itemSet =
-        new HashSet<TaskDialogCustomButton>();
-
-    private TaskDialogPage _boundPage;
+        [];
 
     /// <summary>
     /// 
@@ -24,11 +24,7 @@ public class TaskDialogCustomButtonCollection
     {
     }
 
-    internal TaskDialogPage BoundPage
-    {
-        get => _boundPage;
-        set => _boundPage = value;
-    }
+    internal TaskDialogPage BoundPage { get; set; }
 
     /// <summary>
     /// 
@@ -57,7 +53,7 @@ public class TaskDialogCustomButtonCollection
     {
         // Disallow collection modification, so that we don't need to copy it
         // when binding the TaskDialogPage.
-        _boundPage?.DenyIfBound();
+        BoundPage?.DenyIfBound();
         DenyIfHasOtherCollection(item);
 
         TaskDialogCustomButton oldItem = this[index];
@@ -85,7 +81,7 @@ public class TaskDialogCustomButtonCollection
     {
         // Disallow collection modification, so that we don't need to copy it
         // when binding the TaskDialogPage.
-        _boundPage?.DenyIfBound();
+        BoundPage?.DenyIfBound();
         DenyIfHasOtherCollection(item);
 
         if (!_itemSet.Add(item))
@@ -103,7 +99,7 @@ public class TaskDialogCustomButtonCollection
     {
         // Disallow collection modification, so that we don't need to copy it
         // when binding the TaskDialogPage.
-        _boundPage?.DenyIfBound();
+        BoundPage?.DenyIfBound();
 
         TaskDialogCustomButton oldItem = this[index];
         oldItem.Collection = null;
@@ -118,7 +114,7 @@ public class TaskDialogCustomButtonCollection
     {
         // Disallow collection modification, so that we don't need to copy it
         // when binding the TaskDialogPage.
-        _boundPage?.DenyIfBound();
+        BoundPage?.DenyIfBound();
 
         foreach (TaskDialogCustomButton button in this)
             button.Collection = null;

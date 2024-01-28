@@ -3,11 +3,13 @@ using System.Runtime.InteropServices;
 
 namespace WindowsVirtualDesktopHelper.VirtualDesktopAPI.Implementation;
 
-internal class VirtualDesktopWin11_Insider(ImmersiveShellProvider immersiveShellProvider)
+#pragma warning disable S101
+internal sealed class VirtualDesktopWin11_Insider(ImmersiveShellProvider immersiveShellProvider)
+#pragma warning restore S101
     : VirtualDesktop<VirtualDesktopWin11_Insider.IVirtualDesktopManagerInternal>(immersiveShellProvider)
 {
     protected override Guid GetCurrentDesktopId() =>
-        VirtualDesktopManagerInternal.GetCurrentDesktop(IntPtr.Zero).GetId();
+        VirtualDesktopManagerInternal!.GetCurrentDesktop(IntPtr.Zero).GetId();
 
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

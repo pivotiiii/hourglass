@@ -30,12 +30,9 @@ public static class TimerWindowExtensions
         }
 
         var nextWindow = GetNextWindow();
-        if (nextWindow is not null)
-        {
-            nextWindow.Dispatcher.BeginInvoke(nextWindow.BringToFrontAndActivate);
-        }
+        nextWindow?.Dispatcher.BeginInvoke(nextWindow.BringToFrontAndActivate);
 
-        TimerWindow GetNextWindow()
+        TimerWindow? GetNextWindow()
         {
             if (Application.Current is null)
             {
@@ -50,12 +47,12 @@ public static class TimerWindowExtensions
             bool NotThisWindow(TimerWindow window) =>
                 !ReferenceEquals(thisWindow, window);
 
-            static TimerWindow GetNextApplicableWindow(IEnumerable<TimerWindow> windows) =>
+            static TimerWindow? GetNextApplicableWindow(IEnumerable<TimerWindow> windows) =>
                 windows.FirstOrDefault(static window => window.IsVisible && window.WindowState != WindowState.Minimized);
         }
     }
 
-    private static string Title(TimerWindow window) =>
+    private static string? Title(TimerWindow window) =>
         window.Timer.Options.Title;
 
     private static int CompareTime(TimerWindow x, TimerWindow y)
@@ -175,9 +172,7 @@ public static class TimerWindowExtensions
 
             [DllImport("user32.dll", CharSet = CharSet.Unicode)]
             [return: MarshalAs(UnmanagedType.Bool)]
-#pragma warning disable S3241
             static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
-#pragma warning restore S3241
 
             [DllImport("user32.dll")]
             static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);

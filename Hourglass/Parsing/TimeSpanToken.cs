@@ -104,7 +104,7 @@ public sealed class TimeSpanToken : TimerStartToken
         {
             ThrowIfNotValid();
 
-            List<string> parts = new();
+            List<string> parts = [];
 
             // Years
             if (!Equals(Years, 0.0))

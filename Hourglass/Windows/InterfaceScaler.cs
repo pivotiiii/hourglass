@@ -97,43 +97,43 @@ public sealed class InterfaceScaler
     /// <summary>
     /// A <see cref="TimerWindow"/>.
     /// </summary>
-    private TimerWindow _timerWindow;
+    private TimerWindow _timerWindow = null!;
 
     /// <summary>
     /// The <see cref="Grid"/> control that contains the <see cref="_controlsPanel"/>.
     /// </summary>
-    private Grid _innerGrid;
+    private Grid _innerGrid = null!;
 
     /// <summary>
     /// The <see cref="StackPanel"/> control that contains the controls of the <see cref="_timerWindow"/>.
     /// </summary>
-    private StackPanel _controlsPanel;
+    private StackPanel _controlsPanel = null!;
 
     /// <summary>
     /// The larger <see cref="TextBox"/> on the <see cref="_timerWindow"/>.
     /// </summary>
-    private SizeToFitTextBox _timerTextBox;
+    private SizeToFitTextBox _timerTextBox = null!;
 
     /// <summary>
     /// The smaller <see cref="TextBox"/> on the <see cref="_timerWindow"/>.
     /// </summary>
-    private SizeToFitTextBox _titleTextBox;
+    private SizeToFitTextBox _titleTextBox = null!;
 
     /// <summary>
     /// The <see cref="Border"/> that animates to notify the user that the timer has expired or that the input was
     /// invalid.
     /// </summary>
-    private Border _innerNotificationBorder;
+    private Border _innerNotificationBorder = null!;
 
     /// <summary>
     /// An array of the <see cref="Button"/> elements on the <see cref="_timerWindow"/>.
     /// </summary>
-    private Button[] _buttons;
+    private Button[] _buttons = null!;
 
     /// <summary>
     /// The <see cref="Label"/> that contains the time elapsed since the timer expired when the timer has expired.
     /// </summary>
-    private Label _timeExpiredLabel;
+    private Label _timeExpiredLabel = null!;
 
     /// <summary>
     /// Binds the <see cref="InterfaceScaler"/> to a <see cref="TimerWindow"/>.
@@ -155,8 +155,8 @@ public sealed class InterfaceScaler
         _timerTextBox = _timerWindow.TimerTextBox;
         _titleTextBox = _timerWindow.TitleTextBox;
         _innerNotificationBorder = _timerWindow.InnerNotificationBorder;
-        _buttons = new[]
-        {
+        _buttons =
+        [
             _timerWindow.StartButton,
             _timerWindow.PauseButton,
             _timerWindow.ResumeButton,
@@ -164,8 +164,8 @@ public sealed class InterfaceScaler
             _timerWindow.RestartButton,
             _timerWindow.CloseButton,
             _timerWindow.CancelButton,
-            _timerWindow.UpdateButton,
-        };
+            _timerWindow.UpdateButton
+        ];
         _timeExpiredLabel = _timerWindow.TimeExpiredLabel;
 
         // Hook up events

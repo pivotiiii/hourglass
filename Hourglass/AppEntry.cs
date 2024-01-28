@@ -27,6 +27,8 @@ using StartupEventArgs = Microsoft.VisualBasic.ApplicationServices.StartupEventA
 /// </summary>
 public sealed class AppEntry : WindowsFormsApplicationBase
 {
+    private static int _showSavedTimerWindowsExecuted;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="AppEntry"/> class.
     /// </summary>
@@ -139,6 +141,13 @@ public sealed class AppEntry : WindowsFormsApplicationBase
     /// <param name="arguments">Parsed command-line arguments.</param>
     private static void ShowSavedTimerWindows(CommandLineArguments arguments)
     {
+        const int executed = 1;
+
+        if (System.Threading.Interlocked.Exchange(ref _showSavedTimerWindowsExecuted, executed) == executed)
+        {
+            return;
+        }
+
         foreach (Timer savedTimer in TimerManager.Instance.ResumableTimers)
         {
             TimerWindow window = new();

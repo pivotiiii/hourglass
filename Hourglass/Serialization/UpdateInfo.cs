@@ -14,10 +14,10 @@ public sealed class UpdateInfo
     /// <summary>
     /// Gets or sets the latest version of the app.
     /// </summary>
-    public string LatestVersion { get; set; }
+    public string LatestVersion { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the URL to download the update to the latest version of the app.
     /// </summary>
-    public string UpdateUrl { get; set; }
+    public string UpdateUrl { get; set; } = null!;
 }
