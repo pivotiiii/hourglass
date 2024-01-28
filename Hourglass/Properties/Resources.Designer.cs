@@ -1472,11 +1472,11 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No timers are currently running.
+        ///   Looks up a localized string similar to There are currently no timers.
         /// </summary>
-        public static string NoTimersAreCurrentlyRunningNotificationAreText {
+        public static string NoTimersNotificationAreaText {
             get {
-                return ResourceManager.GetString("NoTimersAreCurrentlyRunningNotificationAreText", resourceCulture);
+                return ResourceManager.GetString("NoTimersNotificationAreaText", resourceCulture);
             }
         }
         

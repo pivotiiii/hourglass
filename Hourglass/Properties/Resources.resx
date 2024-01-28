@@ -1360,8 +1360,8 @@ $</value>
     <value>Hourglass FAQ</value>
     <comment>The text for the hyperlink that launches the FAQ from the usage dialog</comment>
   </data>
-  <data name="NoTimersAreCurrentlyRunningNotificationAreText" xml:space="preserve">
-    <value>No timers are currently running</value>
+  <data name="NoTimersNotificationAreaText" xml:space="preserve">
+    <value>There are currently no timers</value>
     <comment>Notification area text if no timers</comment>
   </data>
   <data name="FAQUrl" xml:space="preserve">

@@ -23,30 +23,30 @@ internal class ImmersiveShellProvider : IDisposable
 
     public T QueryService<T>(Guid service) where T : class
     {
-        var obj = _serviceProvider?.QueryService(service, typeof(T).GUID);
+        object obj = null;
         try
         {
+            obj = _serviceProvider?.QueryService(service, typeof(T).GUID);
             return (T)obj;
         }
         catch
         {
             if (obj is not null)
             {
-                Marshal.ReleaseComObject(obj);
+                Marshal.FinalReleaseComObject(obj);
             }
+
             return null;
         }
     }
 
     public void Dispose()
     {
-        if (_serviceProvider is null)
+        if (_serviceProvider is not null)
         {
-            return;
+            Marshal.FinalReleaseComObject(_serviceProvider);
+            _serviceProvider = null;
         }
-
-        Marshal.ReleaseComObject(_serviceProvider);
-        _serviceProvider = null;
     }
 
     [ComImport]

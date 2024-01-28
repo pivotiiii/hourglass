@@ -250,14 +250,15 @@ public class NotificationAreaIcon : IDisposable
             return;
         }
 
-        TimerWindow[] windows = Application.Current.Windows.OfType<TimerWindow>()
-            .Where(static window => window.Timer.State == TimerState.Running)
-            .OrderBy(static window => window.Timer.TimeLeft ?? TimeSpan.MaxValue)
+        string[] windowStrings = Application.Current.Windows.OfType<TimerWindow>()
+            .Arrange()
+            .Select(static window => window.ToString())
+            .Where(static windowString => !string.IsNullOrWhiteSpace(windowString))
             .ToArray();
 
-        if (!windows.Any())
+        if (!windowStrings.Any())
         {
-            _notifyIcon.Text = Resources.NoTimersAreCurrentlyRunningNotificationAreText;
+            _notifyIcon.Text = Resources.NoTimersNotificationAreaText;
             return;
         }
 
@@ -265,10 +266,7 @@ public class NotificationAreaIcon : IDisposable
 
         StringBuilder builder = new(maxSize);
 
-        foreach (string windowString in Application.Current.Windows.OfType<TimerWindow>().Where(static window => window.Timer.State == TimerState.Running)
-                     .OrderBy(static window => window.Timer.TimeLeft ?? TimeSpan.MaxValue)
-                     .Select(static window => window.ToString())
-                     .Where(static windowString => !string.IsNullOrWhiteSpace(windowString)))
+        foreach (string windowString in windowStrings)
         {
             if (builder.Length == 0)
             {

@@ -46,8 +46,7 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 ### Notification Area
 
 - The double click shows/hides all the timer windows.
-- All the timers are arranged by the time left in the notification area context menu.
-- The nearest remaining running timers are shown in the notification area tooltip.
+- All the timers are arranged by the time left. The order of the timers is new, expired, paused, running.
 - The **Exit** menu asks to close all the running timer windows if the **Prompt on exit** option is on.
 
 ### Timer Windows
@@ -58,7 +57,7 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 - The mouse double-click on progress border makes the timer window full screen and back.
 - The minimum timer window size is limited by the Windows.
 - The timer tooltip is shown if the timer window size is too small.
-- All the timer windows are arranged by the time left. The order of timer windows is new, expired, paused, running.
+- All the timer windows are arranged by the time left. The order of the timer windows is new, expired, paused, running.
 - When the timer window is minimized or closed the next visible non-minimized timer window is activated.
 - The **Window title** submenu is available directly from the timer window context menu.
 - The **Reset bounds** menu item sets the timer window default position and size.

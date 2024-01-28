@@ -62,7 +62,7 @@ internal abstract class VirtualDesktop<TVirtualDesktopManagerInternal> : ICurren
         {
             if (o is not null)
             {
-                Marshal.ReleaseComObject(o);
+                Marshal.FinalReleaseComObject(o);
             }
         }
     }
