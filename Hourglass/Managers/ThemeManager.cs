@@ -73,7 +73,9 @@ public sealed class ThemeManager : Manager
     /// Gets a collection of the themes defined by the user ordered by name.
     /// </summary>
 #pragma warning disable S2365
+#pragma warning disable IDE0305
     public IList<Theme> UserProvidedThemes => _themes.Where(static t => t.Type == ThemeType.UserProvided).OrderBy(t => t.Name).ToList();
+#pragma warning restore IDE0305
 #pragma warning restore S2365
 
     /// <summary>
@@ -153,7 +155,7 @@ public sealed class ThemeManager : Manager
     /// <param name="identifier">The identifier for the theme.</param>
     /// <returns>The theme for the specified identifier, or <see cref="DefaultTheme"/> if no such theme is loaded.
     /// </returns>
-    public Theme? GetThemeOrDefaultByIdentifier(string? identifier)
+    public Theme GetThemeOrDefaultByIdentifier(string? identifier)
     {
         return GetThemeByIdentifier(identifier) ?? DefaultTheme;
     }
@@ -180,7 +182,7 @@ public sealed class ThemeManager : Manager
     /// </summary>
     /// <param name="theme">A theme.</param>
     /// <returns>The light variant of the <paramref name="theme"/>.</returns>
-    public Theme? GetLightVariantForTheme(Theme theme)
+    public Theme GetLightVariantForTheme(Theme theme)
     {
         return theme.Type switch
         {
@@ -196,7 +198,7 @@ public sealed class ThemeManager : Manager
     /// </summary>
     /// <param name="theme">A theme.</param>
     /// <returns>The dark variant of the <paramref name="theme"/>.</returns>
-    public Theme? GetDarkVariantForTheme(Theme theme)
+    public Theme GetDarkVariantForTheme(Theme theme)
     {
         return theme.Type switch
         {

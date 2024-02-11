@@ -164,14 +164,22 @@ public sealed class SoundManager : Manager
     /// <returns>A collection of sounds stored in the file system.</returns>
     private IEnumerable<Sound> GetUserProvidedSounds()
     {
+        const string soundsDirectory = "Sounds";
+
         try
         {
             string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ".";
-            string soundsDirectory = Path.Combine(appDirectory, "Sounds");
+            string appSoundsDirectory = Path.Combine(appDirectory, soundsDirectory);
+            string localAppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Hourglass");
+            string localAppDataSoundsDirectory = Path.Combine(localAppDataDirectory, soundsDirectory);
 
-            List<Sound> list = [];
-            list.AddRange(GetUserProvidedSounds(appDirectory));
-            list.AddRange(GetUserProvidedSounds(soundsDirectory));
+            List<Sound> list =
+            [
+                ..GetUserProvidedSounds(appDirectory),
+                ..GetUserProvidedSounds(appSoundsDirectory),
+                ..GetUserProvidedSounds(localAppDataDirectory),
+                ..GetUserProvidedSounds(localAppDataSoundsDirectory)
+            ];
             list.Sort(static (a, b) => string.Compare(a.Name, b.Name, CultureInfo.CurrentCulture, CompareOptions.StringSort));
             return list;
         }

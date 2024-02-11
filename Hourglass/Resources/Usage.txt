@@ -157,6 +157,11 @@ Options:
         Default value   last
         Alias           -s, /s
 
+        Where "sound" is the name of a sound WAV file without extension. The sound WAV files
+        should be placed to the application directory or to the "%LOCALAPPDATA%\Hourglass"
+        directory, or to the corresponding "Sounds" subdirectory. The symbolic links created
+        with the "mklink" system command are also supported.
+
   --loop-sound on|off|last
         Loops the sound that plays when the timer expires.
 

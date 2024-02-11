@@ -194,11 +194,12 @@ public sealed class DateTimeToken : TimerStartToken
         /// <returns>A list of <see cref="PatternDefinition"/> objects.</returns>
         private static List<PatternDefinition> GetAllDateTimePatternDefinitions(IFormatProvider provider)
         {
-            List<PatternDefinition> list = [];
-            list.AddRange(GetDatePatternDefinitions(provider));
-            list.AddRange(GetTimePatternDefinitions(provider));
-            list.AddRange(GetDateTimePatternDefinitions(provider));
-            return list;
+            return
+            [
+                ..GetDatePatternDefinitions(provider),
+                ..GetTimePatternDefinitions(provider),
+                ..GetDateTimePatternDefinitions(provider)
+            ];
         }
 
         /// <summary>
