@@ -27,8 +27,6 @@ using StartupEventArgs = Microsoft.VisualBasic.ApplicationServices.StartupEventA
 /// </summary>
 public sealed class AppEntry : WindowsFormsApplicationBase
 {
-    private static int _showSavedTimerWindowsExecuted;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="AppEntry"/> class.
     /// </summary>
@@ -141,9 +139,7 @@ public sealed class AppEntry : WindowsFormsApplicationBase
     /// <param name="arguments">Parsed command-line arguments.</param>
     private static void ShowSavedTimerWindows(CommandLineArguments arguments)
     {
-        const int executed = 1;
-
-        if (System.Threading.Interlocked.Exchange(ref _showSavedTimerWindowsExecuted, executed) == executed)
+        if (IsShowSavedTimerWindowsExecuted)
         {
             return;
         }
@@ -155,6 +151,18 @@ public sealed class AppEntry : WindowsFormsApplicationBase
             window.Restore(savedTimer.Options.WindowSize ?? arguments.GetWindowSize(), RestoreOptions.AllowMinimized);
 
             window.Show(savedTimer);
+        }
+    }
+
+    private static int _isShowSavedTimerWindowsExecuted;
+
+    private static bool IsShowSavedTimerWindowsExecuted
+    {
+        get
+        {
+            const int executed = 1;
+
+            return System.Threading.Interlocked.Exchange(ref _isShowSavedTimerWindowsExecuted, executed) == executed;
         }
     }
 

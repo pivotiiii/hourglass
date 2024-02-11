@@ -445,7 +445,7 @@ public class NotificationAreaIcon : IDisposable
             return;
         }
 
-        TimerWindow firstTimerWindow =
+        TimerWindow? firstTimerWindow =
             Application.Current.Windows
                 .OfType<TimerWindow>()
                 .Arrange()
@@ -456,11 +456,15 @@ public class NotificationAreaIcon : IDisposable
 
         if (firstTimerWindow is not null)
         {
+            WindowState windowState = firstTimerWindow.WindowState;
+
             firstTimerWindow.BringToFrontAndActivate();
 
             MessageBoxResult result = firstTimerWindow.ShowTaskDialog(
                 Resources.ExitMenuTaskDialogInstruction,
                 Resources.StopAndExitMenuTaskDialogCommand);
+
+            firstTimerWindow.WindowState = windowState;
 
             if (result != MessageBoxResult.Yes)
             {

@@ -68,7 +68,7 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 - The switching between light and dark themes is improved.
 - The **Display time in the digital clock format** menu item toggles the displayed time digital clock time format. It can be found under the **Advanced options** submenu of the timer window context menu. The command-line option is  `--digital-clock-time` / `-c`
 - The timer window pops up on the current virtual desktop.
-- The sound WAV files can be placed to the `%LOCALAPPDATA%\Hourglass` or `%LOCALAPPDATA%\Hourglass\Sounds` directories. The symbolic links created with the `mklink` system command are also supported.
+- The sound file can be placed to the `%LOCALAPPDATA%\Hourglass` or `%LOCALAPPDATA%\Hourglass\Sounds` directories. It can be the symbolic link created by the `mklink` system command.
 
 ### Misc
 
