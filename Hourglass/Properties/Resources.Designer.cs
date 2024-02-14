@@ -242,6 +242,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Activate next window when minimized or closed.
+        /// </summary>
+        public static string ContextMenuActivateNextWindowMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuActivateNextWindowMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Advanced _options.
         /// </summary>
         public static string ContextMenuAdvancedOptionsMenuItem {

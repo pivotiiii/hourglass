@@ -491,7 +491,6 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 // If the interface is locked, there is nothing the user can do or should be able to do other than
                 // close the window, so pretend that the timer expired immediately
                 Show(TimerStart.Zero, false /* remember */);
-                return;
             }
             else
             {
@@ -499,8 +498,9 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 Show();
                 SwitchToInputMode();
                 BeginValidationErrorAnimation();
-                return;
             }
+
+            return;
         }
 
         TimerManager.Instance.Add(newTimer);
@@ -544,13 +544,25 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         }
     }
 
+    private bool _activating;
+
     /// <summary>
     /// Brings the window to the front, activates it, and focuses it.
     /// </summary>
-    public void BringToFrontAndActivate()
+    /// <param name="activate">Activate window.</param>
+    public void BringToFrontAndActivate(bool activate = true)
     {
         try
         {
+            if (_activating)
+            {
+                return;
+            }
+
+            _activating = true;
+
+            ShowActivated = activate;
+
             this.MoveToCurrentVirtualDesktop();
 
             Show();
@@ -564,18 +576,25 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             Topmost = true;
             Topmost = Options.AlwaysOnTop;
 
-            Dispatcher.BeginInvoke(Sleep);
-            Dispatcher.BeginInvoke(Activate);
-            Dispatcher.BeginInvoke(Focus);
-
-            static void Sleep()
+            if(activate)
             {
-                System.Threading.Thread.Sleep(10);
+                Dispatcher.BeginInvoke(Sleep);
+                Dispatcher.BeginInvoke(Activate);
+                Dispatcher.BeginInvoke(Focus);
+
+                static void Sleep()
+                {
+                    System.Threading.Thread.Sleep(10);
+                }
             }
         }
         catch (InvalidOperationException)
         {
             // This happens if the window is closing (waiting for the user to confirm) when this method is called
+        }
+        finally
+        {
+            _activating = false;
         }
     }
 
@@ -841,8 +860,6 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// </summary>
     private void InitializeSoundPlayer()
     {
-        _soundPlayer.PlaybackStarted += SoundPlayerPlaybackStarted;
-        _soundPlayer.PlaybackStopped += SoundPlayerPlaybackStopped;
         _soundPlayer.PlaybackCompleted += SoundPlayerPlaybackCompleted;
     }
 
@@ -869,7 +886,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         // Bring the window to the front if required
         if (Options.PopUpWhenExpired)
         {
-            BringToFrontAndActivate();
+            BringToFrontAndActivate(false);
         }
         else if (Settings.Default.ShowInNotificationArea && !IsVisible)
         {
@@ -984,26 +1001,6 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
                 break;
         }
-    }
-
-    /// <summary>
-    /// Invoked when sound playback has started.
-    /// </summary>
-    /// <param name="sender">A <see cref="SoundPlayer"/>.</param>
-    /// <param name="e">The event data.</param>
-    private void SoundPlayerPlaybackStarted(object sender, EventArgs e)
-    {
-        // Do nothing
-    }
-
-    /// <summary>
-    /// Invoked when sound playback has stopped.
-    /// </summary>
-    /// <param name="sender">A <see cref="SoundPlayer"/>.</param>
-    /// <param name="e">The event data.</param>
-    private void SoundPlayerPlaybackStopped(object sender, EventArgs e)
-    {
-        // Do nothing
     }
 
     /// <summary>

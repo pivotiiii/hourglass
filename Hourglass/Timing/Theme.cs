@@ -304,7 +304,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// Gets the default theme.
     /// </summary>
-    public static Theme? DefaultTheme => ThemeManager.Instance.DefaultTheme;
+    public static Theme DefaultTheme => ThemeManager.Instance.DefaultTheme;
 
     /// <summary>
     /// Gets the type of this theme.
@@ -598,12 +598,12 @@ public sealed class Theme : INotifyPropertyChanged
     /// <summary>
     /// Gets the light variant of this theme.
     /// </summary>
-    public Theme? LightVariant => ThemeManager.Instance.GetLightVariantForTheme(this);
+    public Theme LightVariant => ThemeManager.Instance.GetLightVariantForTheme(this);
 
     /// <summary>
     /// Gets the dark variant of this theme.
     /// </summary>
-    public Theme? DarkVariant => ThemeManager.Instance.GetDarkVariantForTheme(this);
+    public Theme DarkVariant => ThemeManager.Instance.GetDarkVariantForTheme(this);
 
     #endregion
 
@@ -614,7 +614,7 @@ public sealed class Theme : INotifyPropertyChanged
     /// </summary>
     /// <param name="identifier">The identifier for the theme.</param>
     /// <returns>The theme for the specified identifier, or <c>null</c> if no such theme is loaded.</returns>
-    public static Theme? FromIdentifier(string? identifier)
+    public static Theme FromIdentifier(string? identifier)
     {
         return ThemeManager.Instance.GetThemeOrDefaultByIdentifier(identifier);
     }

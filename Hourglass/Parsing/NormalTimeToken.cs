@@ -94,33 +94,31 @@ public sealed class NormalTimeToken : TimeToken
     {
         ThrowIfNotValid();
 
+#pragma warning disable S6562
         DateTime earlyDateTime = new(
             datePart.Year,
             datePart.Month,
             datePart.Day,
-            this.Hour == 12 ? 0 : this.Hour,
-            this.Minute,
-            this.Second);
+            Hour == 12 ? 0 : Hour,
+            Minute,
+            Second);
 
         DateTime lateDateTime = new(
             datePart.Year,
             datePart.Month,
             datePart.Day,
-            this.Hour < 12 ? this.Hour + 12 : this.Hour,
-            this.Minute,
-            this.Second);
+            Hour < 12 ? Hour + 12 : Hour,
+            Minute,
+            Second);
+#pragma warning restore S6562
 
-        switch (HourPeriod)
+        return HourPeriod switch
         {
-            case HourPeriod.Am:
-                return earlyDateTime;
-            case HourPeriod.Pm:
-                return lateDateTime;
-            case HourPeriod.Undefined:
-                return earlyDateTime < minDate ? lateDateTime : earlyDateTime;
-        }
-
-        throw new InvalidOperationException();
+            HourPeriod.Am => earlyDateTime,
+            HourPeriod.Pm => lateDateTime,
+            HourPeriod.Undefined => earlyDateTime < minDate ? lateDateTime : earlyDateTime,
+            _ => throw new InvalidOperationException()
+        };
     }
 
     /// <summary>

@@ -9,6 +9,7 @@ namespace Hourglass;
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media.Animation;
 
 using Extensions;
 using Managers;
@@ -27,6 +28,13 @@ using StartupEventArgs = Microsoft.VisualBasic.ApplicationServices.StartupEventA
 /// </summary>
 public sealed class AppEntry : WindowsFormsApplicationBase
 {
+    static AppEntry()
+    {
+        Timeline.DesiredFrameRateProperty.OverrideMetadata(
+            typeof(Timeline),
+            new FrameworkPropertyMetadata(20));
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="AppEntry"/> class.
     /// </summary>
@@ -175,6 +183,7 @@ public sealed class AppEntry : WindowsFormsApplicationBase
         Settings.Default.ShowInNotificationArea = arguments.ShowInNotificationArea;
         Settings.Default.OpenSavedTimersOnStartup = arguments.OpenSavedTimers;
         Settings.Default.Prefer24HourTime = arguments.Prefer24HourTime;
+        Settings.Default.ActivateNextWindow = arguments.ActivateNextWindow;
     }
 
     /// <summary>

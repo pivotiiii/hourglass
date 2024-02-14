@@ -109,17 +109,17 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     /// <summary>
     /// The "Light theme" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _lightThemeMenuItem = null!;
+    private MenuItem? _lightThemeMenuItem;
 
     /// <summary>
     /// The "Dark theme" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _darkThemeMenuItem = null!;
+    private MenuItem? _darkThemeMenuItem;
 
     /// <summary>
     /// The "Manage themes" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _manageThemesMenuItem = null!;
+    private MenuItem? _manageThemesMenuItem;
 
     /// <summary>
     /// The "Theme" <see cref="MenuItem"/>s associated with <see cref="Theme"/>s.
@@ -139,7 +139,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     /// <summary>
     /// The "Loop sound" <see cref="MenuItem"/>.
     /// </summary>
-    private MenuItem _loopSoundMenuItem = null!;
+    private MenuItem? _loopSoundMenuItem;
 
     /// <summary>
     /// The "Do not keep computer awake" <see cref="MenuItem"/>.
@@ -160,6 +160,11 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     /// The "Prefer 24-hour time when parsing" <see cref="MenuItem"/>.
     /// </summary>
     private MenuItem _prefer24HourTimeMenuItem = null!;
+
+    /// <summary>
+    /// The "Activate next window when minimized or closed" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _activateNextWindowMenuItem = null!;
 
     /// <summary>
     /// The "Reverse progress bar" <see cref="MenuItem"/>.
@@ -364,8 +369,8 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
             }
         }
 
-        _lightThemeMenuItem.IsChecked = _timerWindow.Options.Theme?.Type == ThemeType.BuiltInLight;
-        _darkThemeMenuItem.IsChecked = _timerWindow.Options.Theme?.Type == ThemeType.BuiltInDark;
+        _lightThemeMenuItem!.IsChecked = _timerWindow.Options.Theme?.Type == ThemeType.BuiltInLight;
+        _darkThemeMenuItem!.IsChecked = _timerWindow.Options.Theme?.Type == ThemeType.BuiltInDark;
 
         // Sound
         foreach (MenuItem menuItem in _selectableSoundMenuItems)
@@ -374,7 +379,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         }
 
         // Loop sound
-        _loopSoundMenuItem.IsChecked = _timerWindow.Options.LoopSound;
+        _loopSoundMenuItem!.IsChecked = _timerWindow.Options.LoopSound;
 
         // Do not keep computer awake
         _doNotKeepComputerAwakeMenuItem.IsChecked = _timerWindow.Options.DoNotKeepComputerAwake;
@@ -384,6 +389,9 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
 
         // Prefer 24-hour time when parsing
         _prefer24HourTimeMenuItem.IsChecked = Settings.Default.Prefer24HourTime;
+
+        // Activate next window when minimized or closed
+        _activateNextWindowMenuItem.IsChecked = Settings.Default.ActivateNextWindow;
 
         // Display time in the digital clock format
         _digitalClockTimeMenuItem.IsChecked = _timerWindow.Options.DigitalClockTime;
@@ -454,7 +462,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         _timerWindow.Options.Sound = selectedSoundMenuItem?.Tag as Sound;
 
         // Loop sound
-        _timerWindow.Options.LoopSound = _loopSoundMenuItem.IsChecked;
+        _timerWindow.Options.LoopSound = _loopSoundMenuItem?.IsChecked == true;
 
         // Do not keep computer awake
         _timerWindow.Options.DoNotKeepComputerAwake = _doNotKeepComputerAwakeMenuItem.IsChecked;
@@ -464,6 +472,9 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
 
         // Prefer 24-hour time when parsing
         Settings.Default.Prefer24HourTime = _prefer24HourTimeMenuItem.IsChecked;
+
+        // Activate next window when minimized or closed
+        Settings.Default.ActivateNextWindow = _activateNextWindowMenuItem.IsChecked;
 
         // Display time in the digital clock format
         Settings.Default.DigitalClockTime = _digitalClockTimeMenuItem.IsChecked;
@@ -797,6 +808,14 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         };
         _reverseProgressBarMenuItem.Click += CheckableMenuItemClick;
         advancedOptionsMenuItem.Items.Add(_reverseProgressBarMenuItem);
+
+        _activateNextWindowMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuActivateNextWindowMenuItem,
+            IsCheckable = true
+        };
+        _activateNextWindowMenuItem.Click += CheckableMenuItemClick;
+        advancedOptionsMenuItem.Items.Add(_activateNextWindowMenuItem);
 
         advancedOptionsMenuItem.Items.Add(new Separator());
 
@@ -1332,7 +1351,7 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
 
         TextBlock textBlock = new()
         {
-            Text = theme.Name ?? Properties.Resources.ContextMenuUnnamedTheme,
+            Text = string.IsNullOrWhiteSpace(theme.Name) ? Properties.Resources.ContextMenuUnnamedTheme : theme.Name,
             Margin = new(5, 0, 0, 0)
         };
 

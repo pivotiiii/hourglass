@@ -66,7 +66,8 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 - Shortcuts are displayed in the timer window context menu.
 - The progress bar changes direction to vertical when the height is more than the width and vice versa.
 - The switching between light and dark themes is improved.
-- The **Display time in the digital clock format** menu item toggles the displayed time digital clock time format. It can be found under the **Advanced options** submenu of the timer window context menu. The command-line option is  `--digital-clock-time` / `-c`
+- The **Advanced options** / **Display time in the digital clock format** timer window context menu option toggles the displayed time digital clock time format. The command-line option is `--digital-clock-time` / `-c`
+- The **Advanced options** / **Activate next window when minimized or closed** timer window context menu option enables the next timer window activation when the current timer window is minimized or closed. The command-line option is `--activate-next` / `-an`
 - The timer window pops up on the current virtual desktop.
 - The sound file can be placed to the `%LOCALAPPDATA%\Hourglass` or `%LOCALAPPDATA%\Hourglass\Sounds` directories. It can be the symbolic link created by the `mklink` system command.
 

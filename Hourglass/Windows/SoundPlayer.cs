@@ -61,16 +61,6 @@ public class SoundPlayer : IDisposable
     #region Events
 
     /// <summary>
-    /// Raised when sound playback has started.
-    /// </summary>
-    public event EventHandler? PlaybackStarted;
-
-    /// <summary>
-    /// Raised when sound playback has stopped.
-    /// </summary>
-    public event EventHandler? PlaybackStopped;
-
-    /// <summary>
     /// Raised when sound playback has completed.
     /// </summary>
     public event EventHandler? PlaybackCompleted;
@@ -155,8 +145,6 @@ public class SoundPlayer : IDisposable
             return false;
         }
 
-        // Raise an event
-        OnPlaybackStarted();
         return true;
     }
 
@@ -190,8 +178,6 @@ public class SoundPlayer : IDisposable
             return false;
         }
 
-        // Raise an event
-        OnPlaybackStopped();
         return true;
     }
 
@@ -251,30 +237,6 @@ public class SoundPlayer : IDisposable
         }
     }
 
-    /// <summary>
-    /// Raises the <see cref="PlaybackStarted"/> event.
-    /// </summary>
-    protected virtual void OnPlaybackStarted()
-    {
-        PlaybackStarted?.Invoke(this, EventArgs.Empty);
-    }
-
-    /// <summary>
-    /// Raises the <see cref="PlaybackStopped"/> event.
-    /// </summary>
-    protected virtual void OnPlaybackStopped()
-    {
-        PlaybackStopped?.Invoke(this, EventArgs.Empty);
-    }
-
-    /// <summary>
-    /// Raises the <see cref="PlaybackCompleted"/> event.
-    /// </summary>
-    protected virtual void OnPlaybackCompleted()
-    {
-        PlaybackCompleted?.Invoke(this, EventArgs.Empty);
-    }
-
     #endregion
 
     #region Private Methods
@@ -287,7 +249,7 @@ public class SoundPlayer : IDisposable
     private void DispatcherTimerTick(object sender, EventArgs e)
     {
         _dispatcherTimer.Stop();
-        OnPlaybackCompleted();
+        PlaybackCompleted?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -297,15 +259,14 @@ public class SoundPlayer : IDisposable
     /// <param name="e">The event data.</param>
     private void MediaPlayerOnMediaEnded(object sender, EventArgs e)
     {
-        if (IsLooping)
+        if (!IsLooping)
         {
-            _mediaPlayer.Position = TimeSpan.Zero;
-            _mediaPlayer.Play();
+            PlaybackCompleted?.Invoke(this, EventArgs.Empty);
+            return;
         }
-        else
-        {
-            OnPlaybackCompleted();
-        }
+
+        _mediaPlayer.Position = TimeSpan.Zero;
+        _mediaPlayer.Play();
     }
 
     #endregion

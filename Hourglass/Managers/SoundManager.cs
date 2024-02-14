@@ -89,12 +89,9 @@ public sealed class SoundManager : Manager
     /// <returns>The sound for the specified identifier, or <c>null</c> if no such sound is loaded.</returns>
     public Sound? GetSoundByIdentifier(string? identifier)
     {
-        if (string.IsNullOrWhiteSpace(identifier))
-        {
-            return null;
-        }
-
-        return _sounds.Find(s => s.Identifier == identifier);
+        return string.IsNullOrWhiteSpace(identifier)
+                ? null
+                : _sounds.Find(s => s.Identifier == identifier);
     }
 
     /// <summary>
@@ -105,12 +102,9 @@ public sealed class SoundManager : Manager
     /// </returns>
     public Sound? GetSoundOrDefaultByIdentifier(string? identifier)
     {
-        if (string.IsNullOrWhiteSpace(identifier))
-        {
-            return null;
-        }
-
-        return GetSoundByIdentifier(identifier!) ?? DefaultSound;
+        return string.IsNullOrWhiteSpace(identifier)
+                ? null
+                : GetSoundByIdentifier(identifier!) ?? DefaultSound;
     }
 
     /// <summary>
@@ -122,12 +116,9 @@ public sealed class SoundManager : Manager
     /// <returns>The first sound for the specified name, or <c>null</c> if no such sound is loaded.</returns>
     public Sound? GetSoundByName(string name, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            return null;
-        }
-
-        return _sounds.Find(s => string.Equals(s.Name, name, stringComparison));
+        return string.IsNullOrWhiteSpace(name)
+                ? null
+                : _sounds.Find(s => string.Equals(s.Name, name, stringComparison));
     }
 
     /// <summary>

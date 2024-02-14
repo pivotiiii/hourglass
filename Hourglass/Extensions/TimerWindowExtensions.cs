@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
+using Hourglass.Properties;
 using Hourglass.Timing;
 using Hourglass.Windows;
 
@@ -21,7 +22,7 @@ public static class TimerWindowExtensions
     public static IEnumerable<TimerWindow> ArrangeDescending(this IEnumerable<TimerWindow> windows) =>
         windows.OrderByDescending(static window => window, TimeComparer).ThenByDescending(Title, TitleComparer);
 
-    public static void BringNextToFrontAndActivate(this TimerWindow thisWindow)
+    public static void BringNextToFrontAndActivate(this TimerWindow thisWindow, bool activate = true)
     {
         if (thisWindow.DoNotActivateNextWindow)
         {
@@ -29,8 +30,13 @@ public static class TimerWindowExtensions
             return;
         }
 
+        if (!Settings.Default.ActivateNextWindow)
+        {
+            return;
+        }
+
         var nextWindow = GetNextWindow();
-        nextWindow?.Dispatcher.BeginInvoke(nextWindow.BringToFrontAndActivate);
+        nextWindow?.Dispatcher.BeginInvoke(() => nextWindow.BringToFrontAndActivate(activate));
 
         TimerWindow? GetNextWindow()
         {

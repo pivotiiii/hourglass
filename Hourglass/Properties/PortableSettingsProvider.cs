@@ -229,9 +229,9 @@ namespace Hourglass.Properties
         }
 
         /// <summary>
-        /// Returns an <see cref="XmlWriter"/> for the settings XML document.
+        /// Returns a <see cref="XmlWriter"/> for the settings XML document.
         /// </summary>
-        /// <returns>An <see cref="XmlWriter"/> for the settings XML document.</returns>
+        /// <returns>A <see cref="XmlWriter"/> for the settings XML document.</returns>
         private static XmlWriter GetSettingsDocumentWriter()
         {
             string path = GetSettingsDocumentPath();

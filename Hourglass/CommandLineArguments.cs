@@ -9,7 +9,6 @@ namespace Hourglass;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -160,9 +159,9 @@ public sealed class CommandLineArguments
     public bool Prefer24HourTime { get; private set; }
 
     /// <summary>
-    /// Gets or sets a value indicating what information to display in the timer window title.
+    /// Gets a value indicating what information to display in the timer window title.
     /// </summary>
-    public WindowTitleMode WindowTitleMode { get; set; }
+    public WindowTitleMode WindowTitleMode { get; private set; }
 
     /// <summary>
     /// Gets a value that indicates whether the timer window is restored, minimized, or maximized.
@@ -184,6 +183,11 @@ public sealed class CommandLineArguments
     /// action until the timer expires.
     /// </summary>
     public bool LockInterface { get; private set; }
+
+    /// <summary>
+    /// Gets a value indicating whether to activate next window when minimized or closed.
+    /// </summary>
+    public bool ActivateNextWindow { get; private set; }
 
     #endregion
 
@@ -266,9 +270,9 @@ public sealed class CommandLineArguments
     #region Private Methods
 
     /// <summary>
-    /// Returns an <see cref="CommandLineArguments"/> instance based on the most recent options.
+    /// Returns a <see cref="CommandLineArguments"/> instance based on the most recent options.
     /// </summary>
-    /// <returns>An <see cref="CommandLineArguments"/> instance based on the most recent options.</returns>
+    /// <returns>A <see cref="CommandLineArguments"/> instance based on the most recent options.</returns>
     private static CommandLineArguments GetArgumentsFromMostRecentOptions()
     {
         TimerOptions options = TimerOptionsManager.Instance.MostRecentOptions;
@@ -295,6 +299,7 @@ public sealed class CommandLineArguments
             LoopSound = options.LoopSound,
             OpenSavedTimers = Settings.Default.OpenSavedTimersOnStartup,
             Prefer24HourTime = Settings.Default.Prefer24HourTime,
+            ActivateNextWindow = Settings.Default.ActivateNextWindow,
             WindowTitleMode = options.WindowTitleMode,
             WindowState = windowSize.WindowState != WindowState.Minimized ? windowSize.WindowState : windowSize.RestoreWindowState,
             RestoreWindowState = windowSize.RestoreWindowState,
@@ -304,9 +309,9 @@ public sealed class CommandLineArguments
     }
 
     /// <summary>
-    /// Returns an <see cref="CommandLineArguments"/> instance based on the factory default settings.
+    /// Returns a <see cref="CommandLineArguments"/> instance based on the factory default settings.
     /// </summary>
-    /// <returns>An <see cref="CommandLineArguments"/> instance based on the factory default settings.</returns>
+    /// <returns>A <see cref="CommandLineArguments"/> instance based on the factory default settings.</returns>
     private static CommandLineArguments GetArgumentsFromFactoryDefaults()
     {
         TimerOptions defaultOptions = new();
@@ -336,6 +341,7 @@ public sealed class CommandLineArguments
             LoopSound = defaultOptions.LoopSound,
             OpenSavedTimers = false,
             Prefer24HourTime = false,
+            ActivateNextWindow = true,
             WindowTitleMode = WindowTitleMode.ApplicationName,
             WindowState = defaultOptions.WindowSize?.WindowState ?? WindowState.Normal,
             RestoreWindowState = defaultOptions.WindowSize?.RestoreWindowState ?? WindowState.Normal,
@@ -635,6 +641,20 @@ public sealed class CommandLineArguments
 
                     argumentsBasedOnMostRecentOptions.Prefer24HourTime = prefer24HourTime;
                     argumentsBasedOnFactoryDefaults.Prefer24HourTime = prefer24HourTime;
+                    break;
+
+                case "--activate-next":
+                case "-an":
+                case "/an":
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "--activate-next");
+
+                    bool activateNextWindow = GetBoolValue(
+                        arg,
+                        remainingArgs,
+                        argumentsBasedOnMostRecentOptions.ActivateNextWindow);
+
+                    argumentsBasedOnMostRecentOptions.ActivateNextWindow = activateNextWindow;
+                    argumentsBasedOnFactoryDefaults.ActivateNextWindow = activateNextWindow;
                     break;
 
                 case "--window-title":
