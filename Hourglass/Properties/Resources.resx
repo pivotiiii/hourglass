@@ -860,6 +860,14 @@ $</value>
     <value>Hourglass</value>
     <comment>The window title for the error dialog</comment>
   </data>
+  <data name="NotificationAreaIconPauseAllMenuItem" xml:space="preserve">
+    <value>&amp;Pause all</value>
+    <comment>The text for the command-line pause all menu item, where the character following the optional ampersand (&amp;) is the access key</comment>
+  </data>
+  <data name="NotificationAreaIconResumeAllMenuItem" xml:space="preserve">
+    <value>&amp;Resume all</value>
+    <comment>The text for the command-line resume all menu item, where the character following the optional ampersand (&amp;) is the access key</comment>
+  </data>
   <data name="NotificationAreaIconAboutMenuItem" xml:space="preserve">
     <value>&amp;About</value>
     <comment>The text for the command-line about menu item, where the character following the optional ampersand (&amp;) is the access key</comment>
@@ -1319,10 +1327,18 @@ $</value>
   </data>
   <data name="ContextMenuDigitalClockTimeMenuItem" xml:space="preserve">
     <value>Display time in the digital _clock format</value>
-    <comment>The text for the dispay time in the digital clock format when displaying menu item, where the character following the optional underscore (_) is the access key</comment>
+    <comment>The text for the display time in the digital clock format when displaying menu item, where the character following the optional underscore (_) is the access key</comment>
+  </data>
+  <data name="ContextMenuPauseAllMenuItem" xml:space="preserve">
+    <value>Pause _all</value>
+    <comment>The text for the pause all menu item, where the character following the optional underscore (_) is the access key</comment>
+  </data>
+  <data name="ContextMenuResumeAllMenuItem" xml:space="preserve">
+    <value>Resume _all</value>
+    <comment>The text for the resume all menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuAboutMenuItem" xml:space="preserve">
-    <value>_About</value>
+    <value>About</value>
     <comment>The text for the about menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="License" type="System.Resources.ResXFileRef, System.Windows.Forms">

@@ -189,6 +189,16 @@ public sealed class CommandLineArguments
     /// </summary>
     public bool ActivateNextWindow { get; private set; }
 
+    /// <summary>
+    /// Gets a value indicating whether to execute pause all command.
+    /// </summary>
+    public bool PauseAll { get; private set; }
+
+    /// <summary>
+    /// Gets a value indicating whether to execute resume all command.
+    /// </summary>
+    public bool ResumeAll { get; private set; }
+
     #endregion
 
     #region Public Methods
@@ -712,6 +722,22 @@ public sealed class CommandLineArguments
                     argumentsBasedOnFactoryDefaults.LockInterface = lockInterface;
                     break;
 
+                case "pause":
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "pause");
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "resume");
+
+                    argumentsBasedOnMostRecentOptions.PauseAll = true;
+                    argumentsBasedOnFactoryDefaults.PauseAll = true;
+                    break;
+
+                case "resume":
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "resume");
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "pause");
+
+                    argumentsBasedOnMostRecentOptions.ResumeAll = true;
+                    argumentsBasedOnFactoryDefaults.ResumeAll = true;
+                    break;
+
                 case "--use-factory-defaults":
                 case "-d":
                 case "/d":
@@ -1141,21 +1167,23 @@ public sealed class CommandLineArguments
     /// <param name="canonicalSwitch">The canonical representation of a switch argument.</param>
     private static void ThrowIfDuplicateSwitch(HashSet<string> specifiedSwitches, string canonicalSwitch)
     {
-        if (!specifiedSwitches.Add(canonicalSwitch))
+        if (specifiedSwitches.Add(canonicalSwitch))
         {
-            string message = string.Format(
-                Resources.ResourceManager.GetEffectiveProvider(),
-                Resources.CommandLineArgumentsParseExceptionDuplicateSwitchFormatString,
-                canonicalSwitch);
-
-            throw new ParseException(message);
+            return;
         }
+
+        string message = string.Format(
+            Resources.ResourceManager.GetEffectiveProvider(),
+            Resources.CommandLineArgumentsParseExceptionDuplicateSwitchFormatString,
+            canonicalSwitch);
+
+        throw new ParseException(message);
     }
 
     #endregion
 
     /// <summary>
-    /// Represents an error during <see cref="CommandLineArguments.GetCommandLineArguments"/>.
+    /// Represents an error during <see cref="GetCommandLineArguments"/>.
     /// </summary>
     [Serializable]
 #pragma warning disable S3925

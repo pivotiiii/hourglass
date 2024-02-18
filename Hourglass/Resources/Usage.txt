@@ -1,4 +1,4 @@
-﻿Usage: hourglass.exe [OPTIONS] [<input>]
+﻿Usage: hourglass.exe [COMMAND] [OPTIONS] [<input>]
 
 A simple countdown timer for Windows.
 
@@ -25,6 +25,14 @@ A simple countdown timer for Windows.
         * The order of the day, month, and year depends on your system settings.
 
         Variations of some of these formats are also supported.
+
+Commands:
+
+  pause
+        Pauses all the running timers.
+
+  resume
+        Resumes all the paused timers.
 
 Options:
 

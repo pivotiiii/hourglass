@@ -339,10 +339,10 @@ public class NotificationAreaIcon : IDisposable
 
             yield return NewSeparatorMenuItem();
 
-            bool addSeparator = false;
+            bool shouldAddSeparator = false;
             foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().Arrange())
             {
-                addSeparator = true;
+                shouldAddSeparator = true;
 
                 menuItem = new(window.ToString())
                 {
@@ -352,13 +352,36 @@ public class NotificationAreaIcon : IDisposable
                 yield return menuItem;
             }
 
-            if (addSeparator)
+            if (shouldAddSeparator)
+            {
+                shouldAddSeparator = false;
+
+                yield return NewSeparatorMenuItem();
+
+                if (TimerManager.CanPauseAll())
+                {
+                    shouldAddSeparator = true;
+                    menuItem = new(Resources.NotificationAreaIconPauseAllMenuItem);
+                    menuItem.Click += delegate { TimerManager.PauseAll(); };
+                    yield return menuItem;
+                }
+
+                if (TimerManager.CanResumeAll())
+                {
+                    shouldAddSeparator = true;
+                    menuItem = new(Resources.NotificationAreaIconResumeAllMenuItem);
+                    menuItem.Click += delegate { TimerManager.ResumeAll(); };
+                    yield return menuItem;
+                }
+            }
+
+            if (shouldAddSeparator)
             {
                 yield return NewSeparatorMenuItem();
             }
 
             menuItem = new(Resources.NotificationAreaIconAboutMenuItem);
-            menuItem.Click += AboutMenuItemClick;
+            menuItem.Click += delegate { AboutDialog.ShowOrActivate(); };
             yield return menuItem;
 
             yield return NewSeparatorMenuItem();
@@ -366,11 +389,6 @@ public class NotificationAreaIcon : IDisposable
             static MenuItem NewSeparatorMenuItem() =>
                 new("-");
         }
-    }
-
-    private void AboutMenuItemClick(object sender, EventArgs e)
-    {
-        AboutDialog.ShowOrActivate();
     }
 
     /// <summary>
@@ -445,14 +463,15 @@ public class NotificationAreaIcon : IDisposable
             return;
         }
 
-        TimerWindow? firstTimerWindow =
-            Application.Current.Windows
-                .OfType<TimerWindow>()
-                .Arrange()
-                .FirstOrDefault(static window =>
-                    window.Options.PromptOnExit &&
-                    window.Timer.State != TimerState.Stopped &&
-                    window.Timer.State != TimerState.Expired);
+        if (Application.Current.Windows.OfType<TimerWindow>()
+            .Any(static window => window.Options.LockInterface && IsTimerRunningFor(window)))
+        {
+            return;
+        }
+
+        TimerWindow? firstTimerWindow = Application.Current.Windows.OfType<TimerWindow>()
+            .Arrange()
+            .FirstOrDefault(static window => window.Options.PromptOnExit && IsTimerRunningFor(window));
 
         if (firstTimerWindow is not null)
         {
@@ -482,5 +501,9 @@ public class NotificationAreaIcon : IDisposable
 
             window.Close();
         }
+
+        static bool IsTimerRunningFor(TimerWindow window) =>
+            window.Timer.State != TimerState.Stopped &&
+            window.Timer.State != TimerState.Expired;
     }
 }

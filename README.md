@@ -38,6 +38,13 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 
 - Adds the **Hourglass** executable path to the [Windows App Paths](https://learn.microsoft.com/en-us/windows/win32/shell/app-registration#using-the-app-paths-subkey), so the **Hourglass** [command-line](https://github.com/i2van/hourglass/blob/develop/Hourglass/Resources/Usage.txt) is available out of the box.
 
+### Command-line
+
+- New command `pause`
+- New command `resume`
+- New option `--digital-clock-time` / `-c`
+- New option `--activate-next` / `-an`
+
 ### UI
 
 - Uses a [Windows Task Dialog](https://learn.microsoft.com/en-us/windows/win32/controls/task-dialogs-overview) instead of a message box ([GitHub](https://github.com/kpreisser/TaskDialog)).
@@ -47,7 +54,9 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 
 - The double click shows/hides all the timer windows.
 - All the timers are arranged by the time left. The order of the timers is new, expired, paused, running.
-- The **Exit** menu asks to close all the running timer windows if the **Prompt on exit** option is on.
+- The **Exit** menu command asks to close all the running timer windows if the **Prompt on exit** option is on.
+- The **Pause all** menu command pauses all the running timers.
+- The **Resume all** menu command resumes all the paused timers.
 
 ### Timer Windows
 
@@ -60,7 +69,7 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 - All the timer windows are arranged by the time left. The order of the timer windows is new, expired, paused, running.
 - When the timer window is minimized or closed the next visible non-minimized timer window is activated.
 - The **Window title** submenu is available directly from the timer window context menu.
-- The **Reset bounds** menu item sets the timer window default position and size.
+- The **Reset bounds** menu command sets the timer window default position and size.
 - The **Restore**, **Minimize** and **Maximize** timer window commands are always present in the timer window context menu.
 - All the timer window commands are available in the timer window context menu.
 - Shortcuts are displayed in the timer window context menu.
@@ -70,6 +79,8 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 - The **Advanced options** / **Activate next window when minimized or closed** timer window context menu option enables the next timer window activation when the current timer window is minimized or closed. The command-line option is `--activate-next` / `-an`
 - The timer window pops up on the current virtual desktop.
 - The sound file can be placed to the `%LOCALAPPDATA%\Hourglass` or `%LOCALAPPDATA%\Hourglass\Sounds` directories. It can be the symbolic link created by the `mklink` system command.
+- The **Pause all** timer window context menu command pauses all the running timers. Command-line command is `pause`
+- The **Resume all** timer window context menu command resumes all the paused timers. Command-line command is `resume`
 
 ### Misc
 

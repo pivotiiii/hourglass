@@ -233,7 +233,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _About.
+        ///   Looks up a localized string similar to About.
         /// </summary>
         public static string ContextMenuAboutMenuItem {
             get {
@@ -467,6 +467,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pause _all.
+        /// </summary>
+        public static string ContextMenuPauseAllMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuPauseAllMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Pop up when expired.
         /// </summary>
         public static string ContextMenuPopUpWhenExpiredMenuItem {
@@ -517,6 +526,15 @@ namespace Hourglass.Properties {
         public static string ContextMenuRestoreMenuItem {
             get {
                 return ResourceManager.GetString("ContextMenuRestoreMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resume _all.
+        /// </summary>
+        public static string ContextMenuResumeAllMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuResumeAllMenuItem", resourceCulture);
             }
         }
         
@@ -1468,6 +1486,24 @@ namespace Hourglass.Properties {
         public static string NotificationAreaIconNewTimerMenuItem {
             get {
                 return ResourceManager.GetString("NotificationAreaIconNewTimerMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Pause all.
+        /// </summary>
+        public static string NotificationAreaIconPauseAllMenuItem {
+            get {
+                return ResourceManager.GetString("NotificationAreaIconPauseAllMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Resume all.
+        /// </summary>
+        public static string NotificationAreaIconResumeAllMenuItem {
+            get {
+                return ResourceManager.GetString("NotificationAreaIconResumeAllMenuItem", resourceCulture);
             }
         }
         

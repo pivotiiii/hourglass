@@ -37,6 +37,21 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     private DispatcherTimer _dispatcherTimer = null!;
 
     /// <summary>
+    /// The "Pause all" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _pauseAllMenuItem = null!;
+
+    /// <summary>
+    /// The "Pause all" <see cref="MenuItem"/>.
+    /// </summary>
+    private MenuItem _resumeAllMenuItem = null!;
+
+    /// <summary>
+    /// The "Pause all", "Resume all" menu items <see cref="Separator"/>.
+    /// </summary>
+    private Separator _pauseResumeAllSeparator = null!;
+
+    /// <summary>
     /// The "Always on top" <see cref="MenuItem"/>.
     /// </summary>
     private MenuItem _alwaysOnTopMenuItem = null!;
@@ -308,6 +323,8 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
     /// </summary>
     private void UpdateMenuFromOptions()
     {
+        UpdatePauseResumeAll();
+
         // Always on top
         _alwaysOnTopMenuItem.IsChecked = _timerWindow.Options.AlwaysOnTop;
 
@@ -355,18 +372,11 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         {
             Theme menuItemTheme = (Theme)menuItem.Tag;
             menuItem.IsChecked = menuItemTheme == _timerWindow.Options.Theme;
-            if (_timerWindow.Options.Theme?.Type == ThemeType.UserProvided)
-            {
-                menuItem.Visibility = menuItemTheme.Type is ThemeType.BuiltInLight or ThemeType.UserProvided
-                    ? Visibility.Visible
-                    : Visibility.Collapsed;
-            }
-            else
-            {
-                menuItem.Visibility = menuItemTheme.Type == _timerWindow.Options.Theme?.Type || menuItemTheme.Type == ThemeType.UserProvided
-                    ? Visibility.Visible
-                    : Visibility.Collapsed;
-            }
+            menuItem.Visibility = (
+                _timerWindow.Options.Theme?.Type == ThemeType.UserProvided
+                    ? menuItemTheme.Type is ThemeType.BuiltInLight or ThemeType.UserProvided
+                    : menuItemTheme.Type == _timerWindow.Options.Theme?.Type || menuItemTheme.Type == ThemeType.UserProvided
+            ).ToVisibility();
         }
 
         _lightThemeMenuItem!.IsChecked = _timerWindow.Options.Theme?.Type == ThemeType.BuiltInLight;
@@ -419,6 +429,16 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         {
             WindowTitleMode windowTitleMode = (WindowTitleMode)menuItem.Tag;
             menuItem.IsChecked = windowTitleMode == _timerWindow.Options.WindowTitleMode;
+        }
+
+        void UpdatePauseResumeAll()
+        {
+            bool canPauseAll = TimerManager.CanPauseAll();
+            bool canResumeAll = TimerManager.CanResumeAll();
+
+            _pauseAllMenuItem.Visibility = canPauseAll.ToVisibility();
+            _resumeAllMenuItem.Visibility = canResumeAll.ToVisibility();
+            _pauseResumeAllSeparator.Visibility = (canPauseAll || canResumeAll).ToVisibility();
         }
     }
 
@@ -539,6 +559,24 @@ public sealed class ContextMenu : System.Windows.Controls.ContextMenu
         }
 
         Items.Add(new Separator());
+
+        _pauseAllMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuPauseAllMenuItem
+        };
+        _pauseAllMenuItem.Click += delegate { TimerManager.PauseAll(); };
+        Items.Add(_pauseAllMenuItem);
+
+        _resumeAllMenuItem = new()
+        {
+            Header = Properties.Resources.ContextMenuResumeAllMenuItem
+        };
+        _resumeAllMenuItem.Click += delegate { TimerManager.ResumeAll(); };
+        Items.Add(_resumeAllMenuItem);
+
+        _pauseResumeAllSeparator = new Separator();
+
+        Items.Add(_pauseResumeAllSeparator);
 
         // Always on top
         _alwaysOnTopMenuItem = new()

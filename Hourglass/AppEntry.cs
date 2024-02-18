@@ -101,6 +101,8 @@ public sealed class AppEntry : WindowsFormsApplicationBase
         ShowTimerWindowsForArguments(arguments);
     }
 
+    private static int _openSavedTimersExecuted;
+
     /// <summary>
     /// Shows a new timer window or windows for all saved timers, depending on whether the <see
     /// cref="CommandLineArguments"/> specify to open saved timers.
@@ -108,18 +110,35 @@ public sealed class AppEntry : WindowsFormsApplicationBase
     /// <param name="arguments">Parsed command-line arguments.</param>
     private static void ShowTimerWindowsForArguments(CommandLineArguments arguments)
     {
-        if (arguments.OpenSavedTimers && TimerManager.Instance.ResumableTimers.Any())
+        const int executed = 1;
+
+        if (System.Threading.Interlocked.Exchange(ref _openSavedTimersExecuted, executed) != executed &&
+            arguments.OpenSavedTimers && TimerManager.Instance.ResumableTimers.Any())
         {
             ShowSavedTimerWindows(arguments);
-
-            if (arguments.TimerStart is not null)
-            {
-                ShowNewTimerWindow(arguments);
-            }
+            ShowNewTimerWindowWithTimerStart();
         }
         else
         {
-            ShowNewTimerWindow(arguments);
+            ShowNewTimerWindowWithTimerStart(arguments is { PauseAll: false, ResumeAll: false });
+        }
+
+        if (arguments.PauseAll)
+        {
+            TimerManager.PauseAll();
+        }
+
+        if (arguments.ResumeAll)
+        {
+            TimerManager.ResumeAll();
+        }
+
+        void ShowNewTimerWindowWithTimerStart(bool force = false)
+        {
+            if (arguments.TimerStart is not null || force)
+            {
+                ShowNewTimerWindow(arguments);
+            }
         }
     }
 
@@ -147,11 +166,6 @@ public sealed class AppEntry : WindowsFormsApplicationBase
     /// <param name="arguments">Parsed command-line arguments.</param>
     private static void ShowSavedTimerWindows(CommandLineArguments arguments)
     {
-        if (IsShowSavedTimerWindowsExecuted)
-        {
-            return;
-        }
-
         foreach (Timer savedTimer in TimerManager.Instance.ResumableTimers)
         {
             TimerWindow window = new();
@@ -159,18 +173,6 @@ public sealed class AppEntry : WindowsFormsApplicationBase
             window.Restore(savedTimer.Options.WindowSize ?? arguments.GetWindowSize(), RestoreOptions.AllowMinimized);
 
             window.Show(savedTimer);
-        }
-    }
-
-    private static int _isShowSavedTimerWindowsExecuted;
-
-    private static bool IsShowSavedTimerWindowsExecuted
-    {
-        get
-        {
-            const int executed = 1;
-
-            return System.Threading.Interlocked.Exchange(ref _isShowSavedTimerWindowsExecuted, executed) == executed;
         }
     }
 

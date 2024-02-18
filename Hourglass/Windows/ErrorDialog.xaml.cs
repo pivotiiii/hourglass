@@ -8,6 +8,8 @@ namespace Hourglass.Windows;
 
 using System.Windows;
 
+using Extensions;
+
 /// <summary>
 /// A window that displays an error.
 /// </summary>
@@ -34,7 +36,7 @@ public sealed partial class ErrorDialog
         TitleTextBlock.Text = title;
 
         MessageTextBox.Text = message ?? string.Empty;
-        MessageBorder.Visibility = string.IsNullOrWhiteSpace(message) ? Visibility.Collapsed : Visibility.Visible;
+        MessageBorder.Visibility = string.IsNullOrWhiteSpace(message).ToVisibilityReversed();
 
         DetailsTextBox.Text = details ?? string.Empty;
         ShowDetailsButton.IsEnabled = !string.IsNullOrWhiteSpace(details);

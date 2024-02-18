@@ -139,6 +139,45 @@ public sealed class TimerManager : Manager
     }
 
     /// <summary>
+    /// Checks whether at least one timer can be paused.
+    /// </summary>
+    /// <returns><see langword="true" /> if at least one timer can be paused.</returns>
+    public static bool CanPauseAll() =>
+        GetPausableTimers(TimerState.Running).Any();
+
+    /// <summary>
+    /// Checks whether at least one timer can be resumed.
+    /// </summary>
+    /// <returns><see langword="true" /> if at least one timer can be resumed.</returns>
+    public static bool CanResumeAll() =>
+        GetPausableTimers(TimerState.Paused).Any();
+
+    /// <summary>
+    /// Pauses all the running timers.
+    /// </summary>
+    public static void PauseAll() =>
+        ForEachPausableTimer(TimerState.Running, static timer => timer.Pause());
+
+    /// <summary>
+    /// Resumes all the running timers.
+    /// </summary>
+    public static void ResumeAll() =>
+        ForEachPausableTimer(TimerState.Paused, static timer => timer.Resume());
+
+    private static void ForEachPausableTimer(TimerState state, Action<Timer> execute)
+    {
+        foreach (TimerWindow timerWindow in GetPausableTimers(state))
+        {
+            execute(timerWindow.Timer);
+        }
+    }
+
+    private static IEnumerable<TimerWindow> GetPausableTimers(TimerState state) =>
+        Application.Current?.Windows.OfType<TimerWindow>()
+            .Where(timerWindow => timerWindow.Timer.SupportsPause && !timerWindow.Options.LockInterface && timerWindow.Timer.State == state)
+        ?? [];
+
+    /// <summary>
     /// Returns a value indicating whether a timer is bound to any <see cref="TimerWindow"/>.</summary>
     /// <param name="timer">A <see cref="Timer"/>.</param>
     /// <returns>A value indicating whether the timer is bound to any <see cref="TimerWindow"/>. </returns>

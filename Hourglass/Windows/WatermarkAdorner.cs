@@ -13,6 +13,8 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 
+using Extensions;
+
 /// <summary>
 /// An <see cref="Adorner"/> that displays a watermark on a <see cref="TextBox"/> or <see cref="ComboBox"/> control.
 /// </summary>
@@ -43,7 +45,7 @@ public sealed class WatermarkAdorner : Adorner
         IsHitTestVisible = false;
 
         AdornedElement.IsVisibleChanged += AdornedElementIsVisibleChanged;
-        Visibility = AdornedElement.IsVisible ? Visibility.Visible : Visibility.Collapsed;
+        Visibility = AdornedElement.IsVisible.ToVisibility();
 
         Binding opacityBinding = new()
         {
