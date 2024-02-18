@@ -8,5 +8,5 @@ internal static class WpfExtensions
     private static readonly KeyGestureConverter _keyGestureConverter = new();
 
     public static string ToInputGestureText(this KeyGesture keyGesture) =>
-        (string) _keyGestureConverter.ConvertTo(null, CultureInfo.InvariantCulture, keyGesture, typeof(string));
+        (string?) _keyGestureConverter.ConvertTo(null, CultureInfo.InvariantCulture, keyGesture, typeof(string)) ?? string.Empty;
 }

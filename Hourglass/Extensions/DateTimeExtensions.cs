@@ -13,6 +13,8 @@ using System.Linq;
 
 using Properties;
 
+#pragma warning disable S6562
+
 /// <summary>
 /// Provides extensions methods for the <see cref="DateTime"/> class.
 /// </summary>

@@ -33,8 +33,13 @@ public static class ColorExtensions
     /// <returns>A <see cref="Color"/>.</returns>
     public static Color FromString(string colorString)
     {
-        object color = ColorConverter.ConvertFromString(colorString);
+        if (string.IsNullOrWhiteSpace(colorString))
+        {
+            throw new ArgumentNullException(nameof(colorString));
+        }
 
-        return color is null ? throw new ArgumentNullException(nameof(colorString)) : (Color) color;
+        object? color = ColorConverter.ConvertFromString(colorString);
+
+        return color is null ? throw new ArgumentNullException(nameof(colorString)) : (Color)color;
     }
 }

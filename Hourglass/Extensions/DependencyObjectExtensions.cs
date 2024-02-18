@@ -24,9 +24,9 @@ public static class DependencyObjectExtensions
     /// <param name="predicate">A predicate.</param>
     /// <returns>The first visual child of a <see cref="DependencyObject"/> that matches the specified predicate.
     /// </returns>
-    public static DependencyObject FindVisualChild(this DependencyObject parent, Func<DependencyObject, bool> predicate)
+    public static DependencyObject? FindVisualChild(this DependencyObject parent, Func<DependencyObject, bool> predicate)
     {
-        return GetAllVisualChildren(parent).FirstOrDefault(predicate);
+        return GetAllVisualChildren(parent).FirstOrDefault(predicate!);
     }
 
     /// <summary>
@@ -34,13 +34,13 @@ public static class DependencyObjectExtensions
     /// </summary>
     /// <param name="parent">A <see cref="DependencyObject"/>.</param>
     /// <returns>All the visual children of a <see cref="DependencyObject"/>.</returns>
-    public static IEnumerable<DependencyObject> GetAllVisualChildren(this DependencyObject parent)
+    public static IEnumerable<DependencyObject?> GetAllVisualChildren(this DependencyObject parent)
     {
         foreach (DependencyObject child in parent.GetVisualChildren())
         {
             yield return child;
 
-            foreach (DependencyObject childOfChild in GetAllVisualChildren(child))
+            foreach (DependencyObject? childOfChild in GetAllVisualChildren(child))
             {
                 yield return childOfChild;
             }

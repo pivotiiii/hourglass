@@ -46,7 +46,7 @@ public static class Watermark
     /// </summary>
     /// <param name="control">A <see cref="Control"/>.</param>
     /// <returns>The value of the <see cref="HintProperty"/>.</returns>
-    public static object GetHint(Control control)
+    public static object? GetHint(Control control)
     {
         return control.GetValue(HintProperty);
     }
@@ -66,7 +66,7 @@ public static class Watermark
     /// </summary>
     /// <param name="control">A <see cref="Control"/>.</param>
     /// <returns>The value of the <see cref="HintBrushProperty"/>.</returns>
-    public static Brush GetHintBrush(Control control)
+    public static Brush? GetHintBrush(Control control)
     {
         return (Brush)control.GetValue(HintBrushProperty);
     }
@@ -234,8 +234,8 @@ public static class Watermark
     /// <param name="control">A <see cref="Control"/>.</param>
     private static void UpdateWatermark(Control control)
     {
-        object hint = GetHint(control);
-        Brush brush = GetHintBrush(control);
+        object? hint = GetHint(control);
+        Brush? brush = GetHintBrush(control);
 
         if (!control.IsKeyboardFocused && !HasActualValue(control) && hint is not null && brush is not null)
         {

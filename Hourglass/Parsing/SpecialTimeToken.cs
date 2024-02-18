@@ -15,6 +15,8 @@ using System.Text.RegularExpressions;
 using Extensions;
 using Properties;
 
+#pragma warning disable IDE0290
+
 /// <summary>
 /// Represents a special time of day.
 /// </summary>
@@ -193,9 +195,7 @@ public sealed class SpecialTimeToken : TimeToken
         /// <param name="hour">The hour.</param>
         /// <param name="minute">The minute.</param>
         /// <param name="second">The second.</param>
-#pragma warning disable S1144
         public SpecialTimeDefinition(SpecialTime specialTime, int hour, int minute, int second)
-#pragma warning restore S1144
         {
             SpecialTime = specialTime;
 

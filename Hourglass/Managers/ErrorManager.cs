@@ -131,7 +131,9 @@ public sealed class ErrorManager : Manager
             // Get the dump files with newest files first
             string appName = Assembly.GetExecutingAssembly().GetName().Name;
             string dumpPathPattern = string.Format(CultureInfo.InvariantCulture, "{0}-Crash.*", appName);
-            IList<FileInfo> dumpFiles = directory.GetFiles(dumpPathPattern).OrderBy(static f => f.LastWriteTimeUtc).ToList();
+#pragma warning disable IDE0305
+            List<FileInfo> dumpFiles = directory.GetFiles(dumpPathPattern).OrderBy(static f => f.LastWriteTimeUtc).ToList();
+#pragma warning restore IDE0305
 
             // Delete dump files until we have only MaxErrorDumps left
             while (dumpFiles.Count > MaxErrorDumps)

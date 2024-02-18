@@ -85,7 +85,7 @@ public sealed class EmptyDateToken : DateToken
         /// <returns>A set of regular expressions supported by this parser.</returns>
         public override IEnumerable<string> GetPatterns(IFormatProvider provider)
         {
-            return new[] { string.Empty };
+            yield return string.Empty;
         }
 
         /// <summary>

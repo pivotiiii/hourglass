@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace KPreisser.UI;
 
+#pragma warning disable S101
+#pragma warning disable S2344
+
 internal static class TaskDialogNativeMethods
 {
     public const int WM_USER = 0x0400;
@@ -22,11 +25,9 @@ internal static class TaskDialogNativeMethods
 
     //// HResult codes
 
-#pragma warning disable IDE1006 // Naming Styles
     public const int S_OK = 0x0;
 
     public const int S_FALSE = 0x1;
-#pragma warning restore IDE1006 // Naming Styles
 
     //// Progress Bar states
 
@@ -73,7 +74,7 @@ internal static class TaskDialogNativeMethods
     }
 
     [Flags]
-    public enum WINDOWPOS_FLAGS : int
+    public enum WINDOWPOS_FLAGS
     {
         SWP_NOSIZE = 0x0001,
 
@@ -106,7 +107,7 @@ internal static class TaskDialogNativeMethods
     //// were taken from CommCtrl.h.
 
     [Flags]
-    public enum TASKDIALOG_FLAGS : int
+    public enum TASKDIALOG_FLAGS
     {
         TDF_ENABLE_HYPERLINKS = 0x0001,
 
@@ -154,7 +155,7 @@ internal static class TaskDialogNativeMethods
         TDF_SIZE_TO_CONTENT = 0x01000000
     }
 
-    public enum TASKDIALOG_MESSAGES : int
+    public enum TASKDIALOG_MESSAGES
     {
         TDM_NAVIGATE_PAGE = WM_USER + 101,
 
@@ -232,7 +233,7 @@ internal static class TaskDialogNativeMethods
         TDM_UPDATE_ICON = WM_USER + 116
     }
 
-    public enum TASKDIALOG_NOTIFICATIONS : int
+    public enum TASKDIALOG_NOTIFICATIONS
     {
         TDN_CREATED = 0,
 

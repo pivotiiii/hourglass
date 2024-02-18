@@ -14,6 +14,8 @@ using Extensions;
 using Managers;
 using Serialization;
 
+#pragma warning disable IDE0290
+
 /// <summary>
 /// The type of theme.
 /// </summary>

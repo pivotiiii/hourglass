@@ -15,6 +15,8 @@ using System.Text.RegularExpressions;
 using Extensions;
 using Properties;
 
+#pragma warning disable IDE0290
+
 /// <summary>
 /// Represents a relative date.
 /// </summary>
@@ -189,9 +191,7 @@ public sealed class RelativeDateToken : DateToken
         /// <param name="yearDelta">The year delta.</param>
         /// <param name="monthDelta">The month delta.</param>
         /// <param name="dayDelta">The day delta.</param>
-#pragma warning disable S1144
         public RelativeDateDefinition(RelativeDate relativeDate, int yearDelta, int monthDelta, int dayDelta)
-#pragma warning restore S1144
         {
             RelativeDate = relativeDate;
 

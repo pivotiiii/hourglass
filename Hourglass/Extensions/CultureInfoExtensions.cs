@@ -25,7 +25,7 @@ public static class CultureInfoExtensions
     /// ordering in date representations.</returns>
     public static bool IsMonthFirst(this IFormatProvider provider)
     {
-        DateTimeFormatInfo formatInfo = (DateTimeFormatInfo)provider.GetFormat(typeof(DateTimeFormatInfo));
+        DateTimeFormatInfo? formatInfo = (DateTimeFormatInfo?)provider.GetFormat(typeof(DateTimeFormatInfo));
         return Regex.IsMatch(formatInfo!.ShortDatePattern, @"^.*M.*d.*y.*$");
     }
 
@@ -38,7 +38,7 @@ public static class CultureInfoExtensions
     /// ordering in date representations.</returns>
     public static bool IsYearFirst(this IFormatProvider provider)
     {
-        DateTimeFormatInfo formatInfo = (DateTimeFormatInfo)provider.GetFormat(typeof(DateTimeFormatInfo));
+        DateTimeFormatInfo? formatInfo = (DateTimeFormatInfo?)provider.GetFormat(typeof(DateTimeFormatInfo));
         return Regex.IsMatch(formatInfo!.ShortDatePattern, @"^.*y.*M.*d.*$");
     }
 }

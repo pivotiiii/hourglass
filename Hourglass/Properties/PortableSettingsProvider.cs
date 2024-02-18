@@ -41,7 +41,7 @@ namespace Hourglass.Properties
         /// <summary>
         /// Gets the friendly name used to refer to the provider during configuration.
         /// </summary>
-        public override string Name => GetType().FullName;
+        public override string Name => GetType().FullName!;
 
         /// <summary>
         /// Initializes the provider.
@@ -210,7 +210,7 @@ namespace Hourglass.Properties
             }
 
             string query = string.Format(CultureInfo.InvariantCulture, "//setting[@name='{0}']/value", propertyName);
-            XmlNode node = document.SelectSingleNode(query);
+            XmlNode? node = document.SelectSingleNode(query);
             return node?.InnerXml;
         }
 

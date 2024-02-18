@@ -154,7 +154,7 @@ public sealed class SizeToFitTextBox : TextBox
     private double GetViewWidth()
     {
         // This is the control closest to the text and gives the most accurate width
-        DependencyObject textBoxView = this.FindVisualChild(WindowExtensions.IsTextBoxView);
+        DependencyObject? textBoxView = this.FindVisualChild(WindowExtensions.IsTextBoxView);
 
         // Since TextBoxView is internal, fall back to this if it is not found
         FrameworkElement view = textBoxView as FrameworkElement ?? this;

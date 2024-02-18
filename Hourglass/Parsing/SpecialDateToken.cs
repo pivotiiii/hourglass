@@ -15,6 +15,8 @@ using System.Text.RegularExpressions;
 using Extensions;
 using Properties;
 
+#pragma warning disable IDE0290
+
 /// <summary>
 /// Represents a special date.
 /// </summary>
@@ -205,9 +207,7 @@ public sealed class SpecialDateToken : DateToken
         /// <param name="specialDate">The <see cref="SpecialDate"/>.</param>
         /// <param name="month">The month.</param>
         /// <param name="day">The day.</param>
-#pragma warning disable S1144
         public SpecialDateDefinition(SpecialDate specialDate, int month, int day)
-#pragma warning restore S1144
         {
             SpecialDate = specialDate;
 

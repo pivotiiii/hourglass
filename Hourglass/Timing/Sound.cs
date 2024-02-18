@@ -77,7 +77,7 @@ public sealed class Sound
     /// <summary>
     /// Gets the default sound.
     /// </summary>
-    public static Sound? DefaultSound => SoundManager.Instance.DefaultSound;
+    public static Sound DefaultSound => SoundManager.Instance.DefaultSound;
 
     /// <summary>
     /// Gets a sound representing no sound.
