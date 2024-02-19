@@ -9,6 +9,7 @@ namespace Hourglass;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -55,10 +56,9 @@ public sealed class CommandLineArguments
     public bool ShouldShowUsage { get; private set; }
 
     /// <summary>
-    /// Gets a <see cref="TimerStart"/>, or <c>null</c> if no <see cref="TimerStart"/> was specified on the command
-    /// line.
+    /// Gets a <see cref="TimerStart"/> values, or empty if no time was specified on the command line.
     /// </summary>
-    public TimerStart? TimerStart { get; private set; }
+    public IEnumerable<TimerStart> TimerStart { get; private set; } = [];
 
     /// <summary>
     /// Gets a user-specified title for the timer.
@@ -177,6 +177,11 @@ public sealed class CommandLineArguments
     /// Gets the size and location of the window.
     /// </summary>
     public Rect WindowBounds { get; private set; }
+
+    /// <summary>
+    /// Gets a value indicating whether space separated timer command-line arguments should be processed individually.
+    /// </summary>
+    public bool MultiTimers { get; private set; }
 
     /// <summary>
     /// Gets a value indicating whether the user interface should be locked, preventing the user from taking any
@@ -391,6 +396,26 @@ public sealed class CommandLineArguments
 
             switch (arg)
             {
+                // Commands.
+
+                case "pause":
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "pause");
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "resume");
+
+                    argumentsBasedOnMostRecentOptions.PauseAll = true;
+                    argumentsBasedOnFactoryDefaults.PauseAll = true;
+                    break;
+
+                case "resume":
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "resume");
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "pause");
+
+                    argumentsBasedOnMostRecentOptions.ResumeAll = true;
+                    argumentsBasedOnFactoryDefaults.ResumeAll = true;
+                    break;
+
+                // Options.
+
                 case "--title":
                 case "-t":
                 case "/t":
@@ -709,6 +734,19 @@ public sealed class CommandLineArguments
                     argumentsBasedOnFactoryDefaults.WindowBounds = argumentsBasedOnFactoryDefaults.WindowBounds.Merge(windowBounds);
                     break;
 
+                case "--multi-timers":
+                case "-mt":
+                case "/mt":
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "--multi-timers");
+
+                    bool multiTimers = GetBoolValue(
+                        arg,
+                        remainingArgs);
+
+                    argumentsBasedOnMostRecentOptions.MultiTimers = multiTimers;
+                    argumentsBasedOnFactoryDefaults.MultiTimers = multiTimers;
+                    break;
+
                 case "--lock-interface":
                 case "-z":
                 case "/z":
@@ -720,22 +758,6 @@ public sealed class CommandLineArguments
 
                     argumentsBasedOnMostRecentOptions.LockInterface = lockInterface;
                     argumentsBasedOnFactoryDefaults.LockInterface = lockInterface;
-                    break;
-
-                case "pause":
-                    ThrowIfDuplicateSwitch(specifiedSwitches, "pause");
-                    ThrowIfDuplicateSwitch(specifiedSwitches, "resume");
-
-                    argumentsBasedOnMostRecentOptions.PauseAll = true;
-                    argumentsBasedOnFactoryDefaults.PauseAll = true;
-                    break;
-
-                case "resume":
-                    ThrowIfDuplicateSwitch(specifiedSwitches, "resume");
-                    ThrowIfDuplicateSwitch(specifiedSwitches, "pause");
-
-                    argumentsBasedOnMostRecentOptions.ResumeAll = true;
-                    argumentsBasedOnFactoryDefaults.ResumeAll = true;
                     break;
 
                 case "--use-factory-defaults":
@@ -771,7 +793,7 @@ public sealed class CommandLineArguments
                     List<string> inputArgs = [arg, ..remainingArgs];
                     remainingArgs.Clear();
 
-                    TimerStart timerStart = GetTimerStartValue(inputArgs);
+                    IEnumerable<TimerStart> timerStart = GetTimerStartValue(inputArgs, argumentsBasedOnMostRecentOptions.MultiTimers).ToList();
 
                     argumentsBasedOnMostRecentOptions.TimerStart = timerStart;
                     argumentsBasedOnFactoryDefaults.TimerStart = timerStart;
@@ -1113,26 +1135,37 @@ public sealed class CommandLineArguments
     /// is not a valid representation of a <see cref="TimerStart"/>.
     /// </summary>
     /// <param name="remainingArgs">The unparsed arguments.</param>
-    /// <returns>The <see cref="TimerStart"/> value corresponding to the concatenation of all <paramref
-    /// name="remainingArgs"/></returns>
+    /// <param name="multiTimers">Treat each timer argument as a separate timer.</param>
+    /// <returns>
+    /// The <see cref="TimerStart"/> value corresponding to the concatenation of all <paramref name="remainingArgs"/>
+    /// or individual timer values if <paramref name="multiTimers"/> if <c>true</c>.
+    /// </returns>
     /// <exception cref="ParseException">If the concatenation of all <paramref name="remainingArgs"/> is not a
     /// valid representation of a <see cref="TimerStart"/>.</exception>
-    private static TimerStart GetTimerStartValue(IEnumerable<string> remainingArgs)
+    private static IEnumerable<TimerStart> GetTimerStartValue(IEnumerable<string> remainingArgs, bool multiTimers)
     {
-        string value = string.Join(" ", remainingArgs);
-        TimerStart? timerStart = TimerStart.FromString(value);
-
-        if (timerStart is null)
+        if (!multiTimers)
         {
-            string message = string.Format(
-                Resources.ResourceManager.GetEffectiveProvider(),
-                Resources.CommandLineArgumentsParseExceptionInvalidTimerInputFormatString,
-                value);
-
-            throw new ParseException(message);
+            string value = string.Join(" ", remainingArgs);
+            remainingArgs = [ value ];
         }
 
-        return timerStart;
+        foreach (string arg in remainingArgs)
+        {
+            TimerStart? timerStart = Timing.TimerStart.FromString(arg);
+
+            if (timerStart is null)
+            {
+                string message = string.Format(
+                    Resources.ResourceManager.GetEffectiveProvider(),
+                    Resources.CommandLineArgumentsParseExceptionInvalidTimerInputFormatString,
+                    arg);
+
+                throw new ParseException(message);
+            }
+
+            yield return timerStart;
+        }
     }
 
     /// <summary>
@@ -1203,7 +1236,7 @@ public sealed class CommandLineArguments
         /// Initializes a new instance of the <see cref="ParseException"/> class.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
-        /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (<see langword="Nothing" /> in Visual Basic) if no inner exception is specified.</param>
+        /// <param name="innerException">The exception that is the cause of the current exception, or a <c>null</c> reference if no inner exception is specified.</param>
         public ParseException(string message, Exception innerException)
             : base(message, innerException)
         {

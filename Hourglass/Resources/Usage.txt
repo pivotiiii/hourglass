@@ -116,6 +116,16 @@ Options:
         Default value   last
         Alias           -u, /u
 
+  --multi-timers on|off
+        Treats each <input> command-line argument as an individual timer.
+
+        This option is never remembered. It must be specified as a command-line
+        argument each time the timer is started.
+
+        Required        no
+        Default value   off
+        Alias           -mt, /mt
+
   --loop-timer on|off|last
         Loops the timer when it expires.
 
@@ -294,6 +304,7 @@ Options:
             --activate-next               -an on
             --digital-clock-time          -c  off
             --show-time-elapsed           -u  off
+            --multi-timers                -mt off
             --loop-timer                  -l  off
             --pop-up-when-expired         -p  on
             --close-when-expired          -e  off

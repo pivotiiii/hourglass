@@ -7,6 +7,7 @@
 namespace Hourglass;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Animation;
@@ -116,11 +117,11 @@ public sealed class AppEntry : WindowsFormsApplicationBase
             arguments.OpenSavedTimers && TimerManager.Instance.ResumableTimers.Any())
         {
             ShowSavedTimerWindows(arguments);
-            ShowNewTimerWindowWithTimerStart();
+            ShowNewTimerWindows();
         }
         else
         {
-            ShowNewTimerWindowWithTimerStart(arguments is { PauseAll: false, ResumeAll: false });
+            ShowNewTimerWindows(arguments is { PauseAll: false, ResumeAll: false });
         }
 
         if (arguments.PauseAll)
@@ -133,11 +134,18 @@ public sealed class AppEntry : WindowsFormsApplicationBase
             TimerManager.ResumeAll();
         }
 
-        void ShowNewTimerWindowWithTimerStart(bool force = false)
+        void ShowNewTimerWindows(bool forceNew = false)
         {
-            if (arguments.TimerStart is not null || force)
+            IEnumerable<TimerStart?> timerStarts = arguments.TimerStart;
+
+            if (forceNew)
             {
-                ShowNewTimerWindow(arguments);
+                timerStarts = timerStarts.DefaultIfEmpty(null);
+            }
+
+            foreach (TimerStart? timerStart in timerStarts)
+            {
+                ShowNewTimerWindow(arguments, timerStart);
             }
         }
     }
@@ -147,9 +155,10 @@ public sealed class AppEntry : WindowsFormsApplicationBase
     /// cref="CommandLineArguments"/>, or it will display in input mode if there is no <see cref="TimerStart"/>.
     /// </summary>
     /// <param name="arguments">Parsed command-line arguments.</param>
-    private static void ShowNewTimerWindow(CommandLineArguments arguments)
+    /// <param name="timerStart">Timer start.</param>
+    private static void ShowNewTimerWindow(CommandLineArguments arguments, TimerStart? timerStart)
     {
-        TimerWindow window = new(arguments.TimerStart);
+        TimerWindow window = new(timerStart);
         window.Options.Set(arguments.GetTimerOptions());
         window.Restore(arguments.GetWindowSize(), RestoreOptions.AllowMinimized);
         window.Show();
