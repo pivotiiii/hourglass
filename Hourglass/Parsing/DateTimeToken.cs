@@ -98,7 +98,7 @@ public sealed class DateTimeToken : TimerStartToken
             {
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("DateTimeTokenDateTimeFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.DateTimeTokenDateTimeFormatString), provider),
                     datePart,
                     timePart);
             }
@@ -108,7 +108,7 @@ public sealed class DateTimeToken : TimerStartToken
             {
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("DateTimeTokenDateOnlyFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.DateTimeTokenDateOnlyFormatString), provider),
                     datePart);
             }
 
@@ -117,7 +117,7 @@ public sealed class DateTimeToken : TimerStartToken
             {
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("DateTimeTokenTimeOnlyFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.DateTimeTokenTimeOnlyFormatString), provider),
                     timePart);
             }
 
@@ -314,7 +314,7 @@ public sealed class DateTimeToken : TimerStartToken
             {
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("DateTimeTokenDateOnlyPatternFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.DateTimeTokenDateOnlyPatternFormatString), provider),
                     datePartPattern);
             }
 
@@ -323,14 +323,14 @@ public sealed class DateTimeToken : TimerStartToken
             {
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("DateTimeTokenTimeOnlyPatternFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.DateTimeTokenTimeOnlyPatternFormatString), provider),
                     timePartPattern);
             }
 
             // Date and time pattern
             return string.Format(
                 Resources.ResourceManager.GetEffectiveProvider(provider),
-                Resources.ResourceManager.GetString("DateTimeTokenDateTimePatternFormatString", provider),
+                Resources.ResourceManager.GetString(nameof(Resources.DateTimeTokenDateTimePatternFormatString), provider),
                 datePartPattern,
                 timePartPattern);
         }
@@ -356,7 +356,7 @@ public sealed class DateTimeToken : TimerStartToken
             {
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("DateTimeTokenTimeOnlyPatternFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.DateTimeTokenTimeOnlyPatternFormatString), provider),
                     timePartPattern);
             }
 
@@ -365,14 +365,14 @@ public sealed class DateTimeToken : TimerStartToken
             {
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("DateTimeTokenDateOnlyPatternFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.DateTimeTokenDateOnlyPatternFormatString), provider),
                     datePartPattern);
             }
 
             // Time and date pattern
             return string.Format(
                 Resources.ResourceManager.GetEffectiveProvider(provider),
-                Resources.ResourceManager.GetString("DateTimeTokenTimeDatePatternFormatString", provider),
+                Resources.ResourceManager.GetString(nameof(Resources.DateTimeTokenTimeDatePatternFormatString), provider),
                 timePartPattern,
                 datePartPattern);
         }

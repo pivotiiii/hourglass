@@ -159,7 +159,7 @@ public sealed class NormalTimeToken : TimeToken
 
             stringBuilder.AppendFormat(
                 Resources.ResourceManager.GetEffectiveProvider(provider),
-                Resources.ResourceManager.GetString("NormalTimeTokenHourPartFormatString", provider),
+                Resources.ResourceManager.GetString(nameof(Resources.NormalTimeTokenHourPartFormatString), provider),
                 adjustedHour);
 
             // Minute
@@ -167,7 +167,7 @@ public sealed class NormalTimeToken : TimeToken
             {
                 stringBuilder.AppendFormat(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("NormalTimeTokenMinutePartFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.NormalTimeTokenMinutePartFormatString), provider),
                     Minute);
 
                 // Second
@@ -175,7 +175,7 @@ public sealed class NormalTimeToken : TimeToken
                 {
                     stringBuilder.AppendFormat(
                         Resources.ResourceManager.GetEffectiveProvider(provider),
-                        Resources.ResourceManager.GetString("NormalTimeTokenSecondPartFormatString", provider),
+                        Resources.ResourceManager.GetString(nameof(Resources.NormalTimeTokenSecondPartFormatString), provider),
                         Second);
                 }
             }
@@ -187,19 +187,19 @@ public sealed class NormalTimeToken : TimeToken
             }
             else if (IsMidday)
             {
-                stringBuilder.Append(Resources.ResourceManager.GetString("NormalTimeTokenMiddaySuffix", provider));
+                stringBuilder.Append(Resources.ResourceManager.GetString(nameof(Resources.NormalTimeTokenMiddaySuffix), provider));
             }
             else if (IsMidnight)
             {
-                stringBuilder.Append(Resources.ResourceManager.GetString("NormalTimeTokenMidnightSuffix", provider));
+                stringBuilder.Append(Resources.ResourceManager.GetString(nameof(Resources.NormalTimeTokenMidnightSuffix), provider));
             }
             else if (HourPeriod == HourPeriod.Am)
             {
-                stringBuilder.Append(Resources.ResourceManager.GetString("NormalTimeTokenAmSuffix", provider));
+                stringBuilder.Append(Resources.ResourceManager.GetString(nameof(Resources.NormalTimeTokenAmSuffix), provider));
             }
             else if (HourPeriod == HourPeriod.Pm)
             {
-                stringBuilder.Append(Resources.ResourceManager.GetString("NormalTimeTokenPmSuffix", provider));
+                stringBuilder.Append(Resources.ResourceManager.GetString(nameof(Resources.NormalTimeTokenPmSuffix), provider));
             }
 
             return stringBuilder.ToString();
@@ -234,9 +234,9 @@ public sealed class NormalTimeToken : TimeToken
         /// <returns>A set of regular expressions supported by this parser.</returns>
         public override IEnumerable<string> GetPatterns(IFormatProvider provider)
         {
-            yield return Resources.ResourceManager.GetString("NormalTimeTokenMilitaryTimePattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalTimeTokenTimeWithSeparatorsPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalTimeTokenTimeWithoutSeparatorsPattern", provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalTimeTokenMilitaryTimePattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalTimeTokenTimeWithSeparatorsPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalTimeTokenTimeWithoutSeparatorsPattern), provider);
         }
 
         /// <summary>

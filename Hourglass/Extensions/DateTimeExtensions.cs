@@ -112,28 +112,28 @@ public static class DateTimeExtensions
         {
             return string.Format(
                 Resources.ResourceManager.GetEffectiveProvider(provider),
-                Resources.ResourceManager.GetString("DateTimeExtensionsNstFormatString", provider),
+                Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsNstFormatString), provider),
                 day);
         }
         else if (day % 10 == 2 && day / 10 != 1)
         {
             return string.Format(
                 Resources.ResourceManager.GetEffectiveProvider(provider),
-                Resources.ResourceManager.GetString("DateTimeExtensionsNndFormatString", provider),
+                Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsNndFormatString), provider),
                 day);
         }
         else if (day % 10 == 3 && day / 10 != 1)
         {
             return string.Format(
                 Resources.ResourceManager.GetEffectiveProvider(provider),
-                Resources.ResourceManager.GetString("DateTimeExtensionsNrdFormatString", provider),
+                Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsNrdFormatString), provider),
                 day);
         }
         else
         {
             return string.Format(
                 Resources.ResourceManager.GetEffectiveProvider(provider),
-                Resources.ResourceManager.GetString("DateTimeExtensionsNthFormatString", provider),
+                Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsNthFormatString), provider),
                 day);
         }
     }
@@ -240,18 +240,18 @@ public static class DateTimeExtensions
     {
         return new Dictionary<int, string>
         {
-            { 1, Resources.ResourceManager.GetString("DateTimeExtensionsJanuary", provider) },
-            { 2, Resources.ResourceManager.GetString("DateTimeExtensionsFebruary", provider) },
-            { 3, Resources.ResourceManager.GetString("DateTimeExtensionsMarch", provider) },
-            { 4, Resources.ResourceManager.GetString("DateTimeExtensionsApril", provider) },
-            { 5, Resources.ResourceManager.GetString("DateTimeExtensionsMay", provider) },
-            { 6, Resources.ResourceManager.GetString("DateTimeExtensionsJune", provider) },
-            { 7, Resources.ResourceManager.GetString("DateTimeExtensionsJuly", provider) },
-            { 8, Resources.ResourceManager.GetString("DateTimeExtensionsAugust", provider) },
-            { 9, Resources.ResourceManager.GetString("DateTimeExtensionsSeptember", provider) },
-            { 10, Resources.ResourceManager.GetString("DateTimeExtensionsOctober", provider) },
-            { 11, Resources.ResourceManager.GetString("DateTimeExtensionsNovember", provider) },
-            { 12, Resources.ResourceManager.GetString("DateTimeExtensionsDecember", provider) }
+            { 1, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsJanuary), provider) },
+            { 2, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsFebruary), provider) },
+            { 3, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsMarch), provider) },
+            { 4, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsApril), provider) },
+            { 5, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsMay), provider) },
+            { 6, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsJune), provider) },
+            { 7, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsJuly), provider) },
+            { 8, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsAugust), provider) },
+            { 9, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsSeptember), provider) },
+            { 10, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsOctober), provider) },
+            { 11, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsNovember), provider) },
+            { 12, Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsDecember), provider) }
         };
     }
 }

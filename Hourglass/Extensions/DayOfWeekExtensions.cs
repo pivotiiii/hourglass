@@ -73,13 +73,13 @@ public static class DayOfWeekExtensions
     {
         return new Dictionary<DayOfWeek, string>
         {
-            { DayOfWeek.Monday, Resources.ResourceManager.GetString("DayOfWeekExtensionsMonday", provider) },
-            { DayOfWeek.Tuesday, Resources.ResourceManager.GetString("DayOfWeekExtensionsTuesday", provider) },
-            { DayOfWeek.Wednesday, Resources.ResourceManager.GetString("DayOfWeekExtensionsWednesday", provider) },
-            { DayOfWeek.Thursday, Resources.ResourceManager.GetString("DayOfWeekExtensionsThursday", provider) },
-            { DayOfWeek.Friday, Resources.ResourceManager.GetString("DayOfWeekExtensionsFriday", provider) },
-            { DayOfWeek.Saturday, Resources.ResourceManager.GetString("DayOfWeekExtensionsSaturday", provider) },
-            { DayOfWeek.Sunday, Resources.ResourceManager.GetString("DayOfWeekExtensionsSunday", provider) }
+            { DayOfWeek.Monday, Resources.ResourceManager.GetString(nameof(Resources.DayOfWeekExtensionsMonday), provider) },
+            { DayOfWeek.Tuesday, Resources.ResourceManager.GetString(nameof(Resources.DayOfWeekExtensionsTuesday), provider) },
+            { DayOfWeek.Wednesday, Resources.ResourceManager.GetString(nameof(Resources.DayOfWeekExtensionsWednesday), provider) },
+            { DayOfWeek.Thursday, Resources.ResourceManager.GetString(nameof(Resources.DayOfWeekExtensionsThursday), provider) },
+            { DayOfWeek.Friday, Resources.ResourceManager.GetString(nameof(Resources.DayOfWeekExtensionsFriday), provider) },
+            { DayOfWeek.Saturday, Resources.ResourceManager.GetString(nameof(Resources.DayOfWeekExtensionsSaturday), provider) },
+            { DayOfWeek.Sunday, Resources.ResourceManager.GetString(nameof(Resources.DayOfWeekExtensionsSunday), provider) }
         };
     }
 }

@@ -56,7 +56,7 @@ public abstract class TimerStartToken
             return null;
         }
 
-        string preferDateTimePattern = Resources.ResourceManager.GetString("TimerStartTokenUseDateTimeParserPattern", provider);
+        string preferDateTimePattern = Resources.ResourceManager.GetString(nameof(Resources.TimerStartTokenUseDateTimeParserPattern), provider);
         if (Regex.IsMatch(str, preferDateTimePattern, Parser.RegexOptions))
         {
             str = Regex.Replace(str, preferDateTimePattern, string.Empty, Parser.RegexOptions);

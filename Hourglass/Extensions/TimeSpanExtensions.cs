@@ -59,7 +59,7 @@ public static class TimeSpanExtensions
                     : Resources.CompactTimeSpanFormat)
 #pragma warning restore S3358
             : string.Join(
-                Resources.ResourceManager.GetString("TimeSpanExtensionsUnitSeparator", provider),
+                Resources.ResourceManager.GetString(nameof(Resources.TimeSpanExtensionsUnitSeparator), provider),
                 GetParts());
 
         IEnumerable<string> GetParts()

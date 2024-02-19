@@ -148,9 +148,9 @@ public sealed class DayOfWeekDateToken : DateToken
         /// <returns>A set of regular expressions supported by this parser.</returns>
         public override IEnumerable<string> GetPatterns(IFormatProvider provider)
         {
-            yield return Resources.ResourceManager.GetString("DayOfWeekDateTokenDaysOfWeekNextPattern", provider);
-            yield return Resources.ResourceManager.GetString("DayOfWeekDateTokenDaysOfWeekAfterNextPattern", provider);
-            yield return Resources.ResourceManager.GetString("DayOfWeekDateTokenDaysOfWeekNextWeekPattern", provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.DayOfWeekDateTokenDaysOfWeekNextPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.DayOfWeekDateTokenDaysOfWeekAfterNextPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.DayOfWeekDateTokenDaysOfWeekNextWeekPattern), provider);
         }
 
         /// <summary>

@@ -105,7 +105,7 @@ public sealed class NormalDateToken : DateToken
             {
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("NormalDateTokenDayOnlyFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenDayOnlyFormatString), provider),
                     DateTimeExtensions.GetOrdinalDayString(Day.Value, provider));
             }
 
@@ -113,8 +113,8 @@ public sealed class NormalDateToken : DateToken
             if (Day.HasValue && Month.HasValue && !Year.HasValue)
             {
                 string formatString = provider.IsMonthFirst()
-                    ? Resources.ResourceManager.GetString("NormalDateTokenMonthAndDayFormatString", provider)
-                    : Resources.ResourceManager.GetString("NormalDateTokenDayAndMonthFormatString", provider);
+                    ? Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenMonthAndDayFormatString), provider)
+                    : Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenDayAndMonthFormatString), provider);
 
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
@@ -127,8 +127,8 @@ public sealed class NormalDateToken : DateToken
             if (Day.HasValue && Month.HasValue && Year.HasValue)
             {
                 string formatString = provider.IsMonthFirst()
-                    ? Resources.ResourceManager.GetString("NormalDateTokenMonthDayAndYearFormatString", provider)
-                    : Resources.ResourceManager.GetString("NormalDateTokenDayMonthAndYearFormatString", provider);
+                    ? Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenMonthDayAndYearFormatString), provider)
+                    : Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenDayMonthAndYearFormatString), provider);
 
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
@@ -143,7 +143,7 @@ public sealed class NormalDateToken : DateToken
             {
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("NormalDateTokenMonthOnlyFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenMonthOnlyFormatString), provider),
                     DateTimeExtensions.GetMonthString(Month.Value, provider));
             }
 
@@ -152,7 +152,7 @@ public sealed class NormalDateToken : DateToken
             {
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("NormalDateTokenMonthAndYearFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenMonthAndYearFormatString), provider),
                     DateTimeExtensions.GetMonthString(Month.Value, provider),
                     Year);
             }
@@ -162,7 +162,7 @@ public sealed class NormalDateToken : DateToken
             {
                 return string.Format(
                     Resources.ResourceManager.GetEffectiveProvider(provider),
-                    Resources.ResourceManager.GetString("NormalDateTokenYearOnlyFormatString", provider),
+                    Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenYearOnlyFormatString), provider),
                     Year);
             }
 
@@ -265,14 +265,14 @@ public sealed class NormalDateToken : DateToken
         /// <returns>A set of regular expressions supported by this parser.</returns>
         private static IEnumerable<string> GetPatternsWithDayFirst(IFormatProvider provider)
         {
-            yield return Resources.ResourceManager.GetString("NormalDateTokenSpelledDateWithDayFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenSpelledDateWithMonthFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalDateWithDayFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalDateWithMonthFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalDateWithYearFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenDayOnlyPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenSpelledMonthAndOptionalYearPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalMonthAndYearPattern", provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenSpelledDateWithDayFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenSpelledDateWithMonthFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalDateWithDayFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalDateWithMonthFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalDateWithYearFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenDayOnlyPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenSpelledMonthAndOptionalYearPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalMonthAndYearPattern), provider);
         }
 
         /// <summary>
@@ -283,14 +283,14 @@ public sealed class NormalDateToken : DateToken
         /// <returns>A set of regular expressions supported by this parser.</returns>
         private static IEnumerable<string> GetPatternsWithMonthFirst(IFormatProvider provider)
         {
-            yield return Resources.ResourceManager.GetString("NormalDateTokenSpelledDateWithMonthFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenSpelledDateWithDayFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalDateWithMonthFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalDateWithDayFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalDateWithYearFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenDayOnlyPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenSpelledMonthAndOptionalYearPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalMonthAndYearPattern", provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenSpelledDateWithMonthFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenSpelledDateWithDayFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalDateWithMonthFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalDateWithDayFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalDateWithYearFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenDayOnlyPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenSpelledMonthAndOptionalYearPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalMonthAndYearPattern), provider);
         }
 
         /// <summary>
@@ -301,14 +301,14 @@ public sealed class NormalDateToken : DateToken
         /// <returns>A set of regular expressions supported by this parser.</returns>
         private static IEnumerable<string> GetPatternsWithYearFirst(IFormatProvider provider)
         {
-            yield return Resources.ResourceManager.GetString("NormalDateTokenSpelledDateWithDayFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenSpelledDateWithMonthFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalDateWithYearFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalDateWithDayFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalDateWithMonthFirstPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenDayOnlyPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenSpelledMonthAndOptionalYearPattern", provider);
-            yield return Resources.ResourceManager.GetString("NormalDateTokenNumericalMonthAndYearPattern", provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenSpelledDateWithDayFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenSpelledDateWithMonthFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalDateWithYearFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalDateWithDayFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalDateWithMonthFirstPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenDayOnlyPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenSpelledMonthAndOptionalYearPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.NormalDateTokenNumericalMonthAndYearPattern), provider);
         }
     }
 }

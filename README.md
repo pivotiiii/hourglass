@@ -45,6 +45,8 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 - New option `--digital-clock-time` / `-c`
 - New option `--activate-next` / `-an`
 
+See [usage](https://github.com/i2van/hourglass/blob/develop/Hourglass/Resources/Usage.txt) for details.
+
 ### UI
 
 - Uses a [Windows Task Dialog](https://learn.microsoft.com/en-us/windows/win32/controls/task-dialogs-overview) instead of a message box ([GitHub](https://github.com/kpreisser/TaskDialog)).

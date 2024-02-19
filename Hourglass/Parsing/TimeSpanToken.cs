@@ -150,7 +150,7 @@ public sealed class TimeSpanToken : TimerStartToken
 
             // Join parts
             return string.Join(
-                Resources.ResourceManager.GetString("TimeSpanTokenUnitSeparator", provider),
+                Resources.ResourceManager.GetString(nameof(Resources.TimeSpanTokenUnitSeparator), provider),
                 parts);
         }
         catch (Exception ex) when (ex.CanBeHandled())
@@ -282,9 +282,9 @@ public sealed class TimeSpanToken : TimerStartToken
         /// <returns>A set of regular expressions for matching time spans.</returns>
         private static IEnumerable<string> GetPatterns(IFormatProvider provider)
         {
-            yield return Resources.ResourceManager.GetString("TimeSpanTokenMinutesOnlyPattern", provider);
-            yield return Resources.ResourceManager.GetString("TimeSpanTokenShortFormPattern", provider);
-            yield return Resources.ResourceManager.GetString("TimeSpanTokenLongFormPattern", provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.TimeSpanTokenMinutesOnlyPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.TimeSpanTokenShortFormPattern), provider);
+            yield return Resources.ResourceManager.GetString(nameof(Resources.TimeSpanTokenLongFormPattern), provider);
         }
     }
 }
