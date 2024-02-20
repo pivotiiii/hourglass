@@ -26,7 +26,7 @@ internal sealed partial class Settings
     /// </summary>
     public TimerOptions MostRecentOptions
     {
-        get => TimerOptions.FromTimerOptionsInfo(MostRecentOptionsInfo) ?? new ();
+        get => TimerOptions.FromTimerOptionsInfo(MostRecentOptionsInfo) ?? new();
         set => MostRecentOptionsInfo = TimerOptionsInfo.FromTimerOptions(value);
     }
 

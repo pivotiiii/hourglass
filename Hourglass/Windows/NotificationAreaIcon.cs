@@ -52,7 +52,7 @@ public class NotificationAreaIcon : IDisposable
     /// <summary>
     /// Paused notification area icon.
     /// </summary>
-    private readonly Icon _pausedIcon;
+    private readonly Lazy<Icon> _pausedIcon;
 
     /// <summary>
     /// Indicates whether this object has been disposed.
@@ -70,7 +70,7 @@ public class NotificationAreaIcon : IDisposable
     public NotificationAreaIcon()
     {
         _normalIcon = new(Resources.TrayIcon, SystemInformation.SmallIconSize);
-        _pausedIcon = CreatePausedIcon(_normalIcon);
+        _pausedIcon = new(CreatePausedIcon);
 
         _notifyIcon = new()
         {
@@ -96,7 +96,7 @@ public class NotificationAreaIcon : IDisposable
         IsVisible = Settings.Default.ShowInNotificationArea;
     }
 
-    private static Icon CreatePausedIcon(Icon icon)
+    private Icon CreatePausedIcon()
     {
         const int diameter          = 8;
         const int circleBorderWidth = 1;
@@ -107,10 +107,13 @@ public class NotificationAreaIcon : IDisposable
         const int pauseTopOffset    = 2;
         const int pauseBottomOffset = 4;
 
-        int width = icon.Width;
-        int height = icon.Height;
+        Color circlePenColor = Color.FromArgb(unchecked((int)0xFF787878));
+        Color pauseLineColor = Color.FromArgb(unchecked((int)0xFF303030));
 
-        using Bitmap bitmap = icon.ToBitmap();
+        int width  = _normalIcon.Width;
+        int height = _normalIcon.Height;
+
+        using Bitmap bitmap = _normalIcon.ToBitmap();
         using Graphics graphics = Graphics.FromImage(bitmap);
 
         graphics.SmoothingMode = SmoothingMode.HighQuality;
@@ -120,11 +123,12 @@ public class NotificationAreaIcon : IDisposable
 
         graphics.FillEllipse(Brushes.White, circleX, circleY, diameter, diameter);
 
-        using Pen pen = new Pen(Color.Black, circleBorderWidth);
-        graphics.DrawEllipse(pen, circleX, circleY, diameter, diameter);
+        using Pen circlePen = new(circlePenColor, circleBorderWidth);
+        graphics.DrawEllipse(circlePen, circleX, circleY, diameter, diameter);
 
         graphics.SmoothingMode = SmoothingMode.Default;
 
+        using SolidBrush pauseLineBrush = new(pauseLineColor);
         DrawPauseLine(pause1LeftOffset);
         DrawPauseLine(pause2LeftOffset);
 
@@ -132,7 +136,7 @@ public class NotificationAreaIcon : IDisposable
 
         void DrawPauseLine(int leftOffset) =>
             graphics.FillRectangle(
-                Brushes.Black,
+                pauseLineBrush,
                 width  - diameter + leftOffset,
                 height - diameter + pauseTopOffset,
                 pauseWidth,
@@ -199,7 +203,10 @@ public class NotificationAreaIcon : IDisposable
         _dispatcherTimer.Stop();
 
         _notifyIcon.Dispose();
-        _pausedIcon.Dispose();
+        if (_pausedIcon.IsValueCreated)
+        {
+            _pausedIcon.Value.Dispose();
+        }
         _normalIcon.Dispose();
 
         Settings.Default.PropertyChanged -= SettingsPropertyChanged;
@@ -588,8 +595,7 @@ public class NotificationAreaIcon : IDisposable
     /// </summary>
     public void RefreshIcon() =>
         _notifyIcon.Icon =
-            Application.Current?.Windows.OfType<TimerWindow>()
-                .Any(static window => window.Timer.State == TimerState.Paused) == true
-                    ? _pausedIcon
-                    : _normalIcon;
+            TimerManager.GetPausableTimers(TimerState.Paused).Any()
+                ? _pausedIcon.Value
+                : _normalIcon;
 }

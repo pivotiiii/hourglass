@@ -1059,10 +1059,10 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// </summary>
     private void BindTimer()
     {
-        Timer.Started += TimerStarted;
-        Timer.Paused += TimerPaused;
-        Timer.Resumed += TimerResumed;
-        Timer.Stopped += TimerStopped;
+        Timer.Started += TimerStateChanged;
+        Timer.Paused += TimerStateChanged;
+        Timer.Resumed += TimerStateChanged;
+        Timer.Stopped += TimerStateChanged;
         Timer.Expired += TimerExpired;
         Timer.Tick += TimerTick;
         PropertyChangedEventManager.AddHandler(Timer, TimerPropertyChanged, string.Empty);
@@ -1425,10 +1425,10 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// </summary>
     private void UnbindTimer()
     {
-        Timer.Started -= TimerStarted;
-        Timer.Paused -= TimerPaused;
-        Timer.Resumed -= TimerResumed;
-        Timer.Stopped -= TimerStopped;
+        Timer.Started -= TimerStateChanged;
+        Timer.Paused -= TimerStateChanged;
+        Timer.Resumed -= TimerStateChanged;
+        Timer.Stopped -= TimerStateChanged;
         Timer.Expired -= TimerExpired;
         Timer.Tick -= TimerTick;
         PropertyChangedEventManager.RemoveHandler(Timer, TimerPropertyChanged, string.Empty);
@@ -1448,43 +1448,11 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     #region Private Methods (Timer Events)
 
     /// <summary>
-    /// Invoked when the timer is started.
+    /// Invoked when the timer is started, paused, stopped or resumed.
     /// </summary>
     /// <param name="sender">The timer.</param>
     /// <param name="e">The event data.</param>
-    private void TimerStarted(object sender, EventArgs e)
-    {
-        UpdateTimeToolTip();
-    }
-
-    /// <summary>
-    /// Invoked when the timer is paused.
-    /// </summary>
-    /// <param name="sender">The timer.</param>
-    /// <param name="e">The event data.</param>
-    private void TimerPaused(object sender, EventArgs e)
-    {
-        UpdateTimeToolTip();
-        UpdateNotificationAreaIcon();
-    }
-
-    /// <summary>
-    /// Invoked when the timer is resumed from a paused state.
-    /// </summary>
-    /// <param name="sender">The timer.</param>
-    /// <param name="e">The event data.</param>
-    private void TimerResumed(object sender, EventArgs e)
-    {
-        UpdateTimeToolTip();
-        UpdateNotificationAreaIcon();
-    }
-
-    /// <summary>
-    /// Invoked when the timer is stopped.
-    /// </summary>
-    /// <param name="sender">The timer.</param>
-    /// <param name="e">The event data.</param>
-    private void TimerStopped(object sender, EventArgs e)
+    private void TimerStateChanged(object sender, EventArgs e)
     {
         UpdateTimeToolTip();
         UpdateNotificationAreaIcon();
@@ -1622,6 +1590,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
         Show(timerStart);
         StartButton.Unfocus();
+
+        UpdateNotificationAreaIcon();
     }
 
     /// <summary>
@@ -2026,11 +1996,15 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// <param name="e">The event data.</param>
     private void WindowMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        if (!e.OriginalSource.IsTextBoxView())
+        if (e.OriginalSource.GetType() == typeof(System.Windows.Documents.Run) ||
+            e.OriginalSource.IsTextBoxView())
         {
-            IsFullScreen = !IsFullScreen;
-            e.Handled = true;
+            return;
         }
+
+        IsFullScreen = !IsFullScreen;
+
+        e.Handled = true;
     }
 
     /// <summary>
