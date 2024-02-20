@@ -9,6 +9,8 @@ namespace Hourglass.Windows;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -43,10 +45,23 @@ public class NotificationAreaIcon : IDisposable
     private readonly DispatcherTimer _dispatcherTimer;
 
     /// <summary>
+    /// Normal notification area icon.
+    /// </summary>
+    private readonly Icon _normalIcon;
+
+    /// <summary>
+    /// Paused notification area icon.
+    /// </summary>
+    private readonly Icon _pausedIcon;
+
+    /// <summary>
     /// Indicates whether this object has been disposed.
     /// </summary>
     private bool _disposed;
 
+    /// <summary>
+    /// Last mouse click time.
+    /// </summary>
     private DateTime _lastClickTime;
 
     /// <summary>
@@ -54,9 +69,12 @@ public class NotificationAreaIcon : IDisposable
     /// </summary>
     public NotificationAreaIcon()
     {
+        _normalIcon = new(Resources.TrayIcon, SystemInformation.SmallIconSize);
+        _pausedIcon = CreatePausedIcon(_normalIcon);
+
         _notifyIcon = new()
         {
-            Icon = new(Resources.TrayIcon, SystemInformation.SmallIconSize),
+            Icon = _normalIcon,
             ContextMenu = new()
         };
 
@@ -78,13 +96,64 @@ public class NotificationAreaIcon : IDisposable
         IsVisible = Settings.Default.ShowInNotificationArea;
     }
 
+    private static Icon CreatePausedIcon(Icon icon)
+    {
+        const int diameter          = 8;
+        const int circleBorderWidth = 1;
+
+        const int pauseWidth        = 1;
+        const int pause1LeftOffset  = 2;
+        const int pause2LeftOffset  = 4;
+        const int pauseTopOffset    = 2;
+        const int pauseBottomOffset = 4;
+
+        int width = icon.Width;
+        int height = icon.Height;
+
+        using Bitmap bitmap = icon.ToBitmap();
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        graphics.SmoothingMode = SmoothingMode.HighQuality;
+
+        int circleX = width  - diameter - circleBorderWidth;
+        int circleY = height - diameter - circleBorderWidth;
+
+        graphics.FillEllipse(Brushes.White, circleX, circleY, diameter, diameter);
+
+        using Pen pen = new Pen(Color.Black, circleBorderWidth);
+        graphics.DrawEllipse(pen, circleX, circleY, diameter, diameter);
+
+        graphics.SmoothingMode = SmoothingMode.Default;
+
+        DrawPauseLine(pause1LeftOffset);
+        DrawPauseLine(pause2LeftOffset);
+
+        return Icon.FromHandle(bitmap.GetHicon());
+
+        void DrawPauseLine(int leftOffset) =>
+            graphics.FillRectangle(
+                Brushes.Black,
+                width  - diameter + leftOffset,
+                height - diameter + pauseTopOffset,
+                pauseWidth,
+                diameter - pauseBottomOffset);
+    }
+
     /// <summary>
     /// Gets or sets a value indicating whether the icon is visible in the notification area of the taskbar.
     /// </summary>
     public bool IsVisible
     {
         get => _notifyIcon.Visible;
-        set => _notifyIcon.Visible = value;
+        set
+        {
+            _notifyIcon.Visible = value;
+
+            if (value)
+            {
+                RefreshIcon();
+            }
+        }
     }
 
     /// <summary>
@@ -104,7 +173,7 @@ public class NotificationAreaIcon : IDisposable
     /// </summary>
     public void Dispose()
     {
-        Dispose(true /* disposing */);
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
@@ -122,13 +191,18 @@ public class NotificationAreaIcon : IDisposable
 
         _disposed = true;
 
-        if (disposing)
+        if (!disposing)
         {
-            _dispatcherTimer.Stop();
-            _notifyIcon.Dispose();
-
-            Settings.Default.PropertyChanged -= SettingsPropertyChanged;
+            return;
         }
+
+        _dispatcherTimer.Stop();
+
+        _notifyIcon.Dispose();
+        _pausedIcon.Dispose();
+        _normalIcon.Dispose();
+
+        Settings.Default.PropertyChanged -= SettingsPropertyChanged;
     }
 
     /// <summary>
@@ -400,15 +474,17 @@ public class NotificationAreaIcon : IDisposable
     {
         foreach (MenuItem menuItem in _notifyIcon.ContextMenu.MenuItems)
         {
-            if (menuItem.Tag is TimerWindow window)
+            if (menuItem.Tag is not TimerWindow window)
             {
-                if (!window.Timer.Disposed)
-                {
-                    window.Timer.Update();
-                }
-
-                menuItem.Text = window.ToString();
+                continue;
             }
+
+            if (!window.Timer.Disposed)
+            {
+                window.Timer.Update();
+            }
+
+            menuItem.Text = window.ToString();
         }
     }
 
@@ -506,4 +582,14 @@ public class NotificationAreaIcon : IDisposable
             window.Timer.State != TimerState.Stopped &&
             window.Timer.State != TimerState.Expired;
     }
+
+    /// <summary>
+    /// Refreshes notification area icon.
+    /// </summary>
+    public void RefreshIcon() =>
+        _notifyIcon.Icon =
+            Application.Current?.Windows.OfType<TimerWindow>()
+                .Any(static window => window.Timer.State == TimerState.Paused) == true
+                    ? _pausedIcon
+                    : _normalIcon;
 }

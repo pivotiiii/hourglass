@@ -1465,6 +1465,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     private void TimerPaused(object sender, EventArgs e)
     {
         UpdateTimeToolTip();
+        UpdateNotificationAreaIcon();
     }
 
     /// <summary>
@@ -1475,6 +1476,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     private void TimerResumed(object sender, EventArgs e)
     {
         UpdateTimeToolTip();
+        UpdateNotificationAreaIcon();
     }
 
     /// <summary>
@@ -1485,6 +1487,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     private void TimerStopped(object sender, EventArgs e)
     {
         UpdateTimeToolTip();
+        UpdateNotificationAreaIcon();
     }
 
     /// <summary>
@@ -1496,6 +1499,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     {
         BeginExpirationAnimationAndSound();
         UpdateTimeToolTip();
+        UpdateNotificationAreaIcon();
     }
 
     /// <summary>
@@ -1566,6 +1570,11 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             TimerState.Paused  => string.Format(Properties.Resources.TimerPausedToolTipFormatString,  toolTip),
             _ => toolTip
         };
+    }
+
+    private void UpdateNotificationAreaIcon()
+    {
+        NotificationAreaIconManager.Instance.NotifyIcon.RefreshIcon();
     }
 
     private string? GetTimeElapsedPlusTimerTitle()
@@ -1989,6 +1998,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         }
 
         UpdateTimeToolTip();
+        UpdateNotificationAreaIcon();
     }
 
     /// <summary>
@@ -2145,6 +2155,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
     private void WindowClosed(object sender, EventArgs e)
     {
+        UpdateNotificationAreaIcon();
         this.BringNextToFrontAndActivate();
     }
 
