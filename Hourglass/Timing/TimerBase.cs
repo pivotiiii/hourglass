@@ -402,7 +402,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
     /// </summary>
     public void Dispose()
     {
-        Dispose(true /* disposing */);
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 

@@ -37,7 +37,7 @@ public abstract class Manager : IDisposable
     /// </summary>
     public void Dispose()
     {
-        Dispose(true /* disposing */);
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 

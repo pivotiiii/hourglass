@@ -186,7 +186,7 @@ public class SoundPlayer : IDisposable
     /// </summary>
     public void Dispose()
     {
-        Dispose(true /* disposing */);
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
