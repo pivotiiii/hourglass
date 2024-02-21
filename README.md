@@ -43,8 +43,8 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 - New command `pause`
 - New command `resume`
 - New option `--digital-clock-time` / `-c`
-- New option `--activate-next` / `-an`
 - New option `--multi-timers` / `-mt`
+- New option `--activate-next` / `-an`
 
 See [usage](https://github.com/i2van/hourglass/blob/develop/Hourglass/Resources/Usage.txt) for details.
 
@@ -57,34 +57,43 @@ See [usage](https://github.com/i2van/hourglass/blob/develop/Hourglass/Resources/
 
 - The double click shows/hides all the timer windows.
 - All the timers are arranged by the time left. The order of the timers is new, expired, paused, running.
-- The **Exit** menu command asks to close all the running timer windows if the **Prompt on exit** option is on.
+- The pause sign is shown over the notification icon if at least one timer is paused.
+- The digits from 0 to 9 are hotkeys for timers in the notification area context menu.
 - The **Pause all** menu command pauses all the running timers.
 - The **Resume all** menu command resumes all the paused timers.
-- The pause sign is shown over the notification icon if at least one timer is paused.
+- The **Exit** menu command asks to close all the running timer windows if the **Prompt on exit** option is on.
 
 ### Timer Windows
+
+#### Keyboard Shortcuts
 
 - The `Esc` shortcut minimizes the timer window.
 - The `F11` shortcut makes the timer window full screen and back.
 - The `Ctrl+N` shortcut creates a new timer window.
-- The mouse double-click on progress border makes the timer window full screen and back.
-- The minimum timer window size is limited by the Windows.
-- The timer tooltip is shown if the timer window size is too small.
-- All the timer windows are arranged by the time left. The order of the timer windows is new, expired, paused, running.
-- When the timer window is minimized or closed the next visible non-minimized timer window is activated.
+
+#### Context Menu
+
+- All the timer window commands are available in the timer window context menu.
+- The shortcuts are displayed in the timer window context menu.
 - The **Window title** submenu is available directly from the timer window context menu.
 - The **Reset bounds** menu command sets the timer window default position and size.
 - The **Restore**, **Minimize** and **Maximize** timer window commands are always present in the timer window context menu.
-- All the timer window commands are available in the timer window context menu.
-- Shortcuts are displayed in the timer window context menu.
-- The progress bar changes direction to vertical when the height is more than the width and vice versa.
-- The switching between light and dark themes is improved.
 - The **Advanced options** / **Display time in the digital clock format** timer window context menu option toggles the displayed time digital clock time format. The command-line option is `--digital-clock-time` / `-c`
 - The **Advanced options** / **Activate next window when minimized or closed** timer window context menu option enables the next timer window activation when the current timer window is minimized or closed. The command-line option is `--activate-next` / `-an`
-- The timer window pops up on the current virtual desktop.
-- The sound file can be placed to the `%LOCALAPPDATA%\Hourglass` or `%LOCALAPPDATA%\Hourglass\Sounds` directories. It can be the symbolic link created by the `mklink` system command.
 - The **Pause all** timer window context menu command pauses all the running timers. Command-line command is `pause`
 - The **Resume all** timer window context menu command resumes all the paused timers. Command-line command is `resume`
+
+#### Other
+
+- All the timer windows are arranged by the time left. The order of the timer windows is new, expired, paused, running.
+- The minimum timer window size is limited by the Windows only.
+- The timer tooltip is shown if the timer window size is too small.
+- The progress bar changes direction to vertical when the height is more than the width and vice versa.
+- When the timer window is minimized or closed the next visible non-minimized timer window is activated.
+- The time left is now used for editing instead of the original launch time.
+- The timer window pops up on the current virtual desktop.
+- The mouse double-click on progress border toggles full screen.
+- The sound file can be placed to the `%LOCALAPPDATA%\Hourglass` or `%LOCALAPPDATA%\Hourglass\Sounds` directories. It can be the symbolic link created by the `mklink` system command.
 
 ### Misc
 

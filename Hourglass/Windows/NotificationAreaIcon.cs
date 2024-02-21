@@ -107,7 +107,8 @@ public class NotificationAreaIcon : IDisposable
         const int pauseTopOffset    = 2;
         const int pauseBottomOffset = 4;
 
-        Color circlePenColor = Color.FromArgb(unchecked((int)0xFF787878));
+        Brush circleBrush    = Brushes.White;
+        Color circlePenColor = Color.FromArgb(unchecked((int)0xFF727272));
         Color pauseLineColor = Color.FromArgb(unchecked((int)0xFF303030));
 
         int width  = _normalIcon.Width;
@@ -121,7 +122,7 @@ public class NotificationAreaIcon : IDisposable
         int circleX = width  - diameter - circleBorderWidth;
         int circleY = height - diameter - circleBorderWidth;
 
-        graphics.FillEllipse(Brushes.White, circleX, circleY, diameter, diameter);
+        graphics.FillEllipse(circleBrush, circleX, circleY, diameter, diameter);
 
         using Pen circlePen = new(circlePenColor, circleBorderWidth);
         graphics.DrawEllipse(circlePen, circleX, circleY, diameter, diameter);
@@ -387,6 +388,13 @@ public class NotificationAreaIcon : IDisposable
         RestoreAllExpiredTimerWindows();
     }
 
+    private static Lazy<Func<TimerWindow, string>> CreateTimerMenuItemTextGenerator()
+    {
+        int i = 0;
+
+        return new(() => window => string.Format(Resources.NotificationAreaIconTimerMenuItemText, ++i % 10, window));
+    }
+
     /// <summary>
     /// Invoked before the notify icon context menu is displayed.
     /// </summary>
@@ -420,12 +428,14 @@ public class NotificationAreaIcon : IDisposable
 
             yield return NewSeparatorMenuItem();
 
+            Lazy<Func<TimerWindow, string>> timerMenuItemTextGenerator = CreateTimerMenuItemTextGenerator();
+
             bool shouldAddSeparator = false;
             foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().Arrange())
             {
                 shouldAddSeparator = true;
 
-                menuItem = new(window.ToString())
+                menuItem = new(timerMenuItemTextGenerator.Value(window))
                 {
                     Tag = window
                 };
@@ -479,6 +489,8 @@ public class NotificationAreaIcon : IDisposable
     /// <param name="e">The event data.</param>
     private void DispatcherTimerTick(object sender, EventArgs e)
     {
+        Lazy<Func<TimerWindow, string>> timerMenuItemTextGenerator = CreateTimerMenuItemTextGenerator();
+
         foreach (MenuItem menuItem in _notifyIcon.ContextMenu.MenuItems)
         {
             if (menuItem.Tag is not TimerWindow window)
@@ -491,7 +503,7 @@ public class NotificationAreaIcon : IDisposable
                 window.Timer.Update();
             }
 
-            menuItem.Text = window.ToString();
+            menuItem.Text = timerMenuItemTextGenerator.Value(window);
         }
     }
 

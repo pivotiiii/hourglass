@@ -23,7 +23,7 @@ public sealed class TimerManager : Manager
     /// <summary>
     /// The maximum number of timers to persist in settings.
     /// </summary>
-    public const int MaxSavedTimers = 10;
+    public const int MaxSavedTimers = 30;
 
     /// <summary>
     /// Singleton instance of the <see cref="TimerManager"/> class.

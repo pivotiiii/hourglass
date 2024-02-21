@@ -1517,6 +1517,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;{0}｜{1}.
+        /// </summary>
+        public static string NotificationAreaIconTimerMenuItemText {
+            get {
+                return ResourceManager.GetString("NotificationAreaIconTimerMenuItemText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your timer has expired..
         /// </summary>
         public static string NotificationAreaIconYourTimerHasExpired {
@@ -2623,7 +2632,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Usage: hourglass.exe [OPTIONS] [&lt;input&gt;]
+        ///   Looks up a localized string similar to Usage: hourglass.exe [COMMAND] [OPTIONS] [&lt;input&gt;]
         ///
         ///A simple countdown timer for Windows.
         ///
@@ -2636,7 +2645,7 @@ namespace Hourglass.Properties {
         ///        &quot;7:30:00&quot;               count down for 7 hours 30 minutes
         ///        &quot;5 minutes&quot;             count down for 5 minutes
         ///        &quot;5 minutes 30 seconds&quot;  count down for 5 minutes 30 seconds
-        ///        &quot;7 hours 30 minutes [rest of string was truncated]&quot;;.
+        ///        &quot;7 hours  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Usage {
             get {

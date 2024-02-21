@@ -860,6 +860,10 @@ $</value>
     <value>Hourglass</value>
     <comment>The window title for the error dialog</comment>
   </data>
+  <data name="NotificationAreaIconTimerMenuItemText" xml:space="preserve">
+    <value>&amp;{0}｜{1}</value>
+    <comment>The format for the timer menu item, where the character following the optional ampersand (&amp;) is the access key</comment>
+  </data>
   <data name="NotificationAreaIconPauseAllMenuItem" xml:space="preserve">
     <value>&amp;Pause all</value>
     <comment>The text for the command-line pause all menu item, where the character following the optional ampersand (&amp;) is the access key</comment>

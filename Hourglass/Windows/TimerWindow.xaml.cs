@@ -591,6 +591,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         catch (InvalidOperationException)
         {
             // This happens if the window is closing (waiting for the user to confirm) when this method is called
+            // or when showing Maximized window with ShowActivated = false
         }
         finally
         {
@@ -663,7 +664,17 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
         Mode = TimerWindowMode.Input;
 
         TitleTextBox.Text = Timer.Options.Title ?? string.Empty;
-        TimerTextBox.Text = LastTimerStart.ToString();
+
+        if (Timer.Options.ShowTimeElapsed)
+        {
+            TimerTextBox.Text = Timer.TimeLeftAsString ?? string.Empty;
+        }
+
+        if (string.IsNullOrWhiteSpace(TimerTextBox.Text) ||
+            Timer.State is TimerState.Expired or TimerState.Stopped)
+        {
+            TimerTextBox.Text = LastTimerStart.ToString();
+        }
 
         textBoxToFocus ??= TimerTextBox;
         textBoxToFocus.SelectAll();
