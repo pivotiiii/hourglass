@@ -550,7 +550,8 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
     /// Brings the window to the front, activates it, and focuses it.
     /// </summary>
     /// <param name="activate">Activate window.</param>
-    public void BringToFrontAndActivate(bool activate = true)
+    /// <param name="contextMenu">Open window context menu.</param>
+    public void BringToFrontAndActivate(bool activate = true, bool contextMenu = false)
     {
         try
         {
@@ -576,11 +577,16 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
             Topmost = true;
             Topmost = Options.AlwaysOnTop;
 
-            if(activate)
+            if(ShowActivated)
             {
                 Dispatcher.BeginInvoke(Sleep);
                 Dispatcher.BeginInvoke(Activate);
-                Dispatcher.BeginInvoke(Focus);
+
+                if (contextMenu)
+                {
+                    Dispatcher.BeginInvoke(UnfocusAll);
+                    Dispatcher.BeginInvoke(() => System.Windows.Forms.SendKeys.SendWait("+{F10}"));
+                }
 
                 static void Sleep()
                 {
@@ -1185,7 +1191,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 {
                     // Enable and disable command buttons as required
                     StartButton.IsEnabled = false;
-                    PauseButton.IsEnabled = Timer.State == TimerState.Running && Timer.SupportsPause;
+                    PauseButton.IsEnabled = Timer is { State: TimerState.Running, SupportsPause: true };
                     ResumeButton.IsEnabled = Timer.State == TimerState.Paused;
                     StopButton.IsEnabled = Timer.State != TimerState.Stopped && Timer.State != TimerState.Expired;
                     RestartButton.IsEnabled = Timer.SupportsRestart;
@@ -2123,7 +2129,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
         MessageBoxResult result = this.ShowTaskDialog(
             Properties.Resources.TimerWindowCloseTaskDialogInstruction,
-            Properties.Resources.StopAndCloseWindowCloseTaskDialogCommand,
+            Properties.Resources.CloseWindowCloseTaskDialogCommand,
             Properties.Resources.MinimizeWindowCloseTaskDialogCommand);
 
         switch (result)

@@ -170,6 +170,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;Close.
+        /// </summary>
+        public static string CloseWindowCloseTaskDialogCommand {
+            get {
+                return ResourceManager.GetString("CloseWindowCloseTaskDialogCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicate switch &quot;{0}&quot;.
         /// </summary>
         public static string CommandLineArgumentsParseExceptionDuplicateSwitchFormatString {
@@ -1092,7 +1101,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are about to stop all the running timers and exit.
+        ///   Looks up a localized string similar to You are about to exit..
         /// </summary>
         public static string ExitMenuTaskDialogInstruction {
             get {
@@ -1490,6 +1499,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open timer &amp;context menu	Shift+RightClick.
+        /// </summary>
+        public static string NotificationAreaIconOpenContextMenuItem {
+            get {
+                return ResourceManager.GetString("NotificationAreaIconOpenContextMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Pause all.
         /// </summary>
         public static string NotificationAreaIconPauseAllMenuItem {
@@ -1697,16 +1715,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stop and &amp;close.
-        /// </summary>
-        public static string StopAndCloseWindowCloseTaskDialogCommand {
-            get {
-                return ResourceManager.GetString("StopAndCloseWindowCloseTaskDialogCommand", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Stop and e&amp;xit.
+        ///   Looks up a localized string similar to E&amp;xit.
         /// </summary>
         public static string StopAndExitMenuTaskDialogCommand {
             get {
@@ -2192,7 +2201,7 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are about to stop the timer and close the timer window.
+        ///   Looks up a localized string similar to You are about to close the timer window..
         /// </summary>
         public static string TimerWindowCloseTaskDialogInstruction {
             get {

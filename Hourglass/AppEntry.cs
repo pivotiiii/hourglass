@@ -75,7 +75,7 @@ public sealed class AppEntry : WindowsFormsApplicationBase
 
         SetGlobalSettingsFromArguments(arguments);
 
-        var app = new Application();
+        Application app = new();
         app.Startup += delegate { ShowTimerWindowsForArguments(arguments); };
         app.Exit += AppExit;
         app.Run();

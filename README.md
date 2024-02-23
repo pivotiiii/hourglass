@@ -59,6 +59,7 @@ See [usage](https://github.com/i2van/hourglass/blob/develop/Hourglass/Resources/
 - All the timers are arranged by the time left. The order of the timers is new, expired, paused, running.
 - The pause sign is shown over the notification icon if at least one timer is paused.
 - The digits from 0 to 9 are hotkeys for timers in the notification area context menu.
+- The **Open timer context menu** menu command opens the timer window context menu. The shortcut is the holding the `Shift` during right click on the notification area icon.
 - The **Pause all** menu command pauses all the running timers.
 - The **Resume all** menu command resumes all the paused timers.
 - The **Exit** menu command asks to close all the running timer windows if the **Prompt on exit** option is on.

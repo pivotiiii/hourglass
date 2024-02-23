@@ -872,6 +872,10 @@ $</value>
     <value>&amp;Resume all</value>
     <comment>The text for the command-line resume all menu item, where the character following the optional ampersand (&amp;) is the access key</comment>
   </data>
+  <data name="NotificationAreaIconOpenContextMenuItem" xml:space="preserve">
+    <value>Open timer &amp;context menu</value>
+    <comment>The text for the command-line open timer context menu item, where the character following the optional ampersand (&amp;) is the access key</comment>
+  </data>
   <data name="NotificationAreaIconAboutMenuItem" xml:space="preserve">
     <value>&amp;About</value>
     <comment>The text for the command-line about menu item, where the character following the optional ampersand (&amp;) is the access key</comment>
@@ -1070,32 +1074,31 @@ $</value>
     <comment>The caption used for any message boxes</comment>
   </data>
   <data name="TimerWindowCloseTaskDialogInstruction" xml:space="preserve">
-    <value>You are about to stop the timer and close the timer window</value>
+    <value>You are about to close the timer window.</value>
     <comment>The instruction displayed when the user closes a timer window while a timer is running</comment>
   </data>
   <data name="BackTaskDialogCommand" xml:space="preserve">
     <value>B&amp;ack</value>
     <comment>Back task dialog command</comment>
   </data>
-  <data name="StopAndCloseWindowCloseTaskDialogCommand" xml:space="preserve">
-    <value>Stop and &amp;close</value>
-    <comment>Stop and close task dialog command</comment>
+  <data name="CloseWindowCloseTaskDialogCommand" xml:space="preserve">
+    <value>&amp;Close</value>
+    <comment>Close task dialog command</comment>
   </data>
   <data name="MinimizeWindowCloseTaskDialogCommand" xml:space="preserve">
     <value>Mi&amp;nimize</value>
     <comment>Minimize task dialog command</comment>
   </data>
   <data name="ExitMenuTaskDialogInstruction" xml:space="preserve">
-    <value>You are about to stop all the running timers and exit</value>
-    <comment>The instruction displayed when the user exist application via exit menu</comment>
+    <value>You are about to exit.</value>
+    <comment>The instruction displayed when the user exits application via exit menu</comment>
   </data>
   <data name="WhatWouldYouDoTaskDialogText" xml:space="preserve">
     <value>What would you do?</value>
     <comment>The message displayed when the user confirms action</comment>
   </data>
   <data name="StopAndExitMenuTaskDialogCommand" xml:space="preserve">
-    <value>Stop and e&amp;xit</value>
-    <comment>Stop and exit task dialog command</comment>
+    <value>E&amp;xit</value>
   </data>
   <data name="ContextMenuAdvancedOptionsMenuItem" xml:space="preserve">
     <value>Advanced _options</value>

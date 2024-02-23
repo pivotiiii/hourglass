@@ -14,6 +14,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Forms;
 using System.Windows.Threading;
 
@@ -23,6 +24,7 @@ using Properties;
 using Timing;
 
 using Application = System.Windows.Application;
+using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
 /// <summary>
 /// Displays an icon for the app in the notification area of the taskbar.
@@ -404,10 +406,17 @@ public class NotificationAreaIcon : IDisposable
     {
         _notifyIcon.ContextMenu.MenuItems.Clear();
 
+        IEnumerable<TimerWindow>? windows = Application.Current?.Windows.OfType<TimerWindow>().Arrange().ToList();
+
         bool hasApplication = Application.Current is not null;
 
         if (hasApplication)
         {
+            if (OpenTimerContextMenu())
+            {
+                return;
+            }
+
             _notifyIcon.ContextMenu.MenuItems.AddRange(GetApplicationMenuItems().ToArray());
         }
 
@@ -418,6 +427,26 @@ public class NotificationAreaIcon : IDisposable
         if (hasApplication)
         {
             _dispatcherTimer.Start();
+        }
+
+
+        bool OpenTimerContextMenu()
+        {
+            if (!Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                return false;
+            }
+
+            TimerWindow? window = windows!.FirstOrDefault(static window => window.IsVisible) ??
+                                  windows!.FirstOrDefault();
+            if (window is null)
+            {
+                return false;
+            }
+
+            OpenTimerContextMenuFor(window);
+
+            return true;
         }
 
         IEnumerable<MenuItem> GetApplicationMenuItems()
@@ -431,7 +460,8 @@ public class NotificationAreaIcon : IDisposable
             Lazy<Func<TimerWindow, string>> timerMenuItemTextGenerator = CreateTimerMenuItemTextGenerator();
 
             bool shouldAddSeparator = false;
-            foreach (TimerWindow window in Application.Current.Windows.OfType<TimerWindow>().Arrange())
+
+            foreach (TimerWindow window in windows!)
             {
                 shouldAddSeparator = true;
 
@@ -471,6 +501,16 @@ public class NotificationAreaIcon : IDisposable
                 yield return NewSeparatorMenuItem();
             }
 
+            TimerWindow? firstWindow = windows!.FirstOrDefault();
+            if (firstWindow is not null)
+            {
+                menuItem = new(Resources.NotificationAreaIconOpenContextMenuItem);
+                menuItem.Click += delegate { OpenTimerContextMenuFor(firstWindow); };
+                yield return menuItem;
+
+                yield return NewSeparatorMenuItem();
+            }
+
             menuItem = new(Resources.NotificationAreaIconAboutMenuItem);
             menuItem.Click += delegate { AboutDialog.ShowOrActivate(); };
             yield return menuItem;
@@ -480,6 +520,9 @@ public class NotificationAreaIcon : IDisposable
             static MenuItem NewSeparatorMenuItem() =>
                 new("-");
         }
+
+        static void OpenTimerContextMenuFor(TimerWindow window) =>
+            window.BringToFrontAndActivate(true, true);
     }
 
     /// <summary>

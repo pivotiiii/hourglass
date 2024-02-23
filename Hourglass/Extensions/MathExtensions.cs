@@ -85,7 +85,7 @@ public static class MathExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsFinite(this double d)
     {
-        var bits = BitConverter.DoubleToInt64Bits(d);
+        long bits = BitConverter.DoubleToInt64Bits(d);
         return (bits & 0x7FFFFFFFFFFFFFFF) < 0x7FF0000000000000;
     }
 }
