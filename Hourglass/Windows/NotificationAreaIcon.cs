@@ -57,6 +57,16 @@ public class NotificationAreaIcon : IDisposable
     private readonly Lazy<Icon> _pausedIcon;
 
     /// <summary>
+    /// Expired notification area icon.
+    /// </summary>
+    private readonly Lazy<Icon> _expiredIcon;
+
+    /// <summary>
+    /// Paused and expired notification area icon.
+    /// </summary>
+    private readonly Lazy<Icon> _pausedExpiredIcon;
+
+    /// <summary>
     /// Indicates whether this object has been disposed.
     /// </summary>
     private bool _disposed;
@@ -72,7 +82,10 @@ public class NotificationAreaIcon : IDisposable
     public NotificationAreaIcon()
     {
         _normalIcon = new(Resources.TrayIcon, SystemInformation.SmallIconSize);
-        _pausedIcon = new(CreatePausedIcon);
+
+        _pausedIcon        = new(() => CreateOverlayIcon(true,  false));
+        _expiredIcon       = new(() => CreateOverlayIcon(false, true));
+        _pausedExpiredIcon = new(() => CreateOverlayIcon(true,  true));
 
         _notifyIcon = new()
         {
@@ -98,7 +111,7 @@ public class NotificationAreaIcon : IDisposable
         IsVisible = Settings.Default.ShowInNotificationArea;
     }
 
-    private Icon CreatePausedIcon()
+    private Icon CreateOverlayIcon(bool paused, bool expired)
     {
         const int diameter          = 8;
         const int circleBorderWidth = 1;
@@ -109,9 +122,9 @@ public class NotificationAreaIcon : IDisposable
         const int pauseTopOffset    = 2;
         const int pauseBottomOffset = 4;
 
-        Brush circleBrush    = Brushes.White;
-        Color circlePenColor = Color.FromArgb(unchecked((int)0xFF727272));
-        Color pauseLineColor = Color.FromArgb(unchecked((int)0xFF303030));
+        Color circlePenColor = Color.FromArgb(unchecked((int)0xFF303030));
+        Brush circleBrush    = expired ? Brushes.Crimson : Brushes.White;
+        Color pauseLineColor = expired ? Color.White     : Color.Black;
 
         int width  = _normalIcon.Width;
         int height = _normalIcon.Height;
@@ -131,19 +144,22 @@ public class NotificationAreaIcon : IDisposable
 
         graphics.SmoothingMode = SmoothingMode.Default;
 
-        using SolidBrush pauseLineBrush = new(pauseLineColor);
-        DrawPauseLine(pause1LeftOffset);
-        DrawPauseLine(pause2LeftOffset);
+        if (paused)
+        {
+            using SolidBrush pauseLineBrush = new(pauseLineColor);
+            DrawPauseLine(pause1LeftOffset);
+            DrawPauseLine(pause2LeftOffset);
+
+            void DrawPauseLine(int leftOffset) =>
+                graphics.FillRectangle(
+                    pauseLineBrush,
+                    width  - diameter + leftOffset,
+                    height - diameter + pauseTopOffset,
+                    pauseWidth,
+                    diameter - pauseBottomOffset);
+        }
 
         return Icon.FromHandle(bitmap.GetHicon());
-
-        void DrawPauseLine(int leftOffset) =>
-            graphics.FillRectangle(
-                pauseLineBrush,
-                width  - diameter + leftOffset,
-                height - diameter + pauseTopOffset,
-                pauseWidth,
-                diameter - pauseBottomOffset);
     }
 
     /// <summary>
@@ -206,13 +222,21 @@ public class NotificationAreaIcon : IDisposable
         _dispatcherTimer.Stop();
 
         _notifyIcon.Dispose();
-        if (_pausedIcon.IsValueCreated)
-        {
-            _pausedIcon.Value.Dispose();
-        }
         _normalIcon.Dispose();
 
+        DisposeIcon(_pausedIcon);
+        DisposeIcon(_expiredIcon);
+        DisposeIcon(_pausedExpiredIcon);
+
         Settings.Default.PropertyChanged -= SettingsPropertyChanged;
+
+        static void DisposeIcon(Lazy<Icon> lazyIcon)
+        {
+            if (lazyIcon.IsValueCreated)
+            {
+                lazyIcon.Value.Dispose();
+            }
+        }
     }
 
     /// <summary>
@@ -501,7 +525,7 @@ public class NotificationAreaIcon : IDisposable
                 yield return NewSeparatorMenuItem();
             }
 
-            TimerWindow? firstWindow = windows!.FirstOrDefault();
+            TimerWindow? firstWindow = windows.FirstOrDefault();
             if (firstWindow is not null)
             {
                 menuItem = new(Resources.NotificationAreaIconOpenContextMenuItem);
@@ -648,9 +672,21 @@ public class NotificationAreaIcon : IDisposable
     /// <summary>
     /// Refreshes notification area icon.
     /// </summary>
-    public void RefreshIcon() =>
-        _notifyIcon.Icon =
-            TimerManager.GetPausableTimers(TimerState.Paused).Any()
-                ? _pausedIcon.Value
-                : _normalIcon;
+    public void RefreshIcon()
+    {
+        bool paused  = TimerManager.GetPausableTimers(TimerState.Paused ).Any();
+        bool expired = TimerManager.GetTimersByState (TimerState.Expired).Any();
+
+        _notifyIcon.Icon = true switch
+        {
+            _ when paused && expired =>
+                _pausedExpiredIcon.Value,
+            _ when expired =>
+                _expiredIcon.Value,
+            _ when paused =>
+                _pausedIcon.Value,
+            _ =>
+                _normalIcon
+        };
+    }
 }
