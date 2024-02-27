@@ -585,7 +585,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
                 if (contextMenu)
                 {
                     Dispatcher.BeginInvoke(UnfocusAll);
-                    Dispatcher.BeginInvoke(() => System.Windows.Forms.SendKeys.SendWait("+{F10}"));
+                    Dispatcher.BeginInvoke(this.OpenContextMenu);
                 }
 
                 static void Sleep()
@@ -671,16 +671,7 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
         TitleTextBox.Text = Timer.Options.Title ?? string.Empty;
 
-        if (Timer.Options.ShowTimeElapsed)
-        {
-            TimerTextBox.Text = Timer.TimeLeftAsString ?? string.Empty;
-        }
-
-        if (string.IsNullOrWhiteSpace(TimerTextBox.Text) ||
-            Timer.State is TimerState.Expired or TimerState.Stopped)
-        {
-            TimerTextBox.Text = LastTimerStart.ToString();
-        }
+        AdjustTimerTextBoxText();
 
         textBoxToFocus ??= TimerTextBox;
         textBoxToFocus.SelectAll();
@@ -688,6 +679,29 @@ public sealed partial class TimerWindow : INotifyPropertyChanged, IRestorableWin
 
         EndAnimationsAndSounds();
         UpdateBoundControls();
+
+        void AdjustTimerTextBoxText()
+        {
+            if (!Timer.SupportsPause)
+            {
+                TimerTextBox.Text = GetTimerStartTime();
+                return;
+            }
+
+            if (Timer.Options.ShowTimeElapsed)
+            {
+                TimerTextBox.Text = Timer.TimeLeftAsString ?? string.Empty;
+            }
+
+            if (string.IsNullOrWhiteSpace(TimerTextBox.Text) ||
+                Timer.State is TimerState.Expired or TimerState.Stopped)
+            {
+                TimerTextBox.Text = GetTimerStartTime();
+            }
+
+            string GetTimerStartTime() =>
+                Timer.TimerStart?.ToString() ?? LastTimerStart.ToString();
+        }
     }
 
     /// <summary>

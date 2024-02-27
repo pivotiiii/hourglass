@@ -74,9 +74,9 @@ public sealed class NormalTimeToken : TimeToken
     /// Gets a value indicating whether the token is valid.
     /// </summary>
     public override bool IsValid =>
-        Hour >= 1 && Hour <= 12
-                  && Minute >= 0 && Minute <= 59
-                  && Second >= 0 && Minute <= 59;
+        Hour is >= 1 and <= 12
+        && Minute is >= 0 and <= 59
+        && Second >= 0 && Minute <= 59;
 
     /// <summary>
     /// Returns the next date and time after <paramref name="minDate"/> that is represented by this token.

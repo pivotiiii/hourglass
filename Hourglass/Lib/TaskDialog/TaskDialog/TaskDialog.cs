@@ -533,9 +533,7 @@ public partial class TaskDialog
         // "button" will be null or its "IsCreated" property returns false.
         // In that case the "Help" button would close the dialog, so we
         // return true.
-        return !(button is TaskDialogStandardButton standardButton &&
-                 standardButton.IsCreated &&
-                 standardButton.Result == TaskDialogResult.Help);
+        return !(button is TaskDialogStandardButton { IsCreated: true, Result: TaskDialogResult.Help });
     }
 
     private static TaskDialogStandardButton CreatePlaceholderButton(

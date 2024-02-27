@@ -7,8 +7,10 @@
 namespace Hourglass.Extensions;
 
 using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 
@@ -78,7 +80,7 @@ public static class WindowExtensions
         }
 
         // This hack appears to be the only way to get the non-client area of the window to redraw correctly.
-        if (window.IsVisible && !window.IsFullScreen)
+        if (window is { IsVisible: true, IsFullScreen: false })
         {
             if (window.WindowState == WindowState.Maximized)
             {
@@ -585,6 +587,40 @@ public static class WindowExtensions
 
         // Center the rect as a fallback
         return rect.CenterOnScreen();
+    }
+
+    /// <summary>
+    /// Open window context menu.
+    /// </summary>
+    /// <param name="window">The window.</param>
+    public static void OpenContextMenu(this Window window)
+    {
+        try
+        {
+            if (window.ContextMenu is null)
+            {
+                return;
+            }
+
+            ContextMenuEventArgs contextMenuEventArgs = (ContextMenuEventArgs)Activator.CreateInstance(
+                typeof(ContextMenuEventArgs),
+#pragma warning disable S3011
+                BindingFlags.Instance | BindingFlags.NonPublic,
+#pragma warning restore S3011
+                null,
+                [window, true],
+                null);
+
+            contextMenuEventArgs.RoutedEvent = FrameworkElement.ContextMenuOpeningEvent;
+            window.RaiseEvent(contextMenuEventArgs);
+
+            window.ContextMenu.IsOpen = !contextMenuEventArgs.Handled;
+        }
+        catch
+        {
+            // Fallback.
+            System.Windows.Forms.SendKeys.SendWait("+{F10}");
+        }
     }
 
     public static void MoveToCurrentVirtualDesktop(this Window window) =>
