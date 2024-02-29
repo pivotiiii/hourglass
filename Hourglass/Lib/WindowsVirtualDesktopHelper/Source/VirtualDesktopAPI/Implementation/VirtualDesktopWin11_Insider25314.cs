@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+// ReSharper disable once CheckNamespace
+
 namespace WindowsVirtualDesktopHelper.VirtualDesktopAPI.Implementation;
 
 #pragma warning disable S101

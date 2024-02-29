@@ -17,6 +17,8 @@ using Extensions;
 using Managers;
 using Timing;
 
+// ReSharper disable LocalSuppression
+
 /// <summary>
 /// The state of the window used to manage themes.
 /// </summary>
@@ -428,6 +430,7 @@ public sealed partial class ThemeManagerWindow
             return;
         }
 
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (_timerWindow.Options is null || !PromptToSaveIfRequired())
         {
             // Revert the selection

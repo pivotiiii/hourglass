@@ -14,6 +14,8 @@ using System.Text.RegularExpressions;
 using Extensions;
 using Properties;
 
+// ReSharper disable ExceptionNotDocumented
+
 /// <summary>
 /// Represents the period of an hour.
 /// </summary>
@@ -245,10 +247,8 @@ public sealed class NormalTimeToken : TimeToken
         /// <param name="match">A <see cref="Match"/> representation of a <see cref="TimeToken"/>.</param>
         /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
         /// <returns>The <see cref="TimeToken"/> parsed from the <see cref="Match"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is
-        /// <c>null</c>.</exception>
-        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of
-        /// a <see cref="TimeToken"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of a <see cref="TimeToken"/>.</exception>
         protected override TimeToken ParseInternal(Match match, IFormatProvider provider)
         {
             NormalTimeToken timeToken = new();

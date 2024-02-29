@@ -17,10 +17,10 @@
                         </Grid.ColumnDefinitions>
                         <Border Grid.Column="0" BorderBrush="#DDDDDD" BorderThickness="1" CornerRadius="5" Width="16" Height="16">
                             <Border.Background>
-                                <SolidColorBrush Color="{Binding RelativeSource={RelativeSource AncestorType=local:ColorControl}, Path=Color}"/>
+                                <SolidColorBrush Color="{Binding RelativeSource={RelativeSource AncestorType=local:ColorControl}, Path=Color, Mode=OneWay}"/>
                             </Border.Background>
                         </Border>
-                        <Label Grid.Column="1" Content="{Binding RelativeSource={RelativeSource AncestorType=local:ColorControl}, Path=Text}" Margin="5 0 0 0"/>
+                        <Label Grid.Column="1" Content="{Binding RelativeSource={RelativeSource AncestorType=local:ColorControl}, Path=Text, Mode=OneWay}" Margin="5 0 0 0"/>
                     </Grid>
                 </Border>
                 <ControlTemplate.Triggers>

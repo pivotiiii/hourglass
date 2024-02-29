@@ -24,8 +24,7 @@ public static class DayOfWeekExtensions
     /// <param name="str">A string.</param>
     /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
     /// <returns>The <see cref="DayOfWeek"/> parsed from the string.</returns>
-    /// <exception cref="FormatException">If <paramref name="str"/> is not a supported representation of a day
-    /// of the week.</exception>
+    /// <exception cref="FormatException">If <paramref name="str"/> is not a supported representation of a day of the week.</exception>
     public static DayOfWeek ParseDayOfWeek(string str, IFormatProvider provider)
     {
         IList<KeyValuePair<DayOfWeek, string>> matches = GetDayOfWeekStrings(provider)

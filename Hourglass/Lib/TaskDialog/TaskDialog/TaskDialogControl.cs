@@ -4,6 +4,8 @@ using System;
 
 using TaskDialogFlags = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_FLAGS;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -13,7 +15,6 @@ public abstract class TaskDialogControl
 {
     // Disallow inheritance by specifying a private protected constructor.
     private protected TaskDialogControl()
-        : base()
     {
     }
 

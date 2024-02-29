@@ -7,6 +7,8 @@ using TaskDialogTextElement = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_EL
 
 #pragma warning disable S1135
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -33,7 +35,6 @@ public sealed class TaskDialogExpander : TaskDialogControl
     /// 
     /// </summary>
     public TaskDialogExpander()
-        : base()
     {
     }
 

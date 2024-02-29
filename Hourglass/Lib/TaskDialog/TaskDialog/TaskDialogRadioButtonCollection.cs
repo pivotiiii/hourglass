@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -20,7 +22,6 @@ public class TaskDialogRadioButtonCollection
     /// 
     /// </summary>
     public TaskDialogRadioButtonCollection()
-        : base()
     {
     }
 

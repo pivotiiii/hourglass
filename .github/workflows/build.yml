@@ -14,14 +14,14 @@ jobs:
 
     steps:
 
-    # Setup
+    # Set up
 
     - name: Setup msbuild
       uses: microsoft/setup-msbuild@v1.3.2
 
-    # Checkout
+    # Check out
 
-    - name: Checkout ${{env.PROJECT}}
+    - name: Check out ${{env.PROJECT}}
       uses: actions/checkout@v4.1.1
 
     # Restore

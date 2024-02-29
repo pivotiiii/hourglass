@@ -14,6 +14,8 @@ using static System.IO.Path;
 
 using Managers;
 
+// ReSharper disable ExceptionNotDocumented
+
 /// <summary>
 /// A sound that can be used to notify the user that a timer has expired.
 /// </summary>
@@ -28,6 +30,7 @@ public sealed class Sound
     /// Initializes a new instance of the <see cref="Sound"/> class for a sound stored in the file system.
     /// </summary>
     /// <param name="path">The path to the sound file.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="path"/> is <see langword="null"/></exception>
     public Sound(string path)
     {
             if (string.IsNullOrWhiteSpace(path))
@@ -49,6 +52,8 @@ public sealed class Sound
     /// <param name="name">The friendly name for the sound.</param>
     /// <param name="streamProvider">A method that returns a stream to the sound data.</param>
     /// <param name="duration">The length of the sound.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="invariantName"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="duration"/> is negative.</exception>
     public Sound(string invariantName, string name, Func<UnmanagedMemoryStream> streamProvider, TimeSpan duration)
     {
             if (string.IsNullOrWhiteSpace(invariantName))

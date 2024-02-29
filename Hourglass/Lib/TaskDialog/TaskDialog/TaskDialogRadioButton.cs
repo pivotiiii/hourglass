@@ -6,6 +6,8 @@ using TaskDialogFlags = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_FLAGS;
 
 #pragma warning disable S1135
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -33,7 +35,6 @@ public sealed class TaskDialogRadioButton : TaskDialogControl
     /// 
     /// </summary>
     public TaskDialogRadioButton()
-        : base()
     {
     }
 

@@ -350,6 +350,24 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ela_psed time · Timer title.
+        /// </summary>
+        public static string ContextMenuElapsedTimePlusTimerTitleWindowTitleMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuElapsedTimePlusTimerTitleWindowTitleMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Elapsed time.
+        /// </summary>
+        public static string ContextMenuElapsedTimeWindowTitleMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuElapsedTimeWindowTitleMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Full screen.
         /// </summary>
         public static string ContextMenuFullScreenMenuItem {
@@ -566,6 +584,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Show elapsed time instead of time left.
+        /// </summary>
+        public static string ContextMenuShowElapsedTimeMenuItem {
+            get {
+                return ResourceManager.GetString("ContextMenuShowElapsedTimeMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to S_how in notification area.
         /// </summary>
         public static string ContextMenuShowInNotificationAreaMenuItem {
@@ -580,15 +607,6 @@ namespace Hourglass.Properties {
         public static string ContextMenuShowProgressInTaskbarMenuItem {
             get {
                 return ResourceManager.GetString("ContextMenuShowProgressInTaskbarMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to _Show time elapsed instead of time left.
-        /// </summary>
-        public static string ContextMenuShowTimeElapsedMenuItem {
-            get {
-                return ResourceManager.GetString("ContextMenuShowTimeElapsedMenuItem", resourceCulture);
             }
         }
         
@@ -620,24 +638,6 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time ela_psed · Timer title.
-        /// </summary>
-        public static string ContextMenuTimeElapsedPlusTimerTitleWindowTitleMenuItem {
-            get {
-                return ResourceManager.GetString("ContextMenuTimeElapsedPlusTimerTitleWindowTitleMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Time _elapsed.
-        /// </summary>
-        public static string ContextMenuTimeElapsedWindowTitleMenuItem {
-            get {
-                return ResourceManager.GetString("ContextMenuTimeElapsedWindowTitleMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Time le_ft · Timer title.
         /// </summary>
         public static string ContextMenuTimeLeftPlusTimerTitleWindowTitleMenuItem {
@@ -656,11 +656,11 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ti_mer title · Time elapsed.
+        ///   Looks up a localized string similar to Ti_mer title · Elapsed time.
         /// </summary>
-        public static string ContextMenuTimerTitlePlusTimeElapsedWindowTitleMenuItem {
+        public static string ContextMenuTimerTitlePlusElapsedTimeWindowTitleMenuItem {
             get {
-                return ResourceManager.GetString("ContextMenuTimerTitlePlusTimeElapsedWindowTitleMenuItem", resourceCulture);
+                return ResourceManager.GetString("ContextMenuTimerTitlePlusElapsedTimeWindowTitleMenuItem", resourceCulture);
             }
         }
         
@@ -1499,15 +1499,6 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open timer &amp;context menu	Shift+RightClick.
-        /// </summary>
-        public static string NotificationAreaIconOpenContextMenuItem {
-            get {
-                return ResourceManager.GetString("NotificationAreaIconOpenContextMenuItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &amp;Pause all.
         /// </summary>
         public static string NotificationAreaIconPauseAllMenuItem {
@@ -1549,6 +1540,15 @@ namespace Hourglass.Properties {
         public static string NotificationAreaIconYourTimerHasExpired {
             get {
                 return ResourceManager.GetString("NotificationAreaIconYourTimerHasExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timer &amp;options.
+        /// </summary>
+        public static string NotificationAreaTimerOptionsMenuItem {
+            get {
+                return ResourceManager.GetString("NotificationAreaTimerOptionsMenuItem", resourceCulture);
             }
         }
         
@@ -2138,6 +2138,15 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} {1}.
+        /// </summary>
+        public static string TimerTimeDateTimeFormatString {
+            get {
+                return ResourceManager.GetString("TimerTimeDateTimeFormatString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} ago.
         /// </summary>
         public static string TimerTimeExpiredFormatString {
@@ -2156,20 +2165,20 @@ namespace Hourglass.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Timer not expired.
-        /// </summary>
-        public static string TimerTimerNotExpired {
-            get {
-                return ResourceManager.GetString("TimerTimerNotExpired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Timer stopped.
         /// </summary>
         public static string TimerTimerStopped {
             get {
                 return ResourceManager.GetString("TimerTimerStopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tomorrow, {0}.
+        /// </summary>
+        public static string TimerTimeTomorrowFormatString {
+            get {
+                return ResourceManager.GetString("TimerTimeTomorrowFormatString", resourceCulture);
             }
         }
         

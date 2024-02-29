@@ -604,6 +604,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// Sets all the options from another instance of the <see cref="TimerOptions"/> class.
     /// </summary>
     /// <param name="options">A <see cref="TimerOptions"/>.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="options"/> is <see langword="null"/></exception>
     public void Set(TimerOptions options)
     {
         if (options is null)
@@ -655,7 +656,8 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// Sets all the options from an instance of the <see cref="TimerOptionsInfo"/> class.
     /// </summary>
     /// <param name="info">A <see cref="TimerOptionsInfo"/>.</param>
-    public void Set(TimerOptionsInfo info)
+    /// <exception cref="ArgumentNullException"><paramref name="info"/> is <see langword="null"/></exception>
+    private void Set(TimerOptionsInfo info)
     {
         if (info is null)
         {

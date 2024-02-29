@@ -3,6 +3,8 @@ using System.Diagnostics;
 
 using Hourglass.Properties;
 
+// ReSharper disable ExceptionNotDocumented
+
 namespace Hourglass.Extensions;
 
 internal static class UriExtensions

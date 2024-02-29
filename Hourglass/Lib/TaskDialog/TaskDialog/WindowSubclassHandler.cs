@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 internal class WindowSubclassHandler : IDisposable

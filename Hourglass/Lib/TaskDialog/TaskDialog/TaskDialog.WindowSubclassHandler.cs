@@ -1,5 +1,7 @@
 ﻿using System;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 public partial class TaskDialog

@@ -6,6 +6,8 @@ using TaskDialogFlags = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_FLAGS;
 using TaskDialogIconElement = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_ICON_ELEMENTS;
 using TaskDialogTextElement = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_ELEMENTS;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -23,7 +25,6 @@ public sealed class TaskDialogFooter : TaskDialogControl
     /// 
     /// </summary>
     public TaskDialogFooter()
-        : base()
     {
     }
 

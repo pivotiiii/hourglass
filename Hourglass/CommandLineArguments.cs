@@ -827,8 +827,7 @@ public sealed class CommandLineArguments
     /// <param name="arg">The name of the argument for which the value is to be returned.</param>
     /// <param name="remainingArgs">The unparsed arguments.</param>
     /// <returns>The next value in <paramref name="remainingArgs"/>.</returns>
-    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument in
-    /// <paramref name="remainingArgs"/> is a switch.</exception>
+    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument in <paramref name="remainingArgs"/> is a switch.</exception>
     private static string GetRequiredValue(string arg, Queue<string> remainingArgs)
     {
         string? value = GetValue(remainingArgs);
@@ -853,8 +852,7 @@ public sealed class CommandLineArguments
     /// <param name="arg">The name of the argument for which the value is to be returned.</param>
     /// <param name="remainingArgs">The unparsed arguments.</param>
     /// <returns>The next <see cref="bool"/> value in <paramref name="remainingArgs"/>.</returns>
-    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not
-    /// "on" or "off".</exception>
+    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not "on" or "off".</exception>
     private static bool GetBoolValue(string arg, Queue<string> remainingArgs)
     {
         string value = GetRequiredValue(arg, remainingArgs);
@@ -886,8 +884,7 @@ public sealed class CommandLineArguments
     /// <param name="remainingArgs">The unparsed arguments.</param>
     /// <param name="last">The value of the argument returned when the user specifies "last".</param>
     /// <returns>The next <see cref="bool"/> value in <paramref name="remainingArgs"/>.</returns>
-    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not
-    /// "on", "off", or "last".</exception>
+    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not "on", "off", or "last".</exception>
     private static bool GetBoolValue(string arg, Queue<string> remainingArgs, bool last)
     {
         string value = GetRequiredValue(arg, remainingArgs);
@@ -923,8 +920,7 @@ public sealed class CommandLineArguments
     /// <param name="remainingArgs">The unparsed arguments.</param>
     /// <param name="last">The value of the argument returned when the user specifies "last".</param>
     /// <returns>The next <see cref="Theme"/> value in <paramref name="remainingArgs"/></returns>
-    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not
-    /// "last" or a valid representation of a <see cref="Theme"/>.</exception>
+    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not "last" or a valid representation of a <see cref="Theme"/>.</exception>
     private static Theme? GetThemeValue(string arg, Queue<string> remainingArgs, Theme? last)
     {
         string value = GetRequiredValue(arg, remainingArgs);
@@ -962,8 +958,7 @@ public sealed class CommandLineArguments
     /// <param name="remainingArgs">The unparsed arguments.</param>
     /// <param name="last">The value of the argument returned when the user specifies "last".</param>
     /// <returns>The next <see cref="Sound"/> value in <paramref name="remainingArgs"/>.</returns>
-    /// <exception cref="ParseException">if <paramref name="remainingArgs"/> is empty or the next argument is not
-    /// "none", "last", or a valid representation of a <see cref="Sound"/>.</exception>
+    /// <exception cref="ParseException">if <paramref name="remainingArgs"/> is empty or the next argument is not "none", "last", or a valid representation of a <see cref="Sound"/>.</exception>
     private static Sound? GetSoundValue(string arg, Queue<string> remainingArgs, Sound? last)
     {
         string value = GetRequiredValue(arg, remainingArgs);
@@ -1003,8 +998,7 @@ public sealed class CommandLineArguments
     /// <param name="remainingArgs">The unparsed arguments.</param>
     /// <param name="last">The value of the argument returned when the user specifies "last".</param>
     /// <returns>The next <see cref="WindowTitleMode"/> value in <paramref name="remainingArgs"/>.</returns>
-    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not
-    /// "app", "left", "elapsed", "title", or "last".</exception>
+    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not "app", "left", "elapsed", "title", or "last".</exception>
     private static WindowTitleMode GetWindowTitleModeValue(string arg, Queue<string> remainingArgs, WindowTitleMode last)
     {
         string value = GetRequiredValue(arg, remainingArgs);
@@ -1061,8 +1055,7 @@ public sealed class CommandLineArguments
     /// <param name="remainingArgs">The unparsed arguments.</param>
     /// <param name="last">The value of the argument returned when the user specifies "last".</param>
     /// <returns>The next <see cref="WindowState"/> value in <paramref name="remainingArgs"/>.</returns>
-    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not
-    /// "normal", "maximized", "minimized", or "last".</exception>
+    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not "normal", "maximized", "minimized", or "last".</exception>
     private static WindowState GetWindowStateValue(string arg, Queue<string> remainingArgs, WindowState last)
     {
         string value = GetRequiredValue(arg, remainingArgs);
@@ -1101,8 +1094,7 @@ public sealed class CommandLineArguments
     /// <param name="remainingArgs">The unparsed arguments.</param>
     /// <param name="last">The value of the argument returned when the user specifies "last".</param>
     /// <returns>The next <see cref="Rect"/> value in <paramref name="remainingArgs"/>.</returns>
-    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not a
-    /// valid representation of a <see cref="Rect"/>.</exception>
+    /// <exception cref="ParseException">If <paramref name="remainingArgs"/> is empty or the next argument is not a valid representation of a <see cref="Rect"/>.</exception>
     private static Rect GetRectValue(string arg, Queue<string> remainingArgs, Rect last)
     {
         string value = GetRequiredValue(arg, remainingArgs);
@@ -1140,8 +1132,7 @@ public sealed class CommandLineArguments
     /// The <see cref="TimerStart"/> value corresponding to the concatenation of all <paramref name="remainingArgs"/>
     /// or individual timer values if <paramref name="multiTimers"/> if <c>true</c>.
     /// </returns>
-    /// <exception cref="ParseException">If the concatenation of all <paramref name="remainingArgs"/> is not a
-    /// valid representation of a <see cref="TimerStart"/>.</exception>
+    /// <exception cref="ParseException">If the concatenation of all <paramref name="remainingArgs"/> is not a valid representation of a <see cref="TimerStart"/>.</exception>
     private static IEnumerable<TimerStart> GetTimerStartValue(IEnumerable<string> remainingArgs, bool multiTimers)
     {
         if (!multiTimers)

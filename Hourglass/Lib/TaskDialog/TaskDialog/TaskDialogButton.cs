@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -31,7 +33,6 @@ public abstract class TaskDialogButton : TaskDialogControl
 
     // Disallow inheritance by specifying a private protected constructor.
     private protected TaskDialogButton()
-        : base()
     {
     }
 

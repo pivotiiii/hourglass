@@ -10,6 +10,8 @@ using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
+// ReSharper disable ExceptionNotDocumented
+
 /// <summary>
 /// Provides extensions methods for the <see cref="CultureInfo"/> class and the related <see
 /// cref="IFormatProvider"/> interface.

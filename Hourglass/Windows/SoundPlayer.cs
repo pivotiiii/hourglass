@@ -13,6 +13,8 @@ using System.Windows.Threading;
 using Extensions;
 using Timing;
 
+// ReSharper disable ExceptionNotDocumented
+
 /// <summary>
 /// Plays <see cref="Sound"/>s stored in the file system.
 /// </summary>

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+// ReSharper disable ExceptionNotDocumented
+
+// ReSharper disable all
 
 namespace KPreisser.UI;
 
@@ -24,7 +27,6 @@ public abstract class TaskDialogIcon
         };
 
     private protected TaskDialogIcon()
-        : base()
     {
     }
 
@@ -32,13 +34,10 @@ public abstract class TaskDialogIcon
     /// 
     /// </summary>
     /// <param name="icon"></param>
-    public static implicit operator TaskDialogIcon(TaskDialogStandardIcon icon)
-    {
-        if (!s_standardIcons.TryGetValue(icon, out TaskDialogStandardIconContainer result))
-            throw new InvalidCastException(); // TODO: Is this the correct exception type?
-
-        return result;
-    }
+    public static implicit operator TaskDialogIcon(TaskDialogStandardIcon icon) =>
+        s_standardIcons.TryGetValue(icon, out TaskDialogStandardIconContainer result)
+            ? result
+            : throw new InvalidCastException();
 
 #if !NET_STANDARD
     /// <summary>

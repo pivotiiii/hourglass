@@ -13,6 +13,8 @@ using System.Windows.Navigation;
 
 using Extensions;
 
+// ReSharper disable MismatchedFileName
+
 /// <summary>
 /// A window that displays command-line usage.
 /// </summary>

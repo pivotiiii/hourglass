@@ -1,1 +1,1 @@
-pwsh.exe -Command "& '%~dpn0.ps1'" %*
+pwsh.exe -NoLogo -NoProfile -NonInteractive -Command "& '%~dpn0.ps1'" %*

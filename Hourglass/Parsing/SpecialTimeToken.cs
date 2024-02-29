@@ -77,7 +77,6 @@ public sealed class SpecialTimeToken : TimeToken
     /// <param name="datePart">The date part of the date and time to return.</param>
     /// <returns>The next date and time after <paramref name="minDate"/> that is represented by this token.
     /// </returns>
-    /// <exception cref="InvalidOperationException">If this token is not valid.</exception>
     public override DateTime ToDateTime(DateTime minDate, DateTime datePart)
     {
         ThrowIfNotValid();
@@ -169,10 +168,7 @@ public sealed class SpecialTimeToken : TimeToken
         /// <param name="match">A <see cref="Match"/> representation of a <see cref="TimeToken"/>.</param>
         /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
         /// <returns>The <see cref="TimeToken"/> parsed from the <see cref="Match"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is
-        /// <c>null</c>.</exception>
-        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of
-        /// a <see cref="TimeToken"/>.</exception>
+        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of a <see cref="TimeToken"/>.</exception>
         protected override TimeToken ParseInternal(Match match, IFormatProvider provider)
         {
             SpecialTimeDefinition? specialTimeDefinition = GetSpecialTimeDefinitionForMatch(match);

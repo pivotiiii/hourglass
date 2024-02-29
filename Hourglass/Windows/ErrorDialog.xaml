@@ -7,7 +7,7 @@
         RenderOptions.ClearTypeHint="Enabled"
         SnapsToDevicePixels="True"
         WindowStartupLocation="CenterScreen"
-        FocusManager.FocusedElement="{Binding ElementName=CloseButton}">
+        FocusManager.FocusedElement="{Binding ElementName=CloseButton, Mode=OneWay}">
     <Window.Resources>
         <Style x:Key="DetailsButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Foreground" Value="#0066CC"/>

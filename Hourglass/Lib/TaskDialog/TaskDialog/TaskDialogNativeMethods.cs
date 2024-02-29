@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 #pragma warning disable S101

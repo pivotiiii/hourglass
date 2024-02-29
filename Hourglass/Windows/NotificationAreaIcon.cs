@@ -26,6 +26,8 @@ using Timing;
 using Application = System.Windows.Application;
 using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
+// ReSharper disable ExceptionNotDocumented
+
 /// <summary>
 /// Displays an icon for the app in the notification area of the taskbar.
 /// </summary>
@@ -165,7 +167,7 @@ public class NotificationAreaIcon : IDisposable
     /// <summary>
     /// Gets or sets a value indicating whether the icon is visible in the notification area of the taskbar.
     /// </summary>
-    public bool IsVisible
+    private bool IsVisible
     {
         get => _notifyIcon.Visible;
         set
@@ -205,7 +207,7 @@ public class NotificationAreaIcon : IDisposable
     /// </summary>
     /// <param name="disposing">A value indicating whether this method was invoked by an explicit call to <see
     /// cref="Dispose"/>.</param>
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (_disposed)
         {
@@ -528,7 +530,7 @@ public class NotificationAreaIcon : IDisposable
             TimerWindow? firstWindow = windows.FirstOrDefault();
             if (firstWindow is not null)
             {
-                menuItem = new(Resources.NotificationAreaIconOpenContextMenuItem);
+                menuItem = new(Resources.NotificationAreaTimerOptionsMenuItem);
                 menuItem.Click += delegate { OpenTimerContextMenuFor(firstWindow); };
                 yield return menuItem;
 

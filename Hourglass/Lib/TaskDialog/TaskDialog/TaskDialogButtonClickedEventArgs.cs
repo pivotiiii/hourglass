@@ -1,5 +1,7 @@
 ﻿using System;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -11,7 +13,6 @@ public class TaskDialogButtonClickedEventArgs : EventArgs
     /// 
     /// </summary>
     internal TaskDialogButtonClickedEventArgs()
-        : base()
     {
     }
 

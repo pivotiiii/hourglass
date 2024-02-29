@@ -11,6 +11,9 @@ using Hourglass.Windows;
 
 namespace Hourglass.Extensions;
 
+// ReSharper disable LocalSuppression
+// ReSharper disable ExceptionNotDocumented
+
 public static class TimerWindowExtensions
 {
     private static readonly Comparer<TimerWindow> TimeComparer = Comparer<TimerWindow>.Create(CompareTime);

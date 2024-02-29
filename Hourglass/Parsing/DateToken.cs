@@ -75,6 +75,7 @@ public abstract class DateToken
     /// <summary>
     /// Throws an <see cref="InvalidOperationException"/> if <see cref="IsValid"/> is <c>false</c>.
     /// </summary>
+    /// <exception cref="InvalidOperationException">If not valid.</exception>
     protected void ThrowIfNotValid()
     {
         if (!IsValid)
@@ -113,10 +114,8 @@ public abstract class DateToken
         /// <param name="match">A <see cref="Match"/> representation of a <see cref="DateToken"/>.</param>
         /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
         /// <returns>The <see cref="DateToken"/> parsed from the <see cref="Match"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is
-        /// <c>null</c>.</exception>
-        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of
-        /// a <see cref="DateToken"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of a <see cref="DateToken"/>.</exception>
         public DateToken Parse(Match match, IFormatProvider provider)
         {
             if (match is null)
@@ -145,10 +144,8 @@ public abstract class DateToken
         /// <param name="match">A <see cref="Match"/> representation of a <see cref="DateToken"/>.</param>
         /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
         /// <returns>The <see cref="DateToken"/> parsed from the <see cref="Match"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is
-        /// <c>null</c>.</exception>
-        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of
-        /// a <see cref="DateToken"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of a <see cref="DateToken"/>.</exception>
         protected abstract DateToken ParseInternal(Match match, IFormatProvider provider);
     }
 }

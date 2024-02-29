@@ -15,6 +15,8 @@ using Extensions;
 using Properties;
 using Timing;
 
+// ReSharper disable ExceptionNotDocumented
+
 /// <summary>
 /// Represents a <see cref="TimerStart"/>.
 /// </summary>
@@ -113,6 +115,7 @@ public abstract class TimerStartToken
     /// <summary>
     /// Throws an <see cref="InvalidOperationException"/> if <see cref="IsValid"/> is <c>false</c>.
     /// </summary>
+    /// <exception cref="InvalidOperationException">If not valid.</exception>
     protected void ThrowIfNotValid()
     {
         if (!IsValid)
@@ -180,10 +183,8 @@ public abstract class TimerStartToken
         /// <param name="str">A string representation of a <see cref="TimerStartToken"/>.</param>
         /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
         /// <returns>The <see cref="TimerStartToken"/> parsed from the string.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="str"/> or <paramref name="provider"/> is
-        /// <c>null</c>.</exception>
-        /// <exception cref="FormatException">If <paramref name="str"/> is not a supported representation of a <see
-        /// cref="TimerStartToken"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="str"/> or <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">If <paramref name="str"/> is not a supported representation of a <see cref="TimerStartToken"/>.</exception>
         public TimerStartToken Parse(string? str, IFormatProvider provider)
         {
             if (str is null)
@@ -246,10 +247,8 @@ public abstract class TimerStartToken
         /// <param name="str">A string representation of a <see cref="TimerStartToken"/>.</param>
         /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
         /// <returns>The <see cref="TimerStartToken"/> parsed from the string.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="str"/> or <paramref name="provider"/> is
-        /// <c>null</c>.</exception>
-        /// <exception cref="FormatException">If <paramref name="str"/> is not a supported representation of a <see
-        /// cref="TimerStartToken"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="str"/> or <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">If <paramref name="str"/> is not a supported representation of a <see cref="TimerStartToken"/>.</exception>
         protected abstract TimerStartToken ParseInternal(string str, IFormatProvider provider);
     }
 }

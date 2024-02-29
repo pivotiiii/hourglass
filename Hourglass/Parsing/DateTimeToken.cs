@@ -58,6 +58,7 @@ public sealed class DateTimeToken : TimerStartToken
     /// </summary>
     /// <param name="startTime">The time the timer is started.</param>
     /// <returns>The end time for a timer started with this token at the specified time.</returns>
+    /// <exception cref="InvalidOperationException">If time is less then <paramref name="startTime"/>.</exception>
     public override DateTime GetEndTime(DateTime startTime)
     {
         ThrowIfNotValid();
@@ -73,7 +74,7 @@ public sealed class DateTimeToken : TimerStartToken
 
         if (dateTime < startTime)
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException(@"dateTime < startTime");
         }
 
         return dateTime;
@@ -153,10 +154,7 @@ public sealed class DateTimeToken : TimerStartToken
         /// <param name="str">A string representation of a <see cref="TimerStartToken"/>.</param>
         /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
         /// <returns>The <see cref="TimerStartToken"/> parsed from the string.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="str"/> or <paramref name="provider"/> is
-        /// <c>null</c>.</exception>
-        /// <exception cref="FormatException">If <paramref name="str"/> is not a supported representation of a <see
-        /// cref="TimerStartToken"/>.</exception>
+        /// <exception cref="FormatException">If <paramref name="str"/> is not a supported representation of a <see cref="TimerStartToken"/>.</exception>
         protected override TimerStartToken ParseInternal(string str, IFormatProvider provider)
         {
             foreach (PatternDefinition patternDefinition in GetAllDateTimePatternDefinitions(provider))

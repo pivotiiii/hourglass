@@ -4,6 +4,8 @@ using TaskDialogFlags = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_FLAGS;
 
 #pragma warning disable S1135
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -25,7 +27,6 @@ public sealed class TaskDialogProgressBar : TaskDialogControl
     /// 
     /// </summary>
     public TaskDialogProgressBar()
-        : base()
     {
     }
 

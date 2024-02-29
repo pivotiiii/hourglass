@@ -19,6 +19,8 @@ using Extensions;
 using Properties;
 using Serialization;
 
+// ReSharper disable LocalSuppression
+
 /// <summary>
 /// Manages app updates.
 /// </summary>
@@ -100,6 +102,7 @@ public sealed class UpdateManager : Manager, INotifyPropertyChanged
             // Try to use TLS 1.3 if it's supported.
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
         }
+        // ReSharper disable once UncatchableException
         catch (NotSupportedException)
         {
             // Otherwise, fall back to using TLS 1.2.

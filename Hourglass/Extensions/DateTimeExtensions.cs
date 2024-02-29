@@ -83,6 +83,7 @@ public static class DateTimeExtensions
     /// <param name="month">A month number between 1 and 12 inclusive.</param>
     /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
     /// <returns>The string representation of the month.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">If the month is out of range.</exception>
     public static string GetMonthString(int month, IFormatProvider provider)
     {
         IDictionary<int, string> months = GetMonthStrings(provider);
@@ -101,6 +102,7 @@ public static class DateTimeExtensions
     /// <param name="day">A day number between 1 and 31 inclusive.</param>
     /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
     /// <returns>The ordinal string representation of the day.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">If the day is out of range.</exception>
     public static string GetOrdinalDayString(int day, IFormatProvider provider)
     {
         if (day is < 1 or > 31)
@@ -115,27 +117,27 @@ public static class DateTimeExtensions
                 Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsNstFormatString), provider),
                 day);
         }
-        else if (day % 10 == 2 && day / 10 != 1)
+
+        if (day % 10 == 2 && day / 10 != 1)
         {
             return string.Format(
                 Resources.ResourceManager.GetEffectiveProvider(provider),
                 Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsNndFormatString), provider),
                 day);
         }
-        else if (day % 10 == 3 && day / 10 != 1)
+
+        if (day % 10 == 3 && day / 10 != 1)
         {
             return string.Format(
                 Resources.ResourceManager.GetEffectiveProvider(provider),
                 Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsNrdFormatString), provider),
                 day);
         }
-        else
-        {
-            return string.Format(
-                Resources.ResourceManager.GetEffectiveProvider(provider),
-                Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsNthFormatString), provider),
-                day);
-        }
+
+        return string.Format(
+            Resources.ResourceManager.GetEffectiveProvider(provider),
+            Resources.ResourceManager.GetString(nameof(Resources.DateTimeExtensionsNthFormatString), provider),
+            day);
     }
 
     /// <summary>
@@ -143,6 +145,7 @@ public static class DateTimeExtensions
     /// </summary>
     /// <param name="year">A year.</param>
     /// <param name="month">A month number between 1 and 12 inclusive.</param>
+    /// <exception cref="ArgumentOutOfRangeException">If the month is out of range.</exception>
     public static void IncrementMonth(ref int year, ref int month)
     {
         if (month is < 1 or > 12)
@@ -191,8 +194,7 @@ public static class DateTimeExtensions
     /// <param name="str">A string representation of a month.</param>
     /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
     /// <returns>The month number parsed from the string.</returns>
-    /// <exception cref="FormatException">If <paramref name="str"/> is not a supported representation of a month.
-    /// </exception>
+    /// <exception cref="FormatException">If <paramref name="str"/> is not a supported representation of a month. </exception>
     public static int ParseMonth(string str, IFormatProvider provider)
     {
         IList<KeyValuePair<int, string>> matches = GetMonthStrings(provider)

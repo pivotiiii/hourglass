@@ -10,6 +10,8 @@ using System;
 using System.Globalization;
 using System.Resources;
 
+// ReSharper disable ExceptionNotDocumented
+
 /// <summary>
 /// Provides extensions methods for the <see cref="ResourceManager"/> class.
 /// </summary>

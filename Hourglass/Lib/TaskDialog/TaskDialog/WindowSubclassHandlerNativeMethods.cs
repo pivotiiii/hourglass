@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 internal static class WindowSubclassHandlerNativeMethods

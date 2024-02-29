@@ -10,6 +10,8 @@ using TaskDialogTextElement = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_EL
 
 #pragma warning disable S125
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>

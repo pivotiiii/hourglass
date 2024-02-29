@@ -1,5 +1,7 @@
 ﻿using System;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -27,7 +29,6 @@ public sealed class TaskDialogStandardButton : TaskDialogButton
     /// <param name="result"></param>
     public TaskDialogStandardButton(
         TaskDialogResult result)
-        : base()
     {
         if (!IsValidStandardButtonResult(result))
             throw new ArgumentOutOfRangeException(nameof(result));

@@ -1,5 +1,7 @@
 ﻿using System;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -12,7 +14,6 @@ public class TaskDialogHyperlinkClickedEventArgs : EventArgs
     /// </summary>
     /// <param name="hyperlink"></param>
     internal TaskDialogHyperlinkClickedEventArgs(string hyperlink)
-        : base()
     {
         Hyperlink = hyperlink;
     }

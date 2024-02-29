@@ -14,6 +14,9 @@ using System.Windows.Navigation;
 using Extensions;
 using Managers;
 
+// ReSharper disable ExceptionNotDocumented
+// ReSharper disable MismatchedFileName
+
 /// <summary>
 /// A window that displays information about the app.
 /// </summary>

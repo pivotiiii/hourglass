@@ -139,12 +139,13 @@ public sealed class InterfaceScaler
     /// Binds the <see cref="InterfaceScaler"/> to a <see cref="TimerWindow"/>.
     /// </summary>
     /// <param name="window">A <see cref="TimerWindow"/>.</param>
+    /// <exception cref="InvalidOperationException">The timer window is already created.</exception>
     public void Bind(TimerWindow window)
     {
         // Validate state
         if (_timerWindow is not null)
         {
-            throw new InvalidOperationException(@"Timer window is already created.");
+            throw new InvalidOperationException(@"The timer window is already created");
         }
 
         // Initialize members

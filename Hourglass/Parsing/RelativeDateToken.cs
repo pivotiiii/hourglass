@@ -165,10 +165,7 @@ public sealed class RelativeDateToken : DateToken
         /// <param name="match">A <see cref="Match"/> representation of a <see cref="DateToken"/>.</param>
         /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
         /// <returns>The <see cref="DateToken"/> parsed from the <see cref="Match"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is
-        /// <c>null</c>.</exception>
-        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of
-        /// a <see cref="DateToken"/>.</exception>
+        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of a <see cref="DateToken"/>.</exception>
         protected override DateToken ParseInternal(Match match, IFormatProvider provider)
         {
             RelativeDateDefinition? relativeDateDefinition = GetRelativeDateDefinitionForMatch(match);

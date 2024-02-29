@@ -8,6 +8,8 @@ namespace Hourglass.Managers;
 
 using Properties;
 
+// ReSharper disable ExceptionNotDocumented
+
 /// <summary>
 /// Manages default settings.
 /// </summary>

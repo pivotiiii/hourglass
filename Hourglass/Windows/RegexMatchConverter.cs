@@ -11,6 +11,8 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
 
+// ReSharper disable ExceptionNotDocumented
+
 /// <summary>
 /// Matches the string representation of objects against a regular expression pattern.
 /// </summary>

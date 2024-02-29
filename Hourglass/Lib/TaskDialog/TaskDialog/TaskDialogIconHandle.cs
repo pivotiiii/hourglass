@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>

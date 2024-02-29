@@ -4,6 +4,8 @@ using System;
 
 using TaskDialogFlags = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_FLAGS;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -24,7 +26,6 @@ public sealed class TaskDialogCheckBox : TaskDialogControl
     /// 
     /// </summary>
     public TaskDialogCheckBox()
-        : base()
     {
     }
 

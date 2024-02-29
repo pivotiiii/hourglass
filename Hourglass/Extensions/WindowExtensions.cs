@@ -602,7 +602,7 @@ public static class WindowExtensions
                 return;
             }
 
-            ContextMenuEventArgs contextMenuEventArgs = (ContextMenuEventArgs)Activator.CreateInstance(
+            var contextMenuEventArgs = (ContextMenuEventArgs)Activator.CreateInstance(
                 typeof(ContextMenuEventArgs),
 #pragma warning disable S3011
                 BindingFlags.Instance | BindingFlags.NonPublic,

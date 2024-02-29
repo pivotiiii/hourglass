@@ -212,8 +212,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
     /// </summary>
     /// <param name="start">The <see cref="DateTime"/> the timer was started.</param>
     /// <param name="end">The <see cref="DateTime"/> the timer expires.</param>
-    /// <exception cref="ObjectDisposedException">If the timer has been disposed.</exception>
-    public virtual void Start(DateTime start, DateTime end)
+    protected void Start(DateTime start, DateTime end)
     {
         ThrowIfDisposed();
 
@@ -245,8 +244,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
     /// <remarks>
     /// If the <see cref="State"/> is not <see cref="TimerState.Running"/>, this method does nothing.
     /// </remarks>
-    /// <exception cref="ObjectDisposedException">If the timer has been disposed.</exception>
-    public virtual void Pause()
+    public void Pause()
     {
         ThrowIfDisposed();
 
@@ -281,8 +279,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
     /// <remarks>
     /// If the <see cref="State"/> is not <see cref="TimerState.Paused"/>, this method does nothing.
     /// </remarks>
-    /// <exception cref="ObjectDisposedException">If the timer has been disposed.</exception>
-    public virtual void Resume()
+    public void Resume()
     {
         ThrowIfDisposed();
 
@@ -311,8 +308,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
     /// <remarks>
     /// If the <see cref="State"/> is <see cref="TimerState.Stopped"/>, this method does nothing.
     /// </remarks>
-    /// <exception cref="ObjectDisposedException">If the timer has been disposed.</exception>
-    public virtual void Stop()
+    public void Stop()
     {
         ThrowIfDisposed();
 
@@ -347,7 +343,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
     /// <remarks>
     /// When the timer is running, this method is periodically invoked to update the state of the timer.
     /// </remarks>
-    public virtual void Update()
+    public void Update()
     {
         ThrowIfDisposed();
 
@@ -481,6 +477,7 @@ public abstract class TimerBase : IDisposable, INotifyPropertyChanged
     /// <summary>
     /// Throws a <see cref="ObjectDisposedException"/> if the object has been disposed.
     /// </summary>
+    /// <exception cref="ObjectDisposedException">If the object has been disposed.</exception>
     protected void ThrowIfDisposed()
     {
         if (Disposed)

@@ -88,8 +88,7 @@ public sealed class TimerManager : Manager
     /// Add a new timer.
     /// </summary>
     /// <param name="timer">A <see cref="Timer"/>.</param>
-    /// <exception cref="InvalidOperationException">If the <see cref="Timer"/> has already been added.
-    /// </exception>
+    /// <exception cref="InvalidOperationException">If the <see cref="Timer"/> has already been added.</exception>
     public void Add(Timer timer)
     {
         if (_timers.Contains(timer))
@@ -104,8 +103,7 @@ public sealed class TimerManager : Manager
     /// Remove an existing timer.
     /// </summary>
     /// <param name="timer">A <see cref="Timer"/>.</param>
-    /// <exception cref="InvalidOperationException">If the timer had not been added previously or has already been
-    /// removed.</exception>
+    /// <exception cref="InvalidOperationException">If the timer had not been added previously or has already been removed.</exception>
     public void Remove(Timer timer)
     {
         timer.Stop();

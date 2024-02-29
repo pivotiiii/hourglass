@@ -71,6 +71,7 @@ public abstract class TimeToken
     /// <summary>
     /// Throws an <see cref="InvalidOperationException"/> if <see cref="IsValid"/> is <c>false</c>.
     /// </summary>
+    /// <exception cref="InvalidOperationException">If not valid.</exception>
     protected void ThrowIfNotValid()
     {
         if (!IsValid)
@@ -109,10 +110,8 @@ public abstract class TimeToken
         /// <param name="match">A <see cref="Match"/> representation of a <see cref="TimeToken"/>.</param>
         /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
         /// <returns>The <see cref="TimeToken"/> parsed from the <see cref="Match"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is
-        /// <c>null</c>.</exception>
-        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of
-        /// a <see cref="TimeToken"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of a <see cref="TimeToken"/>.</exception>
         public TimeToken Parse(Match match, IFormatProvider provider)
         {
             if (match is null)
@@ -141,10 +140,8 @@ public abstract class TimeToken
         /// <param name="match">A <see cref="Match"/> representation of a <see cref="TimeToken"/>.</param>
         /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
         /// <returns>The <see cref="TimeToken"/> parsed from the <see cref="Match"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is
-        /// <c>null</c>.</exception>
-        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of
-        /// a <see cref="TimeToken"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of a <see cref="TimeToken"/>.</exception>
         protected abstract TimeToken ParseInternal(Match match, IFormatProvider provider);
     }
 }

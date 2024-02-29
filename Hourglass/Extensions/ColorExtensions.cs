@@ -31,6 +31,7 @@ public static class ColorExtensions
     /// </summary>
     /// <param name="colorString">A <see cref="string"/> representation of a <see cref="Color"/>.</param>
     /// <returns>A <see cref="Color"/>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="colorString"/> is <see langword="null"/></exception>
     public static Color FromString(string colorString)
     {
         if (string.IsNullOrWhiteSpace(colorString))

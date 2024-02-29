@@ -20,6 +20,8 @@ using TaskDialogTextElement = KPreisser.UI.TaskDialogNativeMethods.TASKDIALOG_EL
 #pragma warning disable S3963
 #pragma warning disable S1135
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -278,7 +280,6 @@ public partial class TaskDialog
     /// 
     /// </summary>
     public TaskDialog()
-        : base()
     {
         // TaskDialog is only supported on Windows.
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

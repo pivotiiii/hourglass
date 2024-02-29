@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 
+// ReSharper disable all
+
 namespace KPreisser.UI;
 
 /// <summary>
@@ -11,7 +13,6 @@ public class TaskDialogClosingEventArgs : CancelEventArgs
     /// 
     /// </summary>
     internal TaskDialogClosingEventArgs(TaskDialogButton closeButton)
-        : base()
     {
         CloseButton = closeButton;
     }

@@ -7,6 +7,8 @@ using WindowsVirtualDesktopHelper.VirtualDesktopAPI.Implementation;
 
 namespace Hourglass.Managers;
 
+// ReSharper disable ExceptionNotDocumented
+
 public sealed class VirtualDesktopManager : Manager
 {
     public static readonly VirtualDesktopManager Instance = new();

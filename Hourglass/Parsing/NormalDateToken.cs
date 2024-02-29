@@ -14,6 +14,8 @@ using System.Text.RegularExpressions;
 using Extensions;
 using Properties;
 
+// ReSharper disable ExceptionNotDocumented
+
 /// <summary>
 /// Represents the date part of an instant in time specified as year, month, and day.
 /// </summary>
@@ -203,14 +205,13 @@ public sealed class NormalDateToken : DateToken
             {
                 return GetPatternsWithMonthFirst(provider);
             }
-            else if (provider.IsYearFirst())
+
+            if (provider.IsYearFirst())
             {
                 return GetPatternsWithYearFirst(provider);
             }
-            else
-            {
-                return GetPatternsWithDayFirst(provider);
-            }
+
+            return GetPatternsWithDayFirst(provider);
         }
 
         /// <summary>
@@ -219,10 +220,8 @@ public sealed class NormalDateToken : DateToken
         /// <param name="match">A <see cref="Match"/> representation of a <see cref="DateToken"/>.</param>
         /// <param name="provider">An <see cref="IFormatProvider"/>.</param>
         /// <returns>The <see cref="DateToken"/> parsed from the <see cref="Match"/>.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is
-        /// <c>null</c>.</exception>
-        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of
-        /// a <see cref="DateToken"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="match"/> or <paramref name="provider"/> is <c>null</c>.</exception>
+        /// <exception cref="FormatException">If the <paramref name="match"/> is not a supported representation of a <see cref="DateToken"/>.</exception>
         protected override DateToken ParseInternal(Match match, IFormatProvider provider)
         {
             NormalDateToken dateToken = new();

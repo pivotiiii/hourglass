@@ -42,16 +42,16 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <local:ColorControl Grid.Row="0" Grid.Column="0" Text="Progress bar" Color="{Binding Path=ProgressBarColor, Mode=TwoWay}" Theme="{Binding}" ColorChanged="ColorControlColorChanged"/>
-                <local:ColorControl Grid.Row="0" Grid.Column="1" Text="Progress bar background" Color="{Binding Path=ProgressBackgroundColor, Mode=TwoWay}" Theme="{Binding}" ColorChanged="ColorControlColorChanged"/>
-                <local:ColorControl Grid.Row="1" Grid.Column="0" Text="Background" Color="{Binding Path=BackgroundColor, Mode=TwoWay}" Theme="{Binding}" ColorChanged="ColorControlColorChanged"/>
-                <local:ColorControl Grid.Row="1" Grid.Column="1" Text="Expiration flash" Color="{Binding Path=ExpirationFlashColor, Mode=TwoWay}" Theme="{Binding}" ColorChanged="ColorControlColorChanged"/>
-                <local:ColorControl Grid.Row="2" Grid.Column="0" Text="Primary text" Color="{Binding Path=PrimaryTextColor, Mode=TwoWay}" Theme="{Binding}" ColorChanged="ColorControlColorChanged"/>
-                <local:ColorControl Grid.Row="2" Grid.Column="1" Text="Primary text hint" Color="{Binding Path=PrimaryHintColor, Mode=TwoWay}" Theme="{Binding}" ColorChanged="ColorControlColorChanged"/>
-                <local:ColorControl Grid.Row="3" Grid.Column="0" Text="Secondary text" Color="{Binding Path=SecondaryTextColor, Mode=TwoWay}" Theme="{Binding}" ColorChanged="ColorControlColorChanged"/>
-                <local:ColorControl Grid.Row="3" Grid.Column="1" Text="Secondary text hint" Color="{Binding Path=SecondaryHintColor, Mode=TwoWay}" Theme="{Binding}" ColorChanged="ColorControlColorChanged"/>
-                <local:ColorControl Grid.Row="4" Grid.Column="0" Text="Button" Color="{Binding Path=ButtonColor, Mode=TwoWay}" Theme="{Binding}" ColorChanged="ColorControlColorChanged"/>
-                <local:ColorControl Grid.Row="4" Grid.Column="1" Text="Button hover" Color="{Binding Path=ButtonHoverColor, Mode=TwoWay}" Theme="{Binding}" ColorChanged="ColorControlColorChanged"/>
+                <local:ColorControl Grid.Row="0" Grid.Column="0" Text="Progress bar" Color="{Binding Path=ProgressBarColor, Mode=TwoWay}" Theme="{Binding Path=., Mode=OneWay}" ColorChanged="ColorControlColorChanged"/>
+                <local:ColorControl Grid.Row="0" Grid.Column="1" Text="Progress bar background" Color="{Binding Path=ProgressBackgroundColor, Mode=TwoWay}" Theme="{Binding Path=., Mode=OneWay}" ColorChanged="ColorControlColorChanged"/>
+                <local:ColorControl Grid.Row="1" Grid.Column="0" Text="Background" Color="{Binding Path=BackgroundColor, Mode=TwoWay}" Theme="{Binding Path=., Mode=OneWay}" ColorChanged="ColorControlColorChanged"/>
+                <local:ColorControl Grid.Row="1" Grid.Column="1" Text="Expiration flash" Color="{Binding Path=ExpirationFlashColor, Mode=TwoWay}" Theme="{Binding Path=., Mode=OneWay}" ColorChanged="ColorControlColorChanged"/>
+                <local:ColorControl Grid.Row="2" Grid.Column="0" Text="Primary text" Color="{Binding Path=PrimaryTextColor, Mode=TwoWay}" Theme="{Binding Path=., Mode=OneWay}" ColorChanged="ColorControlColorChanged"/>
+                <local:ColorControl Grid.Row="2" Grid.Column="1" Text="Primary text hint" Color="{Binding Path=PrimaryHintColor, Mode=TwoWay}" Theme="{Binding Path=., Mode=OneWay}" ColorChanged="ColorControlColorChanged"/>
+                <local:ColorControl Grid.Row="3" Grid.Column="0" Text="Secondary text" Color="{Binding Path=SecondaryTextColor, Mode=TwoWay}" Theme="{Binding Path=., Mode=OneWay}" ColorChanged="ColorControlColorChanged"/>
+                <local:ColorControl Grid.Row="3" Grid.Column="1" Text="Secondary text hint" Color="{Binding Path=SecondaryHintColor, Mode=TwoWay}" Theme="{Binding Path=., Mode=OneWay}" ColorChanged="ColorControlColorChanged"/>
+                <local:ColorControl Grid.Row="4" Grid.Column="0" Text="Button" Color="{Binding Path=ButtonColor, Mode=TwoWay}" Theme="{Binding Path=., Mode=OneWay}" ColorChanged="ColorControlColorChanged"/>
+                <local:ColorControl Grid.Row="4" Grid.Column="1" Text="Button hover" Color="{Binding Path=ButtonHoverColor, Mode=TwoWay}" Theme="{Binding Path=., Mode=OneWay}" ColorChanged="ColorControlColorChanged"/>
             </Grid>
         </Border>
         <Border Background="#F9F9F9" BorderBrush="#DDDDDD" BorderThickness="0 1 0 0" Padding="8">

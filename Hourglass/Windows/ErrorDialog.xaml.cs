@@ -10,6 +10,8 @@ using System.Windows;
 
 using Extensions;
 
+// ReSharper disable MismatchedFileName
+
 /// <summary>
 /// A window that displays an error.
 /// </summary>

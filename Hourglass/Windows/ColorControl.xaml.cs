@@ -15,6 +15,8 @@ using System.Windows.Media;
 using Extensions;
 using Timing;
 
+// ReSharper disable MismatchedFileName
+
 /// <summary>
 /// A control for displaying and selecting a <see cref="Color"/>.
 /// </summary>

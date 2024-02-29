@@ -1,4 +1,6 @@
-﻿namespace KPreisser.UI;
+﻿// ReSharper disable all
+
+namespace KPreisser.UI;
 
 /// <summary>
 /// 

@@ -872,8 +872,8 @@ $</value>
     <value>&amp;Resume all</value>
     <comment>The text for the command-line resume all menu item, where the character following the optional ampersand (&amp;) is the access key</comment>
   </data>
-  <data name="NotificationAreaIconOpenContextMenuItem" xml:space="preserve">
-    <value>Open timer &amp;context menu</value>
+  <data name="NotificationAreaTimerOptionsMenuItem" xml:space="preserve">
+    <value>Timer &amp;options</value>
     <comment>The text for the command-line open timer context menu item, where the character following the optional ampersand (&amp;) is the access key</comment>
   </data>
   <data name="NotificationAreaIconAboutMenuItem" xml:space="preserve">
@@ -1053,9 +1053,13 @@ $</value>
   <data name="TrayIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TrayIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TimerTimerNotExpired" xml:space="preserve">
-    <value>Timer not expired</value>
-    <comment>The string representation of the time since the timer expired for a timer that is not expired</comment>
+  <data name="TimerTimeTomorrowFormatString" xml:space="preserve">
+    <value>Tomorrow, {0}</value>
+    <comment>A format string for the string representation of the tomorrow time</comment>
+  </data>
+  <data name="TimerTimeDateTimeFormatString" xml:space="preserve">
+    <value>{0} {1}</value>
+    <comment>A format string for the string representation of the generic date time format</comment>
   </data>
   <data name="TimerTimeExpiredFormatString" xml:space="preserve">
     <value>{0} ago</value>
@@ -1120,9 +1124,9 @@ $</value>
     <value>_Open saved timers on startup</value>
     <comment>The text for the open saved timers on startup menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
-  <data name="ContextMenuShowTimeElapsedMenuItem" xml:space="preserve">
-    <value>_Show time elapsed instead of time left</value>
-    <comment>The text for the show time elapsed menu item, where the character following the optional underscore (_) is the access key</comment>
+  <data name="ContextMenuShowElapsedTimeMenuItem" xml:space="preserve">
+    <value>_Show elapsed time instead of time left</value>
+    <comment>The text for the show elapsed time menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuDoNotKeepComputerAwakeMenuItem" xml:space="preserve">
     <value>Do not _keep computer awake</value>
@@ -1256,9 +1260,9 @@ $</value>
     <value>_Application name</value>
     <comment>The text for the application name menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
-  <data name="ContextMenuTimeElapsedWindowTitleMenuItem" xml:space="preserve">
-    <value>Time _elapsed</value>
-    <comment>The text for the time elapsed menu item, where the character following the optional underscore (_) is the access key</comment>
+  <data name="ContextMenuElapsedTimeWindowTitleMenuItem" xml:space="preserve">
+    <value>_Elapsed time</value>
+    <comment>The text for the elapsed time menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuTimeLeftWindowTitleMenuItem" xml:space="preserve">
     <value>Time _left</value>
@@ -1280,17 +1284,17 @@ $</value>
     <value>Could not launch web browser</value>
     <comment>The title of the error dialog shown when the web browser could not be launched to open the download page for the latest version of the app</comment>
   </data>
-  <data name="ContextMenuTimeElapsedPlusTimerTitleWindowTitleMenuItem" xml:space="preserve">
-    <value>Time ela_psed · Timer title</value>
-    <comment>The text for the time elapsed plus timer title menu item, where the character following the optional underscore (_) is the access key</comment>
+  <data name="ContextMenuElapsedTimePlusTimerTitleWindowTitleMenuItem" xml:space="preserve">
+    <value>Ela_psed time · Timer title</value>
+    <comment>The text for the elapsed time plus timer title menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuTimeLeftPlusTimerTitleWindowTitleMenuItem" xml:space="preserve">
     <value>Time le_ft · Timer title</value>
     <comment>The text for the time left plus timer title menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
-  <data name="ContextMenuTimerTitlePlusTimeElapsedWindowTitleMenuItem" xml:space="preserve">
-    <value>Ti_mer title · Time elapsed</value>
-    <comment>The text for the timer title plus time elapsed menu item, where the character following the optional underscore (_) is the access key</comment>
+  <data name="ContextMenuTimerTitlePlusElapsedTimeWindowTitleMenuItem" xml:space="preserve">
+    <value>Ti_mer title · Elapsed time</value>
+    <comment>The text for the timer title plus elapsed time menu item, where the character following the optional underscore (_) is the access key</comment>
   </data>
   <data name="ContextMenuTimerTitlePlusTimeLeftWindowTitleMenuItem" xml:space="preserve">
     <value>T_imer title · Time left</value>

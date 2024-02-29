@@ -13,7 +13,7 @@
         RenderOptions.ClearTypeHint="Enabled"
         Title="{x:Static properties:Resources.AboutDialogTitle}"
         WindowStartupLocation="CenterScreen"
-        FocusManager.FocusedElement="{Binding ElementName=CloseButton}">
+        FocusManager.FocusedElement="{Binding ElementName=CloseButton, Mode=OneWay}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
@@ -31,8 +31,8 @@
                     <Run FontWeight="Bold" Text="{x:Static properties:Resources.AppName}"/>
                     <Run Text="{x:Static local:AboutDialog.Version}"/>
                 </TextBlock>
-                <TextBlock DataContext="{x:Static managers:UpdateManager.Instance}" Margin="10 0 0 0" Visibility="{Binding Path=HasUpdates, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Hyperlink Focusable="{Binding Path=HasUpdates}" NavigateUri="{Binding Path=UpdateUri}" RequestNavigate="HyperlinkRequestNavigate">
+                <TextBlock DataContext="{x:Static managers:UpdateManager.Instance}" Margin="10 0 0 0" Visibility="{Binding Path=HasUpdates, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Hyperlink Focusable="{Binding Path=HasUpdates, Mode=OneWay}" NavigateUri="{Binding Path=UpdateUri, Mode=OneWay}" RequestNavigate="HyperlinkRequestNavigate">
                         <Run Text="{x:Static properties:Resources.AboutDialogUpdateAvailableText}"/>
                     </Hyperlink>
                 </TextBlock>
