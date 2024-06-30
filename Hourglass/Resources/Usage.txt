@@ -287,6 +287,12 @@ Options:
         Default value   off
         Alias           -z, /z
 
+  --validate-args
+        Checks if the provided arguments are valid and prints "true" or "false"
+        to the command line without actually starting the timer.
+
+        Required        no
+
   --use-factory-defaults
         If specified, any options that are not explicitly set with another
         switch are set to their factory default setting rather than the last
