@@ -88,5 +88,8 @@ public sealed class TimerOptionsManager : Manager
         // Never save shutting down when expired or lock interface options
         _mostRecentOptions.ShutDownWhenExpired = false;
         _mostRecentOptions.LockInterface = false;
+
+        // Never save validating args
+        _mostRecentOptions.ValidateArgs = false;
     }
 }

@@ -165,6 +165,11 @@ public sealed class TimerOptions : INotifyPropertyChanged
     /// </summary>
     private bool _digitalClockTime;
 
+    /// <summary>
+    /// A value indicating whether to print to console if the parsed args are valid.
+    /// </summary>
+    private bool _validateArgs;
+
     #endregion
 
     #region Constructors
@@ -196,6 +201,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
             WindowState.Normal,
             false /* isFullScreen */);
         _lockInterface = false;
+        _validateArgs = false;
     }
 
     /// <summary>
@@ -572,6 +578,25 @@ public sealed class TimerOptions : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether to print to console if the parsed args are valid.
+    /// </summary>
+    public bool ValidateArgs
+    {
+        get => _validateArgs;
+
+        set
+        {
+            if (_validateArgs == value)
+            {
+                return;
+            }
+
+            _validateArgs = value;
+            PropertyChanged.Notify(this);
+        }
+    }
+
     #endregion
 
     #region Public Methods
@@ -630,6 +655,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
         _windowTitleMode = options._windowTitleMode;
         _windowSize = WindowSize.FromWindowSize(options.WindowSize);
         _lockInterface = options._lockInterface;
+        _validateArgs = options._validateArgs;
 
         PropertyChanged.Notify(this,
             nameof(WindowTitleMode),
@@ -649,7 +675,8 @@ public sealed class TimerOptions : INotifyPropertyChanged
             nameof(Theme),
             nameof(Sound),
             nameof(LoopSound),
-            nameof(LockInterface));
+            nameof(LockInterface),
+            nameof(ValidateArgs));
     }
 
     /// <summary>
@@ -682,6 +709,7 @@ public sealed class TimerOptions : INotifyPropertyChanged
         _windowTitleMode = info.WindowTitleMode;
         _windowSize = WindowSize.FromWindowSizeInfo(info.WindowSize);
         _lockInterface = info.LockInterface;
+        _validateArgs = info.ValidateArgs;
 
         PropertyChanged.Notify(this,
             nameof(WindowTitleMode),
@@ -701,7 +729,8 @@ public sealed class TimerOptions : INotifyPropertyChanged
             nameof(Theme),
             nameof(Sound),
             nameof(LoopSound),
-            nameof(LockInterface));
+            nameof(LockInterface),
+            nameof(ValidateArgs));
     }
 
     /// <summary>
@@ -729,7 +758,8 @@ public sealed class TimerOptions : INotifyPropertyChanged
             LoopSound = _loopSound,
             WindowTitleMode = _windowTitleMode,
             WindowSize = WindowSizeInfo.FromWindowSize(_windowSize)!,
-            LockInterface = _lockInterface
+            LockInterface = _lockInterface,
+            ValidateArgs = _validateArgs
         };
     }
 

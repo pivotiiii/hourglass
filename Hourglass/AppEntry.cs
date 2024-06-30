@@ -66,6 +66,16 @@ public sealed class AppEntry : WindowsFormsApplicationBase
         AppManager.Instance.Initialize();
 
         CommandLineArguments arguments = CommandLineArguments.Parse(eventArgs.CommandLine);
+        if (arguments.ValidateArgs && !arguments.HasParseError)
+        {
+            Console.WriteLine("true");
+            return false;
+        } else if (arguments.ValidateArgs && arguments.HasParseError)
+        {
+            Console.WriteLine("false");
+            return false;
+        }
+        
         if (arguments.ShouldShowUsage || arguments.HasParseError)
         {
             CommandLineArguments.ShowUsage(arguments.ParseErrorMessage);
@@ -91,6 +101,16 @@ public sealed class AppEntry : WindowsFormsApplicationBase
     protected override void OnStartupNextInstance(StartupNextInstanceEventArgs eventArgs)
     {
         CommandLineArguments arguments = CommandLineArguments.Parse(eventArgs.CommandLine);
+        if (arguments.ValidateArgs && !arguments.HasParseError)
+        {
+            Console.WriteLine("true");
+            return;
+        } else if (arguments.ValidateArgs && arguments.HasParseError)
+        {
+            Console.WriteLine("false");
+            return;
+        }
+        
         if (arguments.ShouldShowUsage || arguments.HasParseError)
         {
             CommandLineArguments.ShowUsage(arguments.ParseErrorMessage);

@@ -204,6 +204,11 @@ public sealed class CommandLineArguments
     /// </summary>
     public bool ResumeAll { get; private set; }
 
+    /// <summary>
+    /// Gets a value indicating whether to print to console if the parsed args are valid.
+    /// </summary>
+    public bool ValidateArgs { get; private set; }
+
     #endregion
 
     #region Public Methods
@@ -319,7 +324,8 @@ public sealed class CommandLineArguments
             WindowState = windowSize.WindowState != WindowState.Minimized ? windowSize.WindowState : windowSize.RestoreWindowState,
             RestoreWindowState = windowSize.RestoreWindowState,
             WindowBounds = windowSize.RestoreBounds,
-            LockInterface = options.LockInterface
+            LockInterface = options.LockInterface,
+            ValidateArgs = options.ValidateArgs
         };
     }
 
@@ -361,7 +367,8 @@ public sealed class CommandLineArguments
             WindowState = defaultOptions.WindowSize?.WindowState ?? WindowState.Normal,
             RestoreWindowState = defaultOptions.WindowSize?.RestoreWindowState ?? WindowState.Normal,
             WindowBounds = defaultWindowBoundsWithLocation,
-            LockInterface = defaultOptions.LockInterface
+            LockInterface = defaultOptions.LockInterface,
+            ValidateArgs = defaultOptions.ValidateArgs
         };
     }
 
@@ -758,6 +765,17 @@ public sealed class CommandLineArguments
 
                     argumentsBasedOnMostRecentOptions.LockInterface = lockInterface;
                     argumentsBasedOnFactoryDefaults.LockInterface = lockInterface;
+                    break;
+
+                case "--validate-args":
+                    ThrowIfDuplicateSwitch(specifiedSwitches, "--validate-args");
+                    
+                    bool validateArgs = GetBoolValue(
+                        arg,
+                        remainingArgs);
+
+                    argumentsBasedOnMostRecentOptions.ValidateArgs = validateArgs;
+                    argumentsBasedOnFactoryDefaults.ValidateArgs = validateArgs;
                     break;
 
                 case "--use-factory-defaults":

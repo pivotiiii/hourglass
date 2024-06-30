@@ -109,6 +109,11 @@ public sealed class TimerOptionsInfo
     public bool LockInterface { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether to print to console if the parsed args are valid.
+    /// </summary>
+    public bool ValidateArgs { get; set; }
+
+    /// <summary>
     /// Returns a <see cref="TimerOptionsInfo"/> for the specified <see cref="TimerOptions"/>.
     /// </summary>
     /// <param name="options">A <see cref="TimerOptions"/>.</param>
