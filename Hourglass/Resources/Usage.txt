@@ -287,7 +287,7 @@ Options:
         Default value   off
         Alias           -z, /z
 
-  --validate-args
+  --validate-args on|off
         Checks if the provided arguments are valid and prints "true" or "false"
         to the command line without actually starting the timer.
 
@@ -324,6 +324,7 @@ Options:
             --window-state                -w  normal
             --window-bounds               -b  auto,auto,355,160
             --lock-interface              -z  off
+            --validate-args                   off
 
         Required        no
         Alias           -d, /d

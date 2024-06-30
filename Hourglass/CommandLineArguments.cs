@@ -268,7 +268,8 @@ public sealed class CommandLineArguments
             LoopSound = LoopSound,
             WindowTitleMode = WindowTitleMode,
             WindowSize = GetWindowSize(),
-            LockInterface = LockInterface
+            LockInterface = LockInterface,
+            ValidateArgs = ValidateArgs
         };
     }
 
