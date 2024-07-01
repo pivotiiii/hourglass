@@ -289,15 +289,20 @@ Options:
 
   --validate-args on|off
         Checks if the provided arguments are valid and prints "true" or "false"
-        to the command line without actually starting the timer.
+        to stdout without actually starting the timer.
 
-        IMPORTANT: Since this is an option that provides a command line output 
+        IMPORTANT: Since this is an option that provides a stdout output 
         but Hourglass is a UI only application, it needs to be called with 
-        "| MORE" like:
+        "| MORE"  if called directly on the command line like:
 
         Hourglass.exe --validate-args on [OPTIONS] [<input>] | MORE
 
+        Calls from languages like Python with subprocess.run() or nodeJS with 
+        child_process.exec() may capture stdout by default and don't need 
+        "| MORE".
+
         Required        no
+        Default value   off
 
   --use-factory-defaults
         If specified, any options that are not explicitly set with another

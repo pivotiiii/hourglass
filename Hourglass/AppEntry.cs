@@ -68,7 +68,12 @@ public sealed class AppEntry : WindowsFormsApplicationBase
         CommandLineArguments arguments = CommandLineArguments.Parse(eventArgs.CommandLine);
         if (arguments.ValidateArgs && !arguments.HasParseError)
         {
-            Console.Write("true");
+            Console.WriteLine("true");
+            IEnumerable<TimerStart?> timerStarts = arguments.TimerStart;
+            foreach (TimerStart? timerStart in timerStarts)
+            {
+                Console.Write(timerStart.ToString());
+            }
             return false;
         } else if (arguments.ValidateArgs && arguments.HasParseError)
         {
