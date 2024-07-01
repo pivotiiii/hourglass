@@ -288,8 +288,9 @@ Options:
         Alias           -z, /z
 
   --validate-args on|off
-        Checks if the provided arguments are valid and prints "true" or "false"
-        to stdout without actually starting the timer.
+        Checks if the provided arguments are valid and outputs "true" or "false"
+        to stdout without actually starting the timer. If time input/s is/are 
+        provided, the parsed time/s are written as well.
 
         IMPORTANT: Since this is an option that provides a stdout output 
         but Hourglass is a UI only application, it needs to be called with 

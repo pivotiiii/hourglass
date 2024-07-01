@@ -72,6 +72,7 @@ public sealed class AppEntry : WindowsFormsApplicationBase
             IEnumerable<TimerStart?> timerStarts = arguments.TimerStart;
             foreach (TimerStart? timerStart in timerStarts)
             {
+                Console.WriteLine();
                 Console.Write(timerStart.ToString());
             }
             return false;
