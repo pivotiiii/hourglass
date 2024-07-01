@@ -226,10 +226,12 @@ public sealed class CommandLineArguments
         }
         catch (ParseException e)
         {
+            bool validateCmdArgs = GetValidateCommandLineArguments(args);
             return new()
             {
                 HasParseError = true,
-                ParseErrorMessage = e.Message
+                ParseErrorMessage = e.Message,
+                ValidateArgs = validateCmdArgs
             };
         }
     }
@@ -821,6 +823,36 @@ public sealed class CommandLineArguments
         }
 
         return useFactoryDefaults ? argumentsBasedOnFactoryDefaults : argumentsBasedOnMostRecentOptions;
+    }
+
+    /// <summary>
+    /// Parses command-line arguments to check for "--validate-args on" only.
+    /// </summary>
+    /// <param name="args">The command-line arguments.</param>
+    /// <returns>Boolean that indicates if "--validate-args on" was parsed</returns>
+    private static bool GetValidateCommandLineArguments(IEnumerable<string> args)
+    {
+        bool validateArgs = false;
+        Queue<string> remainingArgs = new(args);
+        while (remainingArgs.Count > 0)
+        {
+            string arg = remainingArgs.Dequeue();
+
+            switch (arg)
+            {
+                case "--validate-args":                    
+                    validateArgs = GetBoolValue(
+                        arg,
+                        remainingArgs);
+                    return validateArgs;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        return validateArgs;
     }
 
     /// <summary>

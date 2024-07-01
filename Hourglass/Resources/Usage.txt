@@ -291,6 +291,12 @@ Options:
         Checks if the provided arguments are valid and prints "true" or "false"
         to the command line without actually starting the timer.
 
+        IMPORTANT: Since this is an option that provides a command line output 
+        but Hourglass is a UI only application, it needs to be called with 
+        "| MORE" like:
+
+        Hourglass.exe --validate-args on [OPTIONS] [<input>] | MORE
+
         Required        no
 
   --use-factory-defaults

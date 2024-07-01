@@ -68,11 +68,11 @@ public sealed class AppEntry : WindowsFormsApplicationBase
         CommandLineArguments arguments = CommandLineArguments.Parse(eventArgs.CommandLine);
         if (arguments.ValidateArgs && !arguments.HasParseError)
         {
-            Console.WriteLine("true");
+            Console.Write("true");
             return false;
         } else if (arguments.ValidateArgs && arguments.HasParseError)
         {
-            Console.WriteLine("false");
+            Console.Write("false");
             return false;
         }
         
