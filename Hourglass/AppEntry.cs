@@ -66,19 +66,9 @@ public sealed class AppEntry : WindowsFormsApplicationBase
         AppManager.Instance.Initialize();
 
         CommandLineArguments arguments = CommandLineArguments.Parse(eventArgs.CommandLine);
-        if (arguments.ValidateArgs && !arguments.HasParseError)
+
+        if (ValidateArgsToStdout())
         {
-            Console.WriteLine("true");
-            IEnumerable<TimerStart?> timerStarts = arguments.TimerStart;
-            foreach (TimerStart? timerStart in timerStarts)
-            {
-                Console.WriteLine();
-                Console.Write(timerStart.ToString());
-            }
-            return false;
-        } else if (arguments.ValidateArgs && arguments.HasParseError)
-        {
-            Console.Write("false");
             return false;
         }
         
@@ -107,16 +97,12 @@ public sealed class AppEntry : WindowsFormsApplicationBase
     protected override void OnStartupNextInstance(StartupNextInstanceEventArgs eventArgs)
     {
         CommandLineArguments arguments = CommandLineArguments.Parse(eventArgs.CommandLine);
-        if (arguments.ValidateArgs && !arguments.HasParseError)
+
+        if (ValidateArgsToStdout())
         {
-            Console.WriteLine("true");
-            return;
-        } else if (arguments.ValidateArgs && arguments.HasParseError)
-        {
-            Console.WriteLine("false");
             return;
         }
-        
+                
         if (arguments.ShouldShowUsage || arguments.HasParseError)
         {
             CommandLineArguments.ShowUsage(arguments.ParseErrorMessage);
@@ -232,5 +218,32 @@ public sealed class AppEntry : WindowsFormsApplicationBase
     {
         AppManager.Instance.Persist();
         AppManager.Instance.Dispose();
+    }
+
+    /// <summary>
+    /// Outputs false or true with parsed times if the --validate-args option is on.
+    /// </summary>
+    /// <param name="arguments">Parsed command-line arguments.</param>
+    /// <returns>A value indicating whether the --validate-args option was parsed.</returns>
+    private static bool ValidateArgsToStdout(CommandLineArguments arguments)
+    {
+        if (!arguments.ValidateArgs)
+        {
+            return false;
+        }
+
+        var hasParseError = arguments.HasParseError;
+
+        Console.WriteLine(hasParseError ? "false" : "true");
+
+        if (!hasParseError)
+        {
+            foreach (var timerStart in arguments.TimerStart.OfType<TimerStart>())
+            {
+                Console.WriteLine(timerStart.ToString());
+            }
+        }
+
+        return true;
     }
 }
