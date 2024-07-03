@@ -238,9 +238,11 @@ public sealed class AppEntry : WindowsFormsApplicationBase
 
         if (!hasParseError)
         {
+            int index = arguments.TimerStart.OfType<TimerStart>().Count();
             foreach (var timerStart in arguments.TimerStart.OfType<TimerStart>())
             {
-                Console.WriteLine(timerStart.ToString());
+                Console.Write(timerStart.ToString() + index > 1 ? Environment.NewLine : "");
+                index = index - 1;
             }
         }
 
