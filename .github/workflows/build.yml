@@ -1,9 +1,10 @@
 ﻿name: build
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 env:
   PROJECT: hourglass_args_validator
+  SOLUTION: Hourglass
   CONFIGURATION_RELEASE_PORTABLE: Release Portable
   RETENTION_DAYS: 30
 
@@ -26,10 +27,7 @@ jobs:
     # Build
 
     - name: Build ${{env.PROJECT}} ${{env.CONFIGURATION_RELEASE_PORTABLE}}
-      run: msbuild /p:Configuration="${{env.CONFIGURATION_RELEASE_PORTABLE}}" ${{env.PROJECT}}.sln
-
-    - name: Build ${{env.PROJECT}} ${{env.CONFIGURATION_RELEASE}}
-      run: msbuild /p:Configuration="${{env.CONFIGURATION_RELEASE}}" ${{env.PROJECT}}.sln
+      run: msbuild /p:Configuration="${{env.CONFIGURATION_RELEASE_PORTABLE}}" ${{env.SOLUTION}}.sln
 
     # Upload artifacts
 
@@ -38,6 +36,5 @@ jobs:
       with:
         name: ${{env.PROJECT}}Portable
         path: |
-          ${{env.PROJECT}}/bin/${{env.CONFIGURATION_RELEASE_PORTABLE}}/net48/${{env.PROJECT}}.exe
-          ${{env.PROJECT}}/bin/${{env.CONFIGURATION_RELEASE_PORTABLE}}/net48/${{env.PROJECT}}.exe.config
+          ${{env.SOLUTION}}/bin/${{env.CONFIGURATION_RELEASE_PORTABLE}}/net48/${{env.PROJECT}}.exe
         retention-days: ${{env.RETENTION_DAYS}}
