@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Animation;
+using Syste.IO;
 
 using Extensions;
 using Managers;
@@ -234,17 +235,20 @@ public sealed class AppEntry : WindowsFormsApplicationBase
 
         var hasParseError = arguments.HasParseError;
 
-        Console.WriteLine(hasParseError ? "false" : "true");
+        string toWrite = (hasParseError ? "false" : "true");
 
         if (!hasParseError)
         {
             int index = arguments.TimerStart.OfType<TimerStart>().Count();
+            toWrite = toWrite + (index > 0 ? Environment.NewLine : "");
             foreach (var timerStart in arguments.TimerStart.OfType<TimerStart>())
             {
-                Console.Write(timerStart.ToString() + (index > 1 ? Environment.NewLine : ""));
+                toWrite = timerStart.ToString() + (index > 1 ? Environment.NewLine : "");
                 index = index - 1;
             }
         }
+
+        File.WriteAllText("comms.txt", toWrite);
 
         return true;
     }
