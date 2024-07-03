@@ -23,11 +23,6 @@ jobs:
     - name: Check out ${{env.PROJECT}}
       uses: actions/checkout@v4.1.1
 
-    # Restore
-
-    - name: Restore ${{env.PROJECT}}.Test
-      run: dotnet restore ${{env.PROJECT}}.Test\${{env.PROJECT}}.Test.csproj
-
     # Build
 
     - name: Build ${{env.PROJECT}} ${{env.CONFIGURATION_RELEASE_PORTABLE}}
