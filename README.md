@@ -45,6 +45,7 @@ Run `hourglass -h` to display the **Hourglass** [command-line reference](https:/
 - New option `--digital-clock-time` / `-c`
 - New option `--multi-timers` / `-mt`
 - New option `--activate-next` / `-an`
+- New option `--validate-args`
 
 See [usage](https://github.com/i2van/hourglass/blob/develop/Hourglass/Resources/Usage.txt) for details.
 
