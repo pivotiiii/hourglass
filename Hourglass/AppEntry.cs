@@ -67,7 +67,7 @@ public sealed class AppEntry : WindowsFormsApplicationBase
 
         CommandLineArguments arguments = CommandLineArguments.Parse(eventArgs.CommandLine);
 
-        if (ValidateArgsToStdout())
+        if (ValidateArgsToStdout(arguments))
         {
             return false;
         }
@@ -98,7 +98,7 @@ public sealed class AppEntry : WindowsFormsApplicationBase
     {
         CommandLineArguments arguments = CommandLineArguments.Parse(eventArgs.CommandLine);
 
-        if (ValidateArgsToStdout())
+        if (ValidateArgsToStdout(arguments))
         {
             return;
         }
