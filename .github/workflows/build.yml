@@ -13,28 +13,32 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      # Set up
 
-    # Set up
+      - name: Setup msbuild
+        uses: microsoft/setup-msbuild@v1.3.2
 
-    - name: Setup msbuild
-      uses: microsoft/setup-msbuild@v1.3.2
+      # Check out
 
-    # Check out
+      - name: Check out ${{env.PROJECT}}
+        uses: actions/checkout@v4.1.1
 
-    - name: Check out ${{env.PROJECT}}
-      uses: actions/checkout@v4.1.1
+      # Restore
 
-    # Build
+      - name: Restore ${{env.SOLUTION}}.Test
+        run: dotnet restore ${{env.SOLUTION}}.Test\${{env.SOLUTION}}.Test.csproj
 
-    - name: Build ${{env.PROJECT}} ${{env.CONFIGURATION_RELEASE_PORTABLE}}
-      run: msbuild /p:Configuration="${{env.CONFIGURATION_RELEASE_PORTABLE}}" ${{env.SOLUTION}}.sln
+      # Build
 
-    # Upload artifacts
+      - name: Build ${{env.PROJECT}} ${{env.CONFIGURATION_RELEASE_PORTABLE}}
+        run: msbuild /p:Configuration="${{env.CONFIGURATION_RELEASE_PORTABLE}}" ${{env.SOLUTION}}.sln
 
-    - name: Publish ${{env.PROJECT}} ${{env.CONFIGURATION_RELEASE_PORTABLE}}
-      uses: actions/upload-artifact@v4.3.0
-      with:
-        name: ${{env.PROJECT}}Portable
-        path: |
-          ${{env.SOLUTION}}/bin/${{env.CONFIGURATION_RELEASE_PORTABLE}}/net48/${{env.PROJECT}}.exe
-        retention-days: ${{env.RETENTION_DAYS}}
+      # Upload artifacts
+
+      - name: Publish ${{env.PROJECT}} ${{env.CONFIGURATION_RELEASE_PORTABLE}}
+        uses: actions/upload-artifact@v4.3.0
+        with:
+          name: ${{env.PROJECT}}Portable
+          path: |
+            ${{env.SOLUTION}}/bin/${{env.CONFIGURATION_RELEASE_PORTABLE}}/net48/${{env.PROJECT}}.exe
+          retention-days: ${{env.RETENTION_DAYS}}
