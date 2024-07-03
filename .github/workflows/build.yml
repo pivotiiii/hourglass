@@ -3,8 +3,7 @@
 on: [push, pull_request]
 
 env:
-  PROJECT: Hourglass
-  CONFIGURATION_RELEASE: Release
+  PROJECT: hourglass_args_validator
   CONFIGURATION_RELEASE_PORTABLE: Release Portable
   RETENTION_DAYS: 30
 
@@ -37,20 +36,7 @@ jobs:
     - name: Build ${{env.PROJECT}} ${{env.CONFIGURATION_RELEASE}}
       run: msbuild /p:Configuration="${{env.CONFIGURATION_RELEASE}}" ${{env.PROJECT}}.sln
 
-    # Test
-
-    - name: Test ${{env.PROJECT}} ${{env.CONFIGURATION_RELEASE_PORTABLE}}
-      run: dotnet test --configuration "${{env.CONFIGURATION_RELEASE_PORTABLE}}" --no-build --verbosity normal
-
     # Upload artifacts
-
-    - name: Publish ${{env.PROJECT}} ${{env.CONFIGURATION_RELEASE}} Installer
-      uses: actions/upload-artifact@v4.3.0
-      with:
-        name: ${{env.PROJECT}}Installer
-        path: |
-          ${{env.PROJECT}}.Bundle/bin/${{env.CONFIGURATION_RELEASE}}/${{env.PROJECT}}Installer.exe
-        retention-days: ${{env.RETENTION_DAYS}}
 
     - name: Publish ${{env.PROJECT}} ${{env.CONFIGURATION_RELEASE_PORTABLE}}
       uses: actions/upload-artifact@v4.3.0
