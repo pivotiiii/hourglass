@@ -68,7 +68,7 @@ public sealed class AppEntry : WindowsFormsApplicationBase
 
         CommandLineArguments arguments = CommandLineArguments.Parse(eventArgs.CommandLine);
 
-        if (ValidateArgsToStdout(arguments))
+        if (ValidateArgsToJSON(arguments))
         {
             return false;
         }
@@ -99,7 +99,7 @@ public sealed class AppEntry : WindowsFormsApplicationBase
     {
         CommandLineArguments arguments = CommandLineArguments.Parse(eventArgs.CommandLine);
 
-        if (ValidateArgsToStdout(arguments))
+        if (ValidateArgsToJSON(arguments))
         {
             return;
         }
@@ -243,12 +243,39 @@ public sealed class AppEntry : WindowsFormsApplicationBase
             toWrite = toWrite + (index > 0 ? Environment.NewLine : "");
             foreach (var timerStart in arguments.TimerStart.OfType<TimerStart>())
             {
-                toWrite = timerStart.ToString() + (index > 1 ? Environment.NewLine : "");
+                toWrite = toWrite + timerStart.ToString() + (index > 1 ? Environment.NewLine : "");
                 index = index - 1;
             }
         }
 
-        File.WriteAllText("comms.txt", toWrite);
+        File.WriteAllText("hourglass_validate_args.txt", toWrite);
+
+        return true;
+    }
+
+    private static bool ValidateArgsToJSON(CommandLineArguments arguments)
+    {
+        if (!arguments.ValidateArgs)
+        {
+            return false;
+        }
+
+        var hasParseError = arguments.HasParseError;
+
+        string toWrite = '{"result":' + (hasParseError ? "false" : "true") + ',';
+        toWrite = toWrite + '"timeStrings":[';
+
+        if (!hasParseError)
+        {
+            int index = arguments.TimerStart.OfType<TimerStart>().Count();
+            foreach (var timerStart in arguments.TimerStart.OfType<TimerStart>())
+            {
+                toWrite = toWrite + '"' + timerStart.ToString() + '"' + (index > 1 ? "," : "");
+                index = index - 1;
+            }
+        }
+        toWrite = toWrite + "]}";
+        File.WriteAllText("hourglass_validate_args.json", toWrite);
 
         return true;
     }
